@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Hexo + Github 搭建博客完整版 - Liven技术博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/github-gist.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_ijqayz9ro8k.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>CALL ME LIVEN</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/page/page_cover.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-04-28 14:24">
+                    2020年4月28日 下午
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    1.3k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    16
+                     分钟
+                  </span>
+                
+
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h2 id="一、Hexo搭建"><a href="#一、Hexo搭建" class="headerlink" title="一、Hexo搭建"></a>一、Hexo搭建</h2><h3 id="1-0-环境准备-具体的参考百度文章"><a href="#1-0-环境准备-具体的参考百度文章" class="headerlink" title="1.0 环境准备(具体的参考百度文章)"></a>1.0 环境准备(具体的参考百度文章)</h3><p>a&gt; npm安装</p>
+<p>b&gt; Git 安装</p>
+<p>c&gt; node.js 安装（建议安装10.0以上版本）</p>
+<h3 id="2-0-Hexo安装"><a href="#2-0-Hexo安装" class="headerlink" title="2.0 Hexo安装"></a>2.0 Hexo安装</h3><pre><code class="hljs plain">$ npm install -g hexo-cli</code></pre>
+
+<p>可以输入hexo -v ，检查hexo是否安装成功</p>
+<h3 id="3-0-搭建网站"><a href="#3-0-搭建网站" class="headerlink" title="3.0 搭建网站"></a>3.0 搭建网站</h3><h5 id="3-1-创建一个文件夹存放网站文件，比如在桌面中添加一个-Blog-文件夹"><a href="#3-1-创建一个文件夹存放网站文件，比如在桌面中添加一个-Blog-文件夹" class="headerlink" title="3.1 创建一个文件夹存放网站文件，比如在桌面中添加一个 Blog 文件夹"></a>3.1 创建一个文件夹存放网站文件，比如在桌面中添加一个 Blog 文件夹</h5><h5 id="3-2-初始化Blog文件夹（上个厕所再回来…）"><a href="#3-2-初始化Blog文件夹（上个厕所再回来…）" class="headerlink" title="3.2 初始化Blog文件夹（上个厕所再回来…）"></a>3.2 初始化Blog文件夹（上个厕所再回来…）</h5><pre><code class="hljs plain">hexo init</code></pre>
+
+<p><img src="https://i.loli.net/2020/05/09/ABecuswPyQEt6kT.png" srcset="/img/loading.gif" alt="image-20200509150624387"></p>
+<h5 id="3-3-安装所需要安装的组件"><a href="#3-3-安装所需要安装的组件" class="headerlink" title="3.3 安装所需要安装的组件"></a>3.3 安装所需要安装的组件</h5><pre><code class="hljs plain">npm install</code></pre>
+
+<h5 id="3-4-生成静态文件"><a href="#3-4-生成静态文件" class="headerlink" title="3.4 生成静态文件"></a>3.4 生成静态文件</h5><pre><code class="hljs plain">hexo g</code></pre>
+
+<h5 id="3-5-开启服务器，访问本地网址，体验hexo"><a href="#3-5-开启服务器，访问本地网址，体验hexo" class="headerlink" title="3.5 开启服务器，访问本地网址，体验hexo"></a>3.5 开启服务器，访问<a href="http://localhost:4000" target="_blank" rel="noopener">本地网址</a>，体验hexo</h5><pre><code class="hljs plain">hexo s</code></pre>
+
+<p>这是一个激动人心的时刻，请高举92年的可乐，一起土嗨！！！！</p>
+<p><img src="https://i.loli.net/2020/05/09/81OLJZCFreMfQ7R.png" srcset="/img/loading.gif" alt="image-20200509151727917"></p>
+<p><em>提示：</em>如果界面无法跳转，可能是端口号被占用了，终端输入<code>ctrl + c</code> 停止服务器，接着输入 <code>hexo server -p 端口号</code> 来修改端口号</p>
+<p><em>扩展：</em>Mac查看端口号是否被占用及释放</p>
+<pre><code class="hljs plain">&#x2F;&#x2F; 查看使用端口号进程
+lsof -i:端口号
+&#x2F;&#x2F; 释放端口号
+kill 进程的PID
+&#x2F;&#x2F; 再次执行，查看无进程占用
+lsof -i:端口号</code></pre>
+
+
+
+<h5 id="3-6-关联Github"><a href="#3-6-关联Github" class="headerlink" title="3.6 关联Github"></a>3.6 关联Github</h5><p>登录Github,创建库，比如本人的CallLiven.github.io，并复制https地址</p>
+<p>（注意点是github.io的前缀一定要跟github的名称一致，否则登录网址会提示404错误，找不到对应的文件）</p>
+<p><img src="https://i.loli.net/2020/05/09/8ErvzakRN6dsw1l.png" srcset="/img/loading.gif" alt="image-20200509152540582"></p>
+<p>打开之前创建的<code>Blog</code>文件夹，打开<code>_config.yml</code>文件，在文件最底部编写以下内容</p>
+<pre><code class="hljs plain"># Deployment
+## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;deployment.html
+deploy:
+  type: git
+  repo:  &lt;仓库地址&gt;
+  branch: master</code></pre>
+
+<p>安装插件Git bash 将文章推到仓库</p>
+<pre><code class="hljs plain">npm install hexo-deloper-git --save</code></pre>
+
+<p>部署到远端服务器Github</p>
+<pre><code class="hljs plain">hexo g (生成静态文件)
+hexo d （将本地数据部署到远端服务器）</code></pre>
+
+<p>恭喜，已经成功了</p>
+<p>浏览器直接打开：<a href="https://callliven.github.io" target="_blank" rel="noopener">https://callliven.github.io</a></p>
+<h3 id="4-0-创建博客"><a href="#4-0-创建博客" class="headerlink" title="4.0 创建博客"></a>4.0 创建博客</h3><pre><code class="hljs plain">hexo new 文件标题</code></pre>
+
+<p><img src="https://i.loli.net/2020/05/09/1oapDuFHGPSfRgB.png" srcset="/img/loading.gif" alt="image-20200509155650478"></p>
+<p>根据路径打开md文件，开始编辑文章，比如大海啊大海，海大啊海大</p>
+<h2 id="二、编辑博客推荐工具：Typora-下载地址"><a href="#二、编辑博客推荐工具：Typora-下载地址" class="headerlink" title="二、编辑博客推荐工具：Typora 下载地址"></a>二、编辑博客推荐工具：Typora <a href="https://www.typora.io" target="_blank" rel="noopener">下载地址</a></h2><p>PS：一定要安装最新版本的，因为最新版本的支持图床设置，也就是将拖拽的图片自动上传到设置好的服务上</p>
+<p>(1) 上传工具：PicGo 下载地址</p>
+<p>(2) 图床选择：SM.MS （特点：永久存储免费，图片链接支持https，可以删除上传的图片，但图片上传有限制：每张图片最大5M，每次最多上传10张）</p>
+<h3 id="1-SM-MS注册"><a href="#1-SM-MS注册" class="headerlink" title="1.SM.MS注册"></a>1.SM.MS注册</h3><p><a href="https://sm.ms/login" target="_blank" rel="noopener">https://sm.ms/login</a></p>
+<h3 id="2-生成token"><a href="#2-生成token" class="headerlink" title="2.生成token"></a>2.生成token</h3><p><a href="https://sm.ms/home/apitoken" target="_blank" rel="noopener">https://sm.ms/home/apitoken</a></p>
+<h3 id="3-配置PicGo的SM-MS图床服务"><a href="#3-配置PicGo的SM-MS图床服务" class="headerlink" title="3.配置PicGo的SM.MS图床服务"></a>3.配置PicGo的SM.MS图床服务</h3><p>文件路径：~/.picgo/config.json</p>
+<pre><code class="hljs plain">&#123;
+  &quot;picBed&quot;: &#123;
+    &quot;uploader&quot;: &quot;smms&quot;, &#x2F;&#x2F; 代表当前的默认上传图床为 SM.MS,
+    &quot;smms&quot;: &#123;
+      &quot;token&quot;: &quot;&quot; &#x2F;&#x2F; 从https:&#x2F;&#x2F;sm.ms&#x2F;home&#x2F;apitoken获取的token
+    &#125;
+  &#125;,
+  &quot;picgoPlugins&quot;: &#123;&#125; &#x2F;&#x2F; 为插件预留
+&#125;</code></pre>
+
+<h3 id="4-修改Typora配置"><a href="#4-修改Typora配置" class="headerlink" title="4.修改Typora配置"></a>4.修改Typora配置</h3><p>偏好设置–&gt;图像</p>
+<p><img src="https://i.loli.net/2020/05/08/9nfTSi5F47jcVoE.png" srcset="/img/loading.gif" alt="image-20200508175202269"></p>
+<h3 id="5-编辑文章"><a href="#5-编辑文章" class="headerlink" title="5.编辑文章"></a>5.编辑文章</h3><p>完成以上操作就可以开始编辑文章，方式跟简书等博客是一样的</p>
+<h2 id="三、更换主题"><a href="#三、更换主题" class="headerlink" title="三、更换主题"></a>三、更换主题</h2><p>我当前使用的主题是<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="noopener">Fluid</a>,安装方法请参考界面所介绍的。(<a href="https://hexo.io/themes/" target="_blank" rel="noopener">更多主题选择</a>)</p>
+<p>Fluid主题预览（风格简易大气，并且支持文章搜索、标签、分类、评论等等）</p>
+<ol>
+<li><p>下载主题包</p>
+</li>
+<li><p>将主题解压，并重命名为“fluid”</p>
+</li>
+<li><p>将主题包拖动“Blog”文件夹中的“themes”</p>
+</li>
+</ol>
+<p><img src="https://i.loli.net/2020/05/09/zEn3GPj4gxXVWRw.png" srcset="/img/loading.gif" alt="image-20200509161029217"></p>
+<ol start="4">
+<li>最后一步，修改hexo主题配置</li>
+</ol>
+<p><img src="https://i.loli.net/2020/05/09/vY6ZAIPQiGqMag7.png" srcset="/img/loading.gif" alt="image-20200509161241944"></p>
+<h2 id="四、个性化功能-非必须的"><a href="#四、个性化功能-非必须的" class="headerlink" title="四、个性化功能(非必须的)"></a>四、个性化功能(非必须的)</h2><p>该主题支持的个性化功能，具体的都在<code>_config.yml</code>文件中都有教程，操作非常简单，此处只介绍添加评论和音乐的方法</p>
+<h3 id="1-添加评论"><a href="#1-添加评论" class="headerlink" title="1. 添加评论"></a>1. 添加评论</h3><p>Fluid主题支持多种评论插件，此处选择<code>Valine</code>，因为我刚好有<a href="https://leancloud.cn" target="_blank" rel="noopener">Leancloud</a>账号，并且Valine不需要提供多种资料，比较简单</p>
+<p><img src="https://i.loli.net/2020/05/11/PsGnZXDcqeTL2Ni.png" srcset="/img/loading.gif" alt="image-20200511151845391"></p>
+<p><img src="https://i.loli.net/2020/05/11/1Zoes23wUP9gupr.png" srcset="/img/loading.gif" alt="image-20200511151734203"></p>
+<h3 id="2-播放音乐"><a href="#2-播放音乐" class="headerlink" title="2. 播放音乐"></a>2. 播放音乐</h3><p>安装音乐播放器插件: <a href="https://aplayer.js.org" target="_blank" rel="noopener">音乐播放插件APlayer</a></p>
+<pre><code class="hljs plain">cd 博客文件夹
+npm install aplayer --save</code></pre>
+
+<p>修改配置文件 <code>_config.yml</code> (需要将mp3文件拉到博客文件夹中)</p>
+<p><img src="https://i.loli.net/2020/05/11/QVRrAqEi8FyOkJw.png" srcset="/img/loading.gif" alt="image-20200511151228772"></p>
+<h3 id="3-统计百度统计"><a href="#3-统计百度统计" class="headerlink" title="3.统计百度统计"></a>3.统计百度统计</h3><p>注册百度统计账号:<a href="https://tongji.baidu.com/sc-web/10000203072/home/site/index?from=3" target="_blank" rel="noopener">网址</a></p>
+<p><img src="https://i.loli.net/2020/05/11/dEcX2NUipmMIlJz.png" srcset="/img/loading.gif" alt="image-20200511200825592"></p>
+<p><img src="https://i.loli.net/2020/05/11/noBJX8NObVx12GU.png" srcset="/img/loading.gif" alt="image-20200511200840983"></p>
+<p><img src="https://i.loli.net/2020/05/11/dBKwlPy2Le36DY5.png" srcset="/img/loading.gif" alt="image-20200511201033923"></p>
+<p><img src="https://i.loli.net/2020/05/11/WEZuYoTLrkmgMSn.png" srcset="/img/loading.gif" alt="image-20200511201111996"></p>
+<p>编辑根目录Blog下的<code>_config.yml</code>文件</p>
+<p><img src="https://i.loli.net/2020/05/11/6kvT37Ne1ayjDSQ.png" srcset="/img/loading.gif" alt="image-20200511201330541"></p>
+<p>重新生成静态文件及部署到github上，就可以了（每次修改内容，都需要重新生成静态文件，再部署git上）</p>
+<pre><code class="hljs plain">hexo g
+hexo d</code></pre>
+
+<p><img src="https://i.loli.net/2020/05/11/9fjyTMAwRBiuUZ6.png" srcset="/img/loading.gif" alt="image-20200511201511851"></p>
+<h2 id="五、Typora-常用快捷键"><a href="#五、Typora-常用快捷键" class="headerlink" title="五、Typora 常用快捷键"></a>五、Typora 常用快捷键</h2><pre><code class="hljs plain">无序列表：输入-之后输入空格
+有序列表：输入数字+“.”之后输入空格
+任务列表：-[空格]空格 文字
+标题：ctrl+数字
+表格：ctrl+t
+生成目录：[TOC]按回车
+选中一整行：ctrl+l
+选中单词：ctrl+d
+选中相同格式的文字：ctrl+e
+跳转到文章开头：ctrl+home
+跳转到文章结尾：ctrl+end
+搜索：ctrl+f
+替换：ctrl+h
+引用：输入&gt;之后输入空格
+代码块：ctrl+alt+f
+加粗：ctrl+b
+倾斜：ctrl+i
+下划线：ctrl+u
+删除线：alt+shift+5
+插入图片：直接拖动到指定位置即可或者ctrl+shift+i
+插入链接：ctrl+k</code></pre>
+
+
+
+<h2 id="六、参考文章："><a href="#六、参考文章：" class="headerlink" title="六、参考文章："></a>六、参考文章：</h2><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo官方文档</a></p>
+<p><a href="https://doc.sm.ms/" target="_blank" rel="noopener">SM.MS API 文档</a></p>
+<p><a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#默认配置文件" target="_blank" rel="noopener">PinGo-Core官方文档</a></p>
+<p><a href="https://www.jianshu.com/p/7b8faf77d1af" target="_blank" rel="noopener">Hexo常用指令</a></p>
+<p><a href="https://aplayer.js.org" target="_blank" rel="noopener">音乐播放插件APlayer</a></p>
+<p><a href="https://leancloud.cn" target="_blank" rel="noopener">Leancloud第三方服务器</a></p>
+<center class="half"> <div>感谢你“一分”支持</div>   <img src="https://i.loli.net/2020/05/11/OJmWIEMseCDVjzx.jpg" srcset="/img/loading.gif" width="300"/><img src="https://i.loli.net/2020/05/11/qSd9hCbynVMkGv5.jpg" srcset="/img/loading.gif" width="300"/> </center>
+
+
+
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%85%B6%E4%BB%96/">其他</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Tool/">Tool</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/05/14/iOS%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85-Jenkins/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Jenkins自动打包--从零开始</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script defer src="https://cdn.staticfile.org/valine/1.4.4/Valine.min.js" ></script>
+
+  <script type="text/javascript">
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+
+      new Valine({
+        el: "#vcomments",
+        app_id: "yXom8ixvXSnnf5ow9iuwTppi-gzGzoHsz",
+        app_key: "Tb7YxoXCUDQsdcJI8M95cAWU",
+        placeholder: "说点什么",
+        path: window.location.pathname,
+        avatar: "retro",
+        meta: ["昵称"],
+        pageSize: "20",
+        lang: "zh-CN",
+        highlight: false,
+        recordIP: false,
+        serverURLs: "",
+      });
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+    <!-- APlayer 音乐播放器 -->
+    <div id="aplayer"></div>
+    <script defer src="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.js" ></script>
+<link  rel="stylesheet" href="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.css" />
+<script type="text/javascript">
+  var oldLoadAp = window.onload;
+  window.onload = function () {
+    oldLoadAp && oldLoadAp();
+
+    new APlayer({
+      container: document.getElementById('aplayer'),
+      fixed: true,
+      autoplay: 'true' === 'true',
+      loop: 'all',
+      order: 'random',
+      theme: '#4169E1',
+      preload: 'none',
+      audio: [{"name":"Try","artist":"Marlisa","url":"/mp3/Try.mp3","cover":"/img/musicCover/Marlisa.jpeg"},{"name":"Love The Way You Lie + I need a doctor","artist":"Rihanna、Eminem","url":"/mp3/Love.mp3","cover":"/img/musicCover/Eminem.jpeg"}]
+    });
+  }
+</script>
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 6,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?26e6317c907495b6a9e0a92188348969";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Hexo + Github 搭建博客完整版&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 100,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
