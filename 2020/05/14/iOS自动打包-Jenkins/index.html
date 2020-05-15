@@ -187,7 +187,6 @@
 <p>篇幅较长，请耐心看完，本人亲测有效。</p>
 <p>写文不容易，翻阅了多篇博客，构建失败将近100次，总结的文章，除了文字描述，也附上图片说明，方便阅读。</p>
 <p>如果喜欢本文的，请打赏一分支持</p>
-<p>daemon</p>
 <h1 id="二、Jenkins安装"><a href="#二、Jenkins安装" class="headerlink" title="二、Jenkins安装"></a>二、Jenkins安装</h1><h4 id="2-0-java-SDK-安装"><a href="#2-0-java-SDK-安装" class="headerlink" title="2.0 java SDK 安装"></a>2.0 java SDK 安装</h4><p><a href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html" target="_blank" rel="noopener">下载地址</a>,双击完成安装</p>
 <h4 id="2-1-安装方式："><a href="#2-1-安装方式：" class="headerlink" title="2.1 安装方式："></a>2.1 安装方式：</h4><p>(1)<a href="https://www.jenkins.io/zh/download/" target="_blank" rel="noopener">官网</a>下载最新版的Jenkins安装包pkg（<a href="">其他版本下载地址</a>）</p>
 <p>双击安装包，按指导完成安装</p>
@@ -198,6 +197,7 @@
 
 <p>启动服务完毕后，在浏览器中打开<a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a></p>
 <h4 id="2-3-根据提示路径打开initialAdminPassword文件，复制密码登录"><a href="#2-3-根据提示路径打开initialAdminPassword文件，复制密码登录" class="headerlink" title="2.3 根据提示路径打开initialAdminPassword文件，复制密码登录"></a>2.3 根据提示路径打开initialAdminPassword文件，复制密码登录</h4><p><img src="https://i.loli.net/2020/05/14/epd8L24Eho5QTY6.png" srcset="/img/loading.gif" alt="image-20200514175313623"></p>
+<p>（PS：如果因为权限问题打不开initialAdminPassword文件，请先跳转目录第三：修复jenkins文件权限后再操作）</p>
 <h4 id="2-4-安装推荐插件"><a href="#2-4-安装推荐插件" class="headerlink" title="2.4 安装推荐插件"></a>2.4 安装推荐插件</h4><p>备注：插件安装不一定会一次性全都安装成功，如果失败了，可以点击重试，如果重试还是有没安装成功的，则选择跳过，继续执行下一步，完成Jenkins的安装，因为插件可以在后续继续完成</p>
 <p><img src="https://i.loli.net/2020/05/14/pW5wqIvCajTPlgR.png" srcset="/img/loading.gif" alt="image-20200514175232751"></p>
 <p><img src="https://i.loli.net/2020/05/14/vtQ2SFZsNeVx1Kj.png" srcset="/img/loading.gif" alt="image-20200514175258436"></p>
@@ -221,8 +221,7 @@ sudo chown -R yyk:daemon &#x2F;var&#x2F;log&#x2F;jenkins&#x2F;</code></pre>
 <p>（4）启动Jenkins，完成权限修改</p>
 <pre><code class="hljs plain">sudo launchctl load &#x2F;Library&#x2F;LaunchDaemons&#x2F;org.jenkins-ci.plist</code></pre>
 
-
-
+<p><img src="https://i.loli.net/2020/05/15/uLb8qFNJ215wo4g.png" srcset="/img/loading.gif" alt="image-20200515163217384"></p>
 <h1 id="四、插件安装及配置"><a href="#四、插件安装及配置" class="headerlink" title="四、插件安装及配置"></a>四、插件安装及配置</h1><h4 id="4-0-打开管理界面"><a href="#4-0-打开管理界面" class="headerlink" title="4.0 打开管理界面"></a>4.0 打开管理界面</h4><p><img src="https://i.loli.net/2020/05/15/ILy63UZTptOeD5i.png" srcset="/img/loading.gif" alt="image-20200515094540316"></p>
 <h4 id="4-1-打开插件管理"><a href="#4-1-打开插件管理" class="headerlink" title="4.1 打开插件管理"></a>4.1 打开插件管理</h4><p><img src="https://i.loli.net/2020/05/15/ulNab1tfmWABZG4.png" srcset="/img/loading.gif" alt="image-20200515094621266"></p>
 <h4 id="4-2-安装插件"><a href="#4-2-安装插件" class="headerlink" title="4.2 安装插件"></a>4.2 安装插件</h4><p>有三个插件是必须额外安装：</p>
@@ -251,7 +250,7 @@ sudo chown -R yyk:daemon &#x2F;var&#x2F;log&#x2F;jenkins&#x2F;</code></pre>
 <p>复制输出内容</p>
 <p><img src="https://i.loli.net/2020/05/15/T2Eh6g7aGuLlXdv.png" srcset="/img/loading.gif" alt="image-20200515135717113"></p>
 <p><img src="https://i.loli.net/2020/05/15/U5Cg1dVPOonDjy4.png" srcset="/img/loading.gif" alt="image-20200515135849747"></p>
-<h1 id="五、新建任务"><a href="#五、新建任务" class="headerlink" title="五、新建任务"></a>五、新建任务</h1><h4 id="5-0-新建任务，创建自由风格工程"><a href="#5-0-新建任务，创建自由风格工程" class="headerlink" title="5.0 新建任务，创建自由风格工程"></a>5.0 新建任务，创建自由风格工程</h4><p><img src="https://i.loli.net/2020/05/15/cDEXgAT4PhemkR9.png" srcset="/img/loading.gif" alt="image-20200515114306575"></p>
+<h1 id="五、新建任务"><a href="#五、新建任务" class="headerlink" title="五、新建任务"></a>五、新建任务</h1><h4 id="5-0-创建自由风格工程"><a href="#5-0-创建自由风格工程" class="headerlink" title="5.0 创建自由风格工程"></a>5.0 创建自由风格工程</h4><p><img src="https://i.loli.net/2020/05/15/cDEXgAT4PhemkR9.png" srcset="/img/loading.gif" alt="image-20200515114306575"></p>
 <p><img src="https://i.loli.net/2020/05/15/Dh5uYBUHFQG6stV.png" srcset="/img/loading.gif" alt="image-20200515114411371"></p>
 <h4 id="5-1-General-项配置"><a href="#5-1-General-项配置" class="headerlink" title="5.1 General 项配置"></a>5.1 General 项配置</h4><p><img src="https://i.loli.net/2020/05/15/RlpH5QLohaMeDjV.png" srcset="/img/loading.gif" alt="image-20200515114722913"></p>
 <h4 id="5-2-源码管理"><a href="#5-2-源码管理" class="headerlink" title="5.2 源码管理"></a>5.2 源码管理</h4><p><img src="https://i.loli.net/2020/05/15/ayDpQMf4BiqUCAe.png" srcset="/img/loading.gif" alt="image-20200515115320879"></p>
