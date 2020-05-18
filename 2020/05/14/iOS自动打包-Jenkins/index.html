@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    1.2k 字
+                    1.4k 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    14
+                    17
                      分钟
                   </span>
                 
@@ -185,7 +185,7 @@
               <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>Jenkins是基于Java开发的一种持续集成工具，支持自动化、部署、构建。</p>
 <p>简而言之，对于开发者可以避免做重复并且耗时的事情，专注于代码的开发(测试的小姐姐就不用每次跟我要安装包)</p>
 <p>篇幅较长，请耐心看完，本人亲测有效。</p>
-<p>写文不容易，翻阅了多篇博客，构建失败将近100次，总结的文章，除了文字描述，也附上图片说明，方便阅读。</p>
+<p>写文不容易，翻阅了多篇博客，构建失败将近50次，总结的文章，除了文字描述，也附上图片说明，方便阅读。</p>
 <p>如果喜欢本文的，请打赏一分支持</p>
 <h1 id="二、Jenkins安装"><a href="#二、Jenkins安装" class="headerlink" title="二、Jenkins安装"></a>二、Jenkins安装</h1><h4 id="2-0-java-SDK-安装"><a href="#2-0-java-SDK-安装" class="headerlink" title="2.0 java SDK 安装"></a>2.0 java SDK 安装</h4><p><a href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html" target="_blank" rel="noopener">下载地址</a>,双击完成安装</p>
 <h4 id="2-1-安装方式："><a href="#2-1-安装方式：" class="headerlink" title="2.1 安装方式："></a>2.1 安装方式：</h4><p>(1)<a href="https://www.jenkins.io/zh/download/" target="_blank" rel="noopener">官网</a>下载最新版的Jenkins安装包pkg（<a href="">其他版本下载地址</a>）</p>
@@ -199,6 +199,7 @@
 <h4 id="2-3-根据提示路径打开initialAdminPassword文件，复制密码登录"><a href="#2-3-根据提示路径打开initialAdminPassword文件，复制密码登录" class="headerlink" title="2.3 根据提示路径打开initialAdminPassword文件，复制密码登录"></a>2.3 根据提示路径打开initialAdminPassword文件，复制密码登录</h4><p><img src="https://i.loli.net/2020/05/14/epd8L24Eho5QTY6.png" srcset="/img/loading.gif" alt="image-20200514175313623"></p>
 <p>（PS：如果因为权限问题打不开initialAdminPassword文件，请先跳转目录第三：修复jenkins文件权限后再操作）</p>
 <h4 id="2-4-安装推荐插件"><a href="#2-4-安装推荐插件" class="headerlink" title="2.4 安装推荐插件"></a>2.4 安装推荐插件</h4><p>备注：插件安装不一定会一次性全都安装成功，如果失败了，可以点击重试，如果重试还是有没安装成功的，则选择跳过，继续执行下一步，完成Jenkins的安装，因为插件可以在后续继续完成</p>
+<p>(备注：如果Jenkins插件多次在线安装失败，可以先下载<a href="https://updates.jenkins-ci.org/download/plugins/" target="_blank" rel="noopener">插件</a>,下载成功后，在插件管理界面选择【高级】上传的方式安装)</p>
 <p><img src="https://i.loli.net/2020/05/14/pW5wqIvCajTPlgR.png" srcset="/img/loading.gif" alt="image-20200514175232751"></p>
 <p><img src="https://i.loli.net/2020/05/14/vtQ2SFZsNeVx1Kj.png" srcset="/img/loading.gif" alt="image-20200514175258436"></p>
 <h4 id="2-5-设置管理账号"><a href="#2-5-设置管理账号" class="headerlink" title="2.5 设置管理账号"></a>2.5 设置管理账号</h4><p><img src="https://i.loli.net/2020/05/14/Y7lsWZN8Ldvkbae.png" srcset="/img/loading.gif" alt="image-20200514184912707"></p>
@@ -295,7 +296,21 @@ pod install</code></pre>
 <p>将输入的PATH值复制，然后到Jenkins的系统管理设置</p>
 <p><img src="https://i.loli.net/2020/05/14/xrASPOGgeLVo6w8.png" srcset="/img/loading.gif" alt="image-20200514143727060"></p>
 </blockquote>
-<h1 id="七、参考文章"><a href="#七、参考文章" class="headerlink" title="七、参考文章"></a>七、参考文章</h1><p><a href="http://paocai.site/2020/04/27/iOS%20最新Jenkins自动化打包配置完整教程/#&gid=1&pid=13" target="_blank" rel="noopener">iOS 最新Jenkins自动化打包配置完整教程</a></p>
+<h1 id="七、待续"><a href="#七、待续" class="headerlink" title="七、待续"></a>七、待续</h1><p>至此我们实现可持续开发的第一步，自动化打包，除此之外还需要配置多个scheme，打出不同环境的安装包</p>
+<p>比如测试妹纸需要一个SIT包，产品经理需要一个SIM包等等，因为我们总不能修改一下代码，提交一下，打一个包，再修改代码再提交再打包，这样的操作依然需要开发人员的配合，增添了不少的成本。</p>
+<p>对此下一篇则会侧重点解决这个问题</p>
+<pre><code class="hljs plain">DEV Development 研发环境
+SIT System Integrate Test 系统集成测试环境（内测）
+UAT User Acceptance Test 用户验收测试环境
+PET Performance Evaluation Test 性能评估测试环境（压测）
+SIM Simulation 高仿真环境&#x2F;预发布
+PRD&#x2F;PROD Production 正式&#x2F;生产环境</code></pre>
+
+
+
+
+
+<h1 id="八、参考文章"><a href="#八、参考文章" class="headerlink" title="八、参考文章"></a>八、参考文章</h1><p><a href="http://paocai.site/2020/04/27/iOS%20最新Jenkins自动化打包配置完整教程/#&gid=1&pid=13" target="_blank" rel="noopener">iOS 最新Jenkins自动化打包配置完整教程</a></p>
 <p><a href="https://www.jianshu.com/p/70e4335b0bd6" target="_blank" rel="noopener">Jenins自动打包</a></p>
 <p><a href="https://www.jianshu.com/p/04b5fe2e8598" target="_blank" rel="noopener">Mac修改jenkins进程默认账户解决权限问题</a></p>
 <p><a href="https://www.jianshu.com/p/5be50ee32450" target="_blank" rel="noopener">CocoaPods管理的项目配置Jenkins遇到的坑</a></p>
