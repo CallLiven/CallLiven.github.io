@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>AVPlayer边播放边缓存</title>
+    <link href="/2020/05/19/AVPlayer%E8%BE%B9%E6%92%AD%E6%94%BE%E8%BE%B9%E7%BC%93%E5%AD%98/"/>
+    <url>/2020/05/19/AVPlayer%E8%BE%B9%E6%92%AD%E6%94%BE%E8%BE%B9%E7%BC%93%E5%AD%98/</url>
+    
+    <content type="html"><![CDATA[<p>随着抖音的兴起，短视频是符是每个app的标配，以往项目都有视频播放的功能，但都是集成第三方库的控件，直接使用的，对于avplayer的边播边缓存不了解，趁着疫情宅在家里有空，研究一下，目标是自己也能封装一个播放器</p><p>分3篇文章</p><p>01 - 视频播放</p><p>02 - 视频缓存</p><p>03 - 播放器封装</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Object-C</category>
+      
+      <category>iOS</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Media</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>数据库基本使用和封装教程看我的就可以了</title>
     <link href="/2020/05/18/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"/>
     <url>/2020/05/18/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
