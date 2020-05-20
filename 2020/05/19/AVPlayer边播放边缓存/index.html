@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    110 字
+                    261 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    1
+                    2
                      分钟
                   </span>
                 
@@ -182,11 +182,15 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p>随着抖音的兴起，短视频是符是每个app的标配，以往项目都有视频播放的功能，但都是集成第三方库的控件，直接使用的，对于avplayer的边播边缓存不了解，趁着疫情宅在家里有空，研究一下，目标是自己也能封装一个播放器</p>
-<p>分3篇文章</p>
+              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着抖音的兴起，短视频是乎是每个app的标配，虽然以往开发的项目都有视频播放的功能，但都是集成第三方库的控件，直接使用的，对于avplayer的边播边缓存是如何实现不了解，趁着疫情宅在家里有空，研究一下，目标是自己也能封装一个播放器</p>
+<p>分4篇文章</p>
 <p>01 - 视频播放</p>
-<p>02 - 视频缓存</p>
-<p>03 - 播放器封装</p>
+<p>02 - 视频分片下载</p>
+<p>03 - 视频缓存</p>
+<p>04 - 播放器封装</p>
+<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>AVPlayer 没有提供API获取播放器下载的数据，所以无法直接获取缓存，但是可以通过设置AVAssetResourceLoader代理的方式，自己使用NSURLSession下载数据，再传给播放器播放，同时缓存在本地，下次播放的时候可以使用。</p>
+<p>AVAssetResourceLoader 只有在AVURLAsset加载不能识别的URL资源的时候，才会回调代理方法，所以在初始化AVURLAsset的时候把目标视频URL地址的scheme替换成系统不能识别的schemen。</p>
+<p><img src="https://i.loli.net/2020/05/19/BJWvbsLajEKHDFr.png" srcset="/img/loading.gif" alt="引用zltunes中的图片"></p>
 
             </article>
             <hr>
