@@ -23,7 +23,7 @@
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/github-gist.min.css" />
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/xcode.min.css" />
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    2.6k 字
+                    2.4k 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    38
+                    34
                      分钟
                   </span>
                 
@@ -195,23 +195,25 @@
 <p>返回YES，表示该代理类现在可以处理该请求，需要在这里保存loadingReques并开启下载数据的任务</p>
 <p>下载回调中拿到响应数据后再对loadingRequest进行填充</p>
 <p>如果返回NO，则表示当前代理不能处理，视频数据需要AVPlayer自己处理(但是之前视频URL的scheme被设置自定义的，所以AVPlayer不能识别，最后导致 AVPlayerItemStatusFailed)</p>
-<pre><code class="hljs objective-c">- (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest</code></pre>
+<pre><code class="hljs objc">- (<span class="hljs-built_in">BOOL</span>)resourceLoader:(<span class="hljs-built_in">AVAssetResourceLoader</span> *)resourceLoader shouldWaitForLoadingOfRequestedResource:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest</code></pre>
 
 
 
 <p>AVAssetResourceLoader取消了本次请求</p>
 <p>把loadingRequest移除下载任务回调列表(停止填充数据)</p>
-<pre><code class="hljs objective-c">- (void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest</code></pre>
+<pre><code class="hljs objc">- (<span class="hljs-keyword">void</span>)resourceLoader:(<span class="hljs-built_in">AVAssetResourceLoader</span> *)resourceLoader didCancelLoadingRequest:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest</code></pre>
 
 
 
 <p>代理方法中<code>AVAssetResourceLoadingRequest</code>类非常关键，以下是该类常用的属性和方法</p>
-<pre><code class="hljs objective-c">@property (nonatomic, readonly) NSURLRequest *request;
-@property (nonatomic, readonly, nullable) AVAssetResourceLoadingContentInformationRequest *contentInformationRequest;
-@property (nonatomic, readonly, nullable) AVAssetResourceLoadingDataRequest *dataRequest;
+<pre><code class="hljs objc"><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">readonly</span>) <span class="hljs-built_in">NSURLRequest</span> *request;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">readonly</span>, <span class="hljs-keyword">nullable</span>) <span class="hljs-built_in">AVAssetResourceLoadingContentInformationRequest</span> *contentInformationRequest;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">readonly</span>, <span class="hljs-keyword">nullable</span>) <span class="hljs-built_in">AVAssetResourceLoadingDataRequest</span> *dataRequest;
 
-- (void)finishLoading;
-- (void)finishLoadingWithError:(nullable NSError *)error;</code></pre>
+- (<span class="hljs-keyword">void</span>)finishLoading;
+- (<span class="hljs-keyword">void</span>)finishLoadingWithError:(<span class="hljs-keyword">nullable</span> <span class="hljs-built_in">NSError</span> *)error;</code></pre>
+
+
 
 <p><code>request</code> 代表原始的请求，获取资源请求地址</p>
 <p><code>contentInformationRequest</code> 播放资源相关的信息，比如资源格式contentType、资源长度大小contentLength、是否支持分片下载byteRangeAccessSupported等</p>
@@ -223,330 +225,330 @@
 <h4 id="（3）重试机制"><a href="#（3）重试机制" class="headerlink" title="（3）重试机制"></a>（3）重试机制</h4><p>AVAssetResourceLoader在执行加载的时候，会时不时触发取消下载方法<code>\- (void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoa</code>，然后重新发起加载请求策略，如果下载了部分，重新发起的下载请求会从还没下载的部分开始。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><h4 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h4><p>完整代码：链接:<a href="https://pan.baidu.com/s/1BR9MkKHxrk_T-mH5vV7NIQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1BR9MkKHxrk_T-mH5vV7NIQ</a>  密码:st0g</p>
 <p><img src="https://i.loli.net/2020/05/21/p1Y4sXlwrFnbHx8.png" srcset="/img/loading.gif" alt="image-20200521134545223"></p>
-<pre><code class="hljs objective-c">#import &quot;ViewController.h&quot;
-#import &lt;AVFoundation&#x2F;AVFoundation.h&gt;
-#import &lt;CoreServices&#x2F;CoreServices.h&gt;
+<pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">"ViewController.h"</span></span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">&lt;AVFoundation/AVFoundation.h&gt;</span></span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">&lt;CoreServices/CoreServices.h&gt;</span></span>
 
-#define kScheme @&quot;scheme&quot;
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> kScheme @<span class="hljs-meta-string">"scheme"</span></span>
 
-@interface ViewController ()&lt;AVAssetResourceLoaderDelegate,NSURLSessionDelegate&gt;
-@property (nonatomic, strong) AVPlayer *player;
-@property (nonatomic, strong) AVPlayerLayer *playerLayer;
-@property (nonatomic, strong) AVURLAsset *urlAsset;
-@property (nonatomic, strong) AVPlayerItem *playerItem;
+<span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">ViewController</span> ()&lt;<span class="hljs-title">AVAssetResourceLoaderDelegate</span>,<span class="hljs-title">NSURLSessionDelegate</span>&gt;</span>
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">AVPlayer</span> *player;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">AVPlayerLayer</span> *playerLayer;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">AVURLAsset</span> *urlAsset;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">AVPlayerItem</span> *playerItem;
 
-@property (nonatomic, strong) NSMutableArray&lt;AVAssetResourceLoadingRequest *&gt; *requestsArray;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSMutableArray</span>&lt;<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *&gt; *requestsArray;
 
-@property (nonatomic, strong) NSURLSession *session;
-@property (nonatomic, strong) NSURLSessionTask *task;
-@property (nonatomic, strong) NSOperationQueue *downloadQueue;
-@property (nonatomic, strong) NSMutableData *downloadData;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSURLSession</span> *session;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSURLSessionTask</span> *task;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSOperationQueue</span> *downloadQueue;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSMutableData</span> *downloadData;
 
-@property (nonatomic, assign) BOOL  byteRangeAccessSupported;
-@property (nonatomic, assign) NSInteger  contentLength;
-@property (nonatomic, copy  ) NSString  *contentType;
-
-
-@end
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">assign</span>) <span class="hljs-built_in">BOOL</span>  byteRangeAccessSupported;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">assign</span>) <span class="hljs-built_in">NSInteger</span>  contentLength;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">copy</span>  ) <span class="hljs-built_in">NSString</span>  *contentType;
 
 
-@implementation ViewController
+<span class="hljs-keyword">@end</span>
 
-- (void)viewDidLoad &#123;
-    [super viewDidLoad];
+
+<span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">ViewController</span></span>
+
+- (<span class="hljs-keyword">void</span>)viewDidLoad &#123;
+    [<span class="hljs-keyword">super</span> viewDidLoad];
     
-    self.view.backgroundColor &#x3D; [UIColor blackColor];
+    <span class="hljs-keyword">self</span>.view.backgroundColor = [<span class="hljs-built_in">UIColor</span> blackColor];
     
-    _requestsArray &#x3D; [NSMutableArray array];
-    _downloadData &#x3D; [NSMutableData data];
+    _requestsArray = [<span class="hljs-built_in">NSMutableArray</span> array];
+    _downloadData = [<span class="hljs-built_in">NSMutableData</span> data];
 
-    &#x2F;&#x2F; URL
-    NSString *url &#x3D; @&quot;http:&#x2F;&#x2F;vfx.mtime.cn&#x2F;Video&#x2F;2019&#x2F;03&#x2F;18&#x2F;mp4&#x2F;190318231014076505.mp4&quot;;
-    NSURL *videoURL &#x3D; [NSURL URLWithString:[kScheme stringByAppendingString:url]];
+    <span class="hljs-comment">// URL</span>
+    <span class="hljs-built_in">NSString</span> *url = <span class="hljs-string">@"http://vfx.mtime.cn/Video/2019/03/18/mp4/190318231014076505.mp4"</span>;
+    <span class="hljs-built_in">NSURL</span> *videoURL = [<span class="hljs-built_in">NSURL</span> URLWithString:[kScheme stringByAppendingString:url]];
     
-    &#x2F;&#x2F; AVURLAsset
-    _urlAsset &#x3D; [AVURLAsset URLAssetWithURL:videoURL options:nil];
-    [_urlAsset.resourceLoader setDelegate:self queue:dispatch_get_main_queue()];
+    <span class="hljs-comment">// AVURLAsset</span>
+    _urlAsset = [<span class="hljs-built_in">AVURLAsset</span> URLAssetWithURL:videoURL options:<span class="hljs-literal">nil</span>];
+    [_urlAsset.resourceLoader setDelegate:<span class="hljs-keyword">self</span> queue:dispatch_get_main_queue()];
 
-    &#x2F;&#x2F; PlayerItem
-    _playerItem &#x3D; [AVPlayerItem playerItemWithAsset:self.urlAsset];
-    [_playerItem addObserver:self forKeyPath:@&quot;status&quot; options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    <span class="hljs-comment">// PlayerItem</span>
+    _playerItem = [<span class="hljs-built_in">AVPlayerItem</span> playerItemWithAsset:<span class="hljs-keyword">self</span>.urlAsset];
+    [_playerItem addObserver:<span class="hljs-keyword">self</span> forKeyPath:<span class="hljs-string">@"status"</span> options:<span class="hljs-built_in">NSKeyValueObservingOptionNew</span>|<span class="hljs-built_in">NSKeyValueObservingOptionOld</span> context:<span class="hljs-literal">nil</span>];
 
-    &#x2F;&#x2F; Player
-    _player &#x3D; [[AVPlayer alloc]initWithPlayerItem:self.playerItem];
+    <span class="hljs-comment">// Player</span>
+    _player = [[<span class="hljs-built_in">AVPlayer</span> alloc]initWithPlayerItem:<span class="hljs-keyword">self</span>.playerItem];
     
-    &#x2F;&#x2F; PlayerLayer
-    _playerLayer &#x3D; [AVPlayerLayer playerLayerWithPlayer:self.player];
-    _playerLayer.videoGravity &#x3D; AVLayerVideoGravityResizeAspect;
-    _playerLayer.frame &#x3D; CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-    [self.view.layer addSublayer:_playerLayer];
+    <span class="hljs-comment">// PlayerLayer</span>
+    _playerLayer = [<span class="hljs-built_in">AVPlayerLayer</span> playerLayerWithPlayer:<span class="hljs-keyword">self</span>.player];
+    _playerLayer.videoGravity = <span class="hljs-built_in">AVLayerVideoGravityResizeAspect</span>;
+    _playerLayer.frame = <span class="hljs-built_in">CGRectMake</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, [<span class="hljs-built_in">UIScreen</span> mainScreen].bounds.size.width, [<span class="hljs-built_in">UIScreen</span> mainScreen].bounds.size.height);
+    [<span class="hljs-keyword">self</span>.view.layer addSublayer:_playerLayer];
 &#125;
 
 
-#pragma mark - AVAssetResourceLoaderDelegate
-&#x2F;&#x2F;&#x2F; 要求加载资源的代理方法
-&#x2F;&#x2F;&#x2F; 返回YES，表示该代理类现在可以处理该请求，需要在这里保存loadingReques并开启下载数据的任务
-&#x2F;&#x2F;&#x2F; 下载回调中拿到响应数据后再对loadingRequest进行填充
-&#x2F;&#x2F;&#x2F; 如果返回NO，则表示当前代理不能处理，视频数据需要AVPlayer自己处理(但是之前视频URL的scheme被设置自定义的，所以AVPlayer不能识别，最后导致 AVPlayerItemStatusFailed)
-- (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest &#123;
-    NSString *requestURL &#x3D; loadingRequest.request.URL.absoluteString;
-    if ([requestURL containsString:kScheme] &amp;&amp; ![_requestsArray containsObject:loadingRequest]) &#123;
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - AVAssetResourceLoaderDelegate</span>
+<span class="hljs-comment">/// 要求加载资源的代理方法</span>
+<span class="hljs-comment">/// 返回YES，表示该代理类现在可以处理该请求，需要在这里保存loadingReques并开启下载数据的任务</span>
+<span class="hljs-comment">/// 下载回调中拿到响应数据后再对loadingRequest进行填充</span>
+<span class="hljs-comment">/// 如果返回NO，则表示当前代理不能处理，视频数据需要AVPlayer自己处理(但是之前视频URL的scheme被设置自定义的，所以AVPlayer不能识别，最后导致 AVPlayerItemStatusFailed)</span>
+- (<span class="hljs-built_in">BOOL</span>)resourceLoader:(<span class="hljs-built_in">AVAssetResourceLoader</span> *)resourceLoader shouldWaitForLoadingOfRequestedResource:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest &#123;
+    <span class="hljs-built_in">NSString</span> *requestURL = loadingRequest.request.URL.absoluteString;
+    <span class="hljs-keyword">if</span> ([requestURL containsString:kScheme] &amp;&amp; ![_requestsArray containsObject:loadingRequest]) &#123;
         [_requestsArray addObject:loadingRequest];
         
-        if (self.task &#x3D;&#x3D; nil) &#123;
-            NSString *orginURL &#x3D; [requestURL stringByReplacingOccurrencesOfString:kScheme withString:@&quot;&quot;];
-            NSMutableURLRequest *request &#x3D; [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:orginURL] cachePolicy:(NSURLRequestUseProtocolCachePolicy) timeoutInterval:20];
-            self.task &#x3D; [self.session dataTaskWithRequest:request];
-            [self.task resume];
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.task == <span class="hljs-literal">nil</span>) &#123;
+            <span class="hljs-built_in">NSString</span> *orginURL = [requestURL stringByReplacingOccurrencesOfString:kScheme withString:<span class="hljs-string">@""</span>];
+            <span class="hljs-built_in">NSMutableURLRequest</span> *request = [[<span class="hljs-built_in">NSMutableURLRequest</span> alloc]initWithURL:[<span class="hljs-built_in">NSURL</span> URLWithString:orginURL] cachePolicy:(<span class="hljs-built_in">NSURLRequestUseProtocolCachePolicy</span>) timeoutInterval:<span class="hljs-number">20</span>];
+            <span class="hljs-keyword">self</span>.task = [<span class="hljs-keyword">self</span>.session dataTaskWithRequest:request];
+            [<span class="hljs-keyword">self</span>.task resume];
         &#125;
         
-        return YES;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">YES</span>;
     &#125;
 
-    return NO;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">NO</span>;
 &#125;
 
 
-&#x2F;&#x2F;&#x2F; AVAssetResourceLoader取消了本次请求
-&#x2F;&#x2F;&#x2F; 把loadingRequest移除下载任务回调列表(停止填充数据)
-- (void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest &#123;
+<span class="hljs-comment">/// AVAssetResourceLoader取消了本次请求</span>
+<span class="hljs-comment">/// 把loadingRequest移除下载任务回调列表(停止填充数据)</span>
+- (<span class="hljs-keyword">void</span>)resourceLoader:(<span class="hljs-built_in">AVAssetResourceLoader</span> *)resourceLoader didCancelLoadingRequest:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest &#123;
     [_requestsArray removeObject:loadingRequest];
 &#125;
 
 
-#pragma mark - NSURLSessionDelegate
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler &#123;
-    completionHandler(NSURLSessionResponseAllow);
-    if ([response isKindOfClass:NSHTTPURLResponse.class]) &#123;
-        NSHTTPURLResponse *httpResponse &#x3D; (NSHTTPURLResponse *)response;
-        NSString *acceptRange &#x3D; httpResponse.allHeaderFields[@&quot;Accept-Ranges&quot;];
-        self.byteRangeAccessSupported &#x3D; [acceptRange isEqualToString:@&quot;bytes&quot;];
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - NSURLSessionDelegate</span>
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session dataTask:(<span class="hljs-built_in">NSURLSessionDataTask</span> *)dataTask didReceiveResponse:(<span class="hljs-built_in">NSURLResponse</span> *)response completionHandler:(<span class="hljs-keyword">void</span> (^)(<span class="hljs-built_in">NSURLSessionResponseDisposition</span>))completionHandler &#123;
+    completionHandler(<span class="hljs-built_in">NSURLSessionResponseAllow</span>);
+    <span class="hljs-keyword">if</span> ([response isKindOfClass:<span class="hljs-built_in">NSHTTPURLResponse</span>.class]) &#123;
+        <span class="hljs-built_in">NSHTTPURLResponse</span> *httpResponse = (<span class="hljs-built_in">NSHTTPURLResponse</span> *)response;
+        <span class="hljs-built_in">NSString</span> *acceptRange = httpResponse.allHeaderFields[<span class="hljs-string">@"Accept-Ranges"</span>];
+        <span class="hljs-keyword">self</span>.byteRangeAccessSupported = [acceptRange isEqualToString:<span class="hljs-string">@"bytes"</span>];
     &#125;
     
-    NSString *mimeType &#x3D; [response MIMEType];
-    CFStringRef contentType &#x3D; UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)(mimeType), NULL);
+    <span class="hljs-built_in">NSString</span> *mimeType = [response MIMEType];
+    <span class="hljs-built_in">CFStringRef</span> contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge <span class="hljs-built_in">CFStringRef</span>)(mimeType), <span class="hljs-literal">NULL</span>);
 
-    self.contentLength &#x3D; response.expectedContentLength;
-    self.contentType &#x3D; CFBridgingRelease(contentType);
+    <span class="hljs-keyword">self</span>.contentLength = response.expectedContentLength;
+    <span class="hljs-keyword">self</span>.contentType = <span class="hljs-built_in">CFBridgingRelease</span>(contentType);
     
-    NSLog(@&quot;视频大小：%f M&quot;,response.expectedContentLength&#x2F;1024.0f&#x2F;1024.0f);
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"视频大小：%f M"</span>,response.expectedContentLength/<span class="hljs-number">1024.0</span>f/<span class="hljs-number">1024.0</span>f);
 &#125;
 
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data &#123;
-    &#x2F;&#x2F; 缓存下载的data
-    [self.downloadData appendData:data];
-    &#x2F;&#x2F; 拼接下载的data
-    [self processRequestData];
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session dataTask:(<span class="hljs-built_in">NSURLSessionDataTask</span> *)dataTask didReceiveData:(<span class="hljs-built_in">NSData</span> *)data &#123;
+    <span class="hljs-comment">// 缓存下载的data</span>
+    [<span class="hljs-keyword">self</span>.downloadData appendData:data];
+    <span class="hljs-comment">// 拼接下载的data</span>
+    [<span class="hljs-keyword">self</span> processRequestData];
     
-    NSLog(@&quot;已下载：%f ，正在下载：%f&quot;,self.downloadData.length&#x2F;1024.0,data.length&#x2F;1024.0);
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"已下载：%f ，正在下载：%f"</span>,<span class="hljs-keyword">self</span>.downloadData.length/<span class="hljs-number">1024.0</span>,data.length/<span class="hljs-number">1024.0</span>);
 &#125;
 
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error &#123;
-    NSLog(@&quot;下载完成&quot;);
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session task:(<span class="hljs-built_in">NSURLSessionTask</span> *)task didCompleteWithError:(<span class="hljs-built_in">NSError</span> *)error &#123;
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"下载完成"</span>);
 &#125;
 
 
 
-#pragma mark - ProcessRequestData
-- (void)processRequestData &#123;
-    NSMutableArray *requestCompleted &#x3D; [NSMutableArray array];
-    for (AVAssetResourceLoadingRequest *loadingRequest in self.requestsArray) &#123;
-        loadingRequest.contentInformationRequest.contentLength &#x3D; self.contentLength;
-        loadingRequest.contentInformationRequest.contentType &#x3D; self.contentType;
-        loadingRequest.contentInformationRequest.byteRangeAccessSupported &#x3D; self.byteRangeAccessSupported;
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - ProcessRequestData</span>
+- (<span class="hljs-keyword">void</span>)processRequestData &#123;
+    <span class="hljs-built_in">NSMutableArray</span> *requestCompleted = [<span class="hljs-built_in">NSMutableArray</span> array];
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *loadingRequest <span class="hljs-keyword">in</span> <span class="hljs-keyword">self</span>.requestsArray) &#123;
+        loadingRequest.contentInformationRequest.contentLength = <span class="hljs-keyword">self</span>.contentLength;
+        loadingRequest.contentInformationRequest.contentType = <span class="hljs-keyword">self</span>.contentType;
+        loadingRequest.contentInformationRequest.byteRangeAccessSupported = <span class="hljs-keyword">self</span>.byteRangeAccessSupported;
         
-        BOOL didRespondCompletely &#x3D; [self respondWithDataForRequest:loadingRequest.dataRequest];
-        if (didRespondCompletely) &#123;
+        <span class="hljs-built_in">BOOL</span> didRespondCompletely = [<span class="hljs-keyword">self</span> respondWithDataForRequest:loadingRequest.dataRequest];
+        <span class="hljs-keyword">if</span> (didRespondCompletely) &#123;
             [requestCompleted addObject:loadingRequest];
             [loadingRequest finishLoading];
         &#125;
     &#125;
-    [self.requestsArray removeObjectsInArray:requestCompleted];
+    [<span class="hljs-keyword">self</span>.requestsArray removeObjectsInArray:requestCompleted];
 &#125;
 
 
 
-&#x2F;&#x2F;&#x2F; 判断loadingRequest要求下载的数据是否全部下载完毕
-&#x2F;&#x2F;&#x2F; 以及将下载的数据data拼接到dataRequest当中
-&#x2F;&#x2F;&#x2F; @param dataRequest dataRequest
-- (BOOL)respondWithDataForRequest:(AVAssetResourceLoadingDataRequest *)dataRequest &#123;
-    long long startOffset &#x3D; dataRequest.requestedOffset;
-    if (dataRequest.currentOffset !&#x3D; 0) &#123;
-        startOffset &#x3D; dataRequest.currentOffset;
+<span class="hljs-comment">/// 判断loadingRequest要求下载的数据是否全部下载完毕</span>
+<span class="hljs-comment">/// 以及将下载的数据data拼接到dataRequest当中</span>
+<span class="hljs-comment">/// @param dataRequest dataRequest</span>
+- (<span class="hljs-built_in">BOOL</span>)respondWithDataForRequest:(<span class="hljs-built_in">AVAssetResourceLoadingDataRequest</span> *)dataRequest &#123;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> startOffset = dataRequest.requestedOffset;
+    <span class="hljs-keyword">if</span> (dataRequest.currentOffset != <span class="hljs-number">0</span>) &#123;
+        startOffset = dataRequest.currentOffset;
     &#125;
     
-    if (self.downloadData.length &lt; startOffset) &#123;
-        return NO;
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.downloadData.length &lt; startOffset) &#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">NO</span>;
     &#125;
     
-    NSUInteger unreadBytes &#x3D; self.downloadData.length - startOffset;
-    NSUInteger numberOfBytesToRespondWith &#x3D; MIN(dataRequest.requestedLength, unreadBytes);
+    <span class="hljs-built_in">NSUInteger</span> unreadBytes = <span class="hljs-keyword">self</span>.downloadData.length - startOffset;
+    <span class="hljs-built_in">NSUInteger</span> numberOfBytesToRespondWith = MIN(dataRequest.requestedLength, unreadBytes);
     
-    [dataRequest respondWithData:[self.downloadData subdataWithRange:NSMakeRange(startOffset, numberOfBytesToRespondWith)]];
+    [dataRequest respondWithData:[<span class="hljs-keyword">self</span>.downloadData subdataWithRange:<span class="hljs-built_in">NSMakeRange</span>(startOffset, numberOfBytesToRespondWith)]];
     
-    long long endOffset &#x3D; startOffset + dataRequest.requestedLength;
-    BOOL didResponsdComplete &#x3D; self.downloadData.length &gt;&#x3D; endOffset;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> endOffset = startOffset + dataRequest.requestedLength;
+    <span class="hljs-built_in">BOOL</span> didResponsdComplete = <span class="hljs-keyword">self</span>.downloadData.length &gt;= endOffset;
     
-    return didResponsdComplete;
+    <span class="hljs-keyword">return</span> didResponsdComplete;
 &#125;
 
 
 
-#pragma mark - KVO
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSKeyValueChangeKey,id&gt; *)change context:(void *)context &#123;
-    if ([keyPath isEqualToString:@&quot;status&quot;]) &#123;
-        switch (self.playerItem.status) &#123;
-            case AVPlayerItemStatusUnknown: &#123;
-                &#x2F;&#x2F; 未知状态，不能播放
-                NSLog(@&quot;AVPlayerItemStatusUnknown&quot;);
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - KVO</span>
+- (<span class="hljs-keyword">void</span>)observeValueForKeyPath:(<span class="hljs-built_in">NSString</span> *)keyPath ofObject:(<span class="hljs-keyword">id</span>)object change:(<span class="hljs-built_in">NSDictionary</span>&lt;<span class="hljs-built_in">NSKeyValueChangeKey</span>,<span class="hljs-keyword">id</span>&gt; *)change context:(<span class="hljs-keyword">void</span> *)context &#123;
+    <span class="hljs-keyword">if</span> ([keyPath isEqualToString:<span class="hljs-string">@"status"</span>]) &#123;
+        <span class="hljs-keyword">switch</span> (<span class="hljs-keyword">self</span>.playerItem.status) &#123;
+            <span class="hljs-keyword">case</span> <span class="hljs-built_in">AVPlayerItemStatusUnknown</span>: &#123;
+                <span class="hljs-comment">// 未知状态，不能播放</span>
+                <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"AVPlayerItemStatusUnknown"</span>);
             &#125;
-                break;
-            case AVPlayerItemStatusReadyToPlay: &#123;
-                &#x2F;&#x2F; 准备完毕，可以播放
-                &#x2F;&#x2F; 此方法可以在视频未播放的时候，获取视频的总时长(备注：一定要在AVPlayer预加载状态status是AVPlayerItemStatusReadyToPlay才能获取)
-                &#x2F;&#x2F; NSLog(@&quot;total %f&quot;,CMTimeGetSeconds(self.playerItem.asset.duration));
-                [self.player play];
-                NSLog(@&quot;AVPlayerItemStatusReadyToPlay&quot;);
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-built_in">AVPlayerItemStatusReadyToPlay</span>: &#123;
+                <span class="hljs-comment">// 准备完毕，可以播放</span>
+                <span class="hljs-comment">// 此方法可以在视频未播放的时候，获取视频的总时长(备注：一定要在AVPlayer预加载状态status是AVPlayerItemStatusReadyToPlay才能获取)</span>
+                <span class="hljs-comment">// NSLog(@"total %f",CMTimeGetSeconds(self.playerItem.asset.duration));</span>
+                [<span class="hljs-keyword">self</span>.player play];
+                <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"AVPlayerItemStatusReadyToPlay"</span>);
             &#125;
-                break;
-            case AVPlayerItemStatusFailed: &#123;
-                &#x2F;&#x2F; 加载失败，网络或者服务器出现问题
-                NSLog(@&quot;AVPlayerItemStatusFailed&quot;);
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-built_in">AVPlayerItemStatusFailed</span>: &#123;
+                <span class="hljs-comment">// 加载失败，网络或者服务器出现问题</span>
+                <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"AVPlayerItemStatusFailed"</span>);
             &#125;
-                break;
-            default:
-                break;
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">default</span>:
+                <span class="hljs-keyword">break</span>;
         &#125;
     &#125;
 &#125;
 
 
-#pragma mark - Getter
-- (NSURLSession *)session &#123;
-    if (!_session) &#123;
-        NSURLSessionConfiguration *configuration &#x3D; [NSURLSessionConfiguration defaultSessionConfiguration];
-        _session &#x3D; [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - Getter</span>
+- (<span class="hljs-built_in">NSURLSession</span> *)session &#123;
+    <span class="hljs-keyword">if</span> (!_session) &#123;
+        <span class="hljs-built_in">NSURLSessionConfiguration</span> *configuration = [<span class="hljs-built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration];
+        _session = [<span class="hljs-built_in">NSURLSession</span> sessionWithConfiguration:configuration delegate:<span class="hljs-keyword">self</span> delegateQueue:[<span class="hljs-built_in">NSOperationQueue</span> mainQueue]];
     &#125;
-    return _session;
+    <span class="hljs-keyword">return</span> _session;
 &#125;
 
 
-@end</code></pre>
+<span class="hljs-keyword">@end</span></code></pre>
 
 <p>（PS：关于初始化NSURLSession请求会话的时候，设置<code>delegateQueue</code>代理回调线程的值，一定要设置成<code>主线程</code>，如果设置成其他自定义的operationQueue，AVPlayer会播放失败，这可能是在拼接数据及完成finishLoading的时候，AVPlayer会在当前线程刷新UI，所以必须设置在主线程完成）</p>
 <h4 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h4><p>完整代码：链接:<a href="https://pan.baidu.com/s/1C5JH6onUsmqgie1Loi1OgQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1C5JH6onUsmqgie1Loi1OgQ</a>  密码:rerp</p>
 <p>这种方式是基于原理假想出来的，但是实际运行视频播放不出来，在完成第一个Range为0~2的loadingRequest请求后，提示<strong>AVPlayerItemStatusFailed</strong>错误，尝试了很久，一直都未能解决，百思不得其解。如果有其他同行知道原因的，麻烦在评论区留意，感谢</p>
 <p><img src="https://i.loli.net/2020/05/21/spL4GkAVWXM38fJ.png" srcset="/img/loading.gif" alt="image-20200521140754935"></p>
 <p>以下是RequestDownder的代码</p>
-<pre><code class="hljs objective-c">#import &quot;RequestDownder.h&quot;
-#import &lt;AVFoundation&#x2F;AVFoundation.h&gt;
-#import &lt;MobileCoreServices&#x2F;MobileCoreServices.h&gt;
+<pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">"RequestDownder.h"</span></span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">&lt;AVFoundation/AVFoundation.h&gt;</span></span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">&lt;MobileCoreServices/MobileCoreServices.h&gt;</span></span>
 
-@interface RequestDownder()&lt;NSURLSessionDataDelegate&gt;
-@property (nonatomic, strong) NSURLSession *session;
-@property (nonatomic, strong) NSURLSessionTask *task;
-@end
+<span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">RequestDownder</span>()&lt;<span class="hljs-title">NSURLSessionDataDelegate</span>&gt;</span>
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSURLSession</span> *session;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSURLSessionTask</span> *task;
+<span class="hljs-keyword">@end</span>
 
 
-@implementation RequestDownder
+<span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">RequestDownder</span></span>
 
-&#x2F;&#x2F;&#x2F; 开始下载
-&#x2F;&#x2F;&#x2F; @param loadingRequest loadingRequest
-+ (instancetype)startDownLoadWithLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest &#123;
-    RequestDownder *downer &#x3D; [[RequestDownder alloc]initWithLoadingRequest:loadingRequest];
-    return downer;
+<span class="hljs-comment">/// 开始下载</span>
+<span class="hljs-comment">/// @param loadingRequest loadingRequest</span>
++ (<span class="hljs-keyword">instancetype</span>)startDownLoadWithLoadingRequest:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest &#123;
+    RequestDownder *downer = [[RequestDownder alloc]initWithLoadingRequest:loadingRequest];
+    <span class="hljs-keyword">return</span> downer;
 &#125;
 
 
-- (instancetype)initWithLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest &#123;
-    self &#x3D; [super init];
-    if (self) &#123;
-        self.loadingRequest &#x3D; loadingRequest;
-        [self setup];
+- (<span class="hljs-keyword">instancetype</span>)initWithLoadingRequest:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest &#123;
+    <span class="hljs-keyword">self</span> = [<span class="hljs-keyword">super</span> init];
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>) &#123;
+        <span class="hljs-keyword">self</span>.loadingRequest = loadingRequest;
+        [<span class="hljs-keyword">self</span> setup];
     &#125;
-    return self;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>;
 &#125;
 
 
-- (void)cancle &#123;
-    [self.session invalidateAndCancel];
+- (<span class="hljs-keyword">void</span>)cancle &#123;
+    [<span class="hljs-keyword">self</span>.session invalidateAndCancel];
 &#125;
 
 
-&#x2F;&#x2F;&#x2F; 发起请求
-- (void)setup  &#123;
-    &#x2F;&#x2F; 获取请求范围
-    AVAssetResourceLoadingDataRequest *dataRequest &#x3D; self.loadingRequest.dataRequest;
-    long long offset &#x3D; dataRequest.requestedOffset;
-    NSInteger length &#x3D; dataRequest.requestedLength;
-    if (dataRequest.currentOffset !&#x3D; 0) &#123;
-        offset &#x3D; dataRequest.currentOffset;
+<span class="hljs-comment">/// 发起请求</span>
+- (<span class="hljs-keyword">void</span>)setup  &#123;
+    <span class="hljs-comment">// 获取请求范围</span>
+    <span class="hljs-built_in">AVAssetResourceLoadingDataRequest</span> *dataRequest = <span class="hljs-keyword">self</span>.loadingRequest.dataRequest;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> offset = dataRequest.requestedOffset;
+    <span class="hljs-built_in">NSInteger</span> length = dataRequest.requestedLength;
+    <span class="hljs-keyword">if</span> (dataRequest.currentOffset != <span class="hljs-number">0</span>) &#123;
+        offset = dataRequest.currentOffset;
     &#125;
-    long long endOffset &#x3D; offset + length - 1;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> endOffset = offset + length - <span class="hljs-number">1</span>;
     
-    &#x2F;&#x2F; 获取请求连接URL
-    NSString *urlStr &#x3D; self.loadingRequest.request.URL.absoluteString;
-    if ([urlStr hasPrefix:@&quot;scheme&quot;]) &#123;
-       urlStr &#x3D; [urlStr stringByReplacingOccurrencesOfString:@&quot;scheme&quot; withString:@&quot;&quot;];
+    <span class="hljs-comment">// 获取请求连接URL</span>
+    <span class="hljs-built_in">NSString</span> *urlStr = <span class="hljs-keyword">self</span>.loadingRequest.request.URL.absoluteString;
+    <span class="hljs-keyword">if</span> ([urlStr hasPrefix:<span class="hljs-string">@"scheme"</span>]) &#123;
+       urlStr = [urlStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"scheme"</span> withString:<span class="hljs-string">@""</span>];
     &#125;
     
-    &#x2F;&#x2F; 发起请求
-    NSMutableURLRequest *request &#x3D; [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
-    NSString *range &#x3D; [NSString stringWithFormat:@&quot;bytes&#x3D;%lld-%lld&quot;,offset,endOffset];
-    [request setValue:range forHTTPHeaderField:@&quot;Range&quot;];
+    <span class="hljs-comment">// 发起请求</span>
+    <span class="hljs-built_in">NSMutableURLRequest</span> *request = [<span class="hljs-built_in">NSMutableURLRequest</span> requestWithURL:[<span class="hljs-built_in">NSURL</span> URLWithString:urlStr] cachePolicy:<span class="hljs-built_in">NSURLRequestReloadIgnoringCacheData</span> timeoutInterval:<span class="hljs-number">20.0</span>];
+    <span class="hljs-built_in">NSString</span> *range = [<span class="hljs-built_in">NSString</span> stringWithFormat:<span class="hljs-string">@"bytes=%lld-%lld"</span>,offset,endOffset];
+    [request setValue:range forHTTPHeaderField:<span class="hljs-string">@"Range"</span>];
     
-    &#x2F;&#x2F; 开始下载
-    self.task &#x3D; [self.session dataTaskWithRequest:request];
-    [self.task resume];
+    <span class="hljs-comment">// 开始下载</span>
+    <span class="hljs-keyword">self</span>.task = [<span class="hljs-keyword">self</span>.session dataTaskWithRequest:request];
+    [<span class="hljs-keyword">self</span>.task resume];
 &#125;
 
 
-#pragma mark - NSURLSessionDataDelegate
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler &#123;
-    completionHandler(NSURLSessionResponseAllow);
-    BOOL byteRangeAccessSupported &#x3D; NO;
-    long long contentLength &#x3D; response.expectedContentLength;
-    if ([response isKindOfClass:NSHTTPURLResponse.class]) &#123;
-        NSHTTPURLResponse *httpResponse &#x3D; (NSHTTPURLResponse *)response;
-        NSString *acceptRange &#x3D; httpResponse.allHeaderFields[@&quot;Accept-Ranges&quot;];
-        byteRangeAccessSupported &#x3D; [acceptRange isEqualToString:@&quot;bytes&quot;];
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - NSURLSessionDataDelegate</span>
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session dataTask:(<span class="hljs-built_in">NSURLSessionDataTask</span> *)dataTask didReceiveResponse:(<span class="hljs-built_in">NSURLResponse</span> *)response completionHandler:(<span class="hljs-keyword">void</span> (^)(<span class="hljs-built_in">NSURLSessionResponseDisposition</span>))completionHandler &#123;
+    completionHandler(<span class="hljs-built_in">NSURLSessionResponseAllow</span>);
+    <span class="hljs-built_in">BOOL</span> byteRangeAccessSupported = <span class="hljs-literal">NO</span>;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> contentLength = response.expectedContentLength;
+    <span class="hljs-keyword">if</span> ([response isKindOfClass:<span class="hljs-built_in">NSHTTPURLResponse</span>.class]) &#123;
+        <span class="hljs-built_in">NSHTTPURLResponse</span> *httpResponse = (<span class="hljs-built_in">NSHTTPURLResponse</span> *)response;
+        <span class="hljs-built_in">NSString</span> *acceptRange = httpResponse.allHeaderFields[<span class="hljs-string">@"Accept-Ranges"</span>];
+        byteRangeAccessSupported = [acceptRange isEqualToString:<span class="hljs-string">@"bytes"</span>];
     &#125;
 
-    self.loadingRequest.contentInformationRequest.contentLength &#x3D; contentLength;
-    self.loadingRequest.contentInformationRequest.contentType &#x3D; response.MIMEType;
-    self.loadingRequest.contentInformationRequest.byteRangeAccessSupported &#x3D; byteRangeAccessSupported;
+    <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.contentLength = contentLength;
+    <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.contentType = response.MIMEType;
+    <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.byteRangeAccessSupported = byteRangeAccessSupported;
     
-    NSLog(@&quot;视频大小：%f M&quot;,response.expectedContentLength&#x2F;1024.0f&#x2F;1024.0f);
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"视频大小：%f M"</span>,response.expectedContentLength/<span class="hljs-number">1024.0</span>f/<span class="hljs-number">1024.0</span>f);
 &#125;
 
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data &#123;
-    [self.loadingRequest.dataRequest respondWithData:data];
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session dataTask:(<span class="hljs-built_in">NSURLSessionDataTask</span> *)dataTask didReceiveData:(<span class="hljs-built_in">NSData</span> *)data &#123;
+    [<span class="hljs-keyword">self</span>.loadingRequest.dataRequest respondWithData:data];
 &#125;
 
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error &#123;
-    NSLog(@&quot;%d -- %d&quot;,self.loadingRequest.isCancelled,self.loadingRequest.isFinished);
-    [self.loadingRequest finishLoading];
-    if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(requestDowner:didComplete:)]) &#123;
-        [self.delegate requestDowner:self didComplete:error];
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session task:(<span class="hljs-built_in">NSURLSessionTask</span> *)task didCompleteWithError:(<span class="hljs-built_in">NSError</span> *)error &#123;
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"%d -- %d"</span>,<span class="hljs-keyword">self</span>.loadingRequest.isCancelled,<span class="hljs-keyword">self</span>.loadingRequest.isFinished);
+    [<span class="hljs-keyword">self</span>.loadingRequest finishLoading];
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.delegate &amp;&amp; [<span class="hljs-keyword">self</span>.delegate respondsToSelector:<span class="hljs-keyword">@selector</span>(requestDowner:didComplete:)]) &#123;
+        [<span class="hljs-keyword">self</span>.delegate requestDowner:<span class="hljs-keyword">self</span> didComplete:error];
     &#125;
-    NSLog(@&quot;下载完成&quot;);
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"下载完成"</span>);
 &#125;
 
 
-#pragma mark - Getter
-- (NSURLSession *)session &#123;
-    if (!_session) &#123;
-        NSURLSessionConfiguration *configuration &#x3D; [NSURLSessionConfiguration defaultSessionConfiguration];
-        _session &#x3D; [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - Getter</span>
+- (<span class="hljs-built_in">NSURLSession</span> *)session &#123;
+    <span class="hljs-keyword">if</span> (!_session) &#123;
+        <span class="hljs-built_in">NSURLSessionConfiguration</span> *configuration = [<span class="hljs-built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration];
+        _session = [<span class="hljs-built_in">NSURLSession</span> sessionWithConfiguration:configuration delegate:<span class="hljs-keyword">self</span> delegateQueue:[<span class="hljs-built_in">NSOperationQueue</span> mainQueue]];
     &#125;
-    return _session;
+    <span class="hljs-keyword">return</span> _session;
 &#125;
 
-@end</code></pre>
+<span class="hljs-keyword">@end</span></code></pre>
 
 
 
