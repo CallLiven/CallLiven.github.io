@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    2.4k 字
+                    3.5k 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    34
+                    50
                      分钟
                   </span>
                 
@@ -182,13 +182,13 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>随着抖音的兴起，短视频是乎是每个app的标配，虽然以往开发的项目都有视频播放的功能，但都是集成第三方库的控件，直接使用的，对于avplayer的边播边缓存是如何实现不了解，趁着疫情宅在家里有空，研究一下，目标是自己也能封装一个播放器</p>
+              <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>随着抖音的兴起，短视频是乎是每个app的标配，虽然以往开发的项目都有视频播放的功能，但都是集成第三方库的控件，直接使用的，对于avplayer的边播边缓存是如何实现不了解，趁着疫情宅在家里有空，研究一下，目标是自己也能封装一个播放器</p>
 <p>分4篇文章</p>
 <p>01 - 视频播放</p>
 <p>02 - 视频分片下载</p>
 <p>03 - 视频缓存</p>
 <p>04 - 播放器封装</p>
-<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>AVPlayer 没有提供API获取播放器下载的数据，所以无法直接获取缓存，但是可以通过设置AVAssetResourceLoader代理的方式，自己使用NSURLSession下载数据，再传给播放器播放，同时缓存在本地，下次播放的时候可以使用。</p>
+<h1 id="二、基本原理"><a href="#二、基本原理" class="headerlink" title="二、基本原理"></a>二、基本原理</h1><p>AVPlayer 没有提供API获取播放器下载的数据，所以无法直接获取缓存，但是可以通过设置AVAssetResourceLoader代理的方式，自己使用NSURLSession下载数据，再传给播放器播放，同时缓存在本地，下次播放的时候可以使用。</p>
 <p>AVAssetResourceLoader 只有在AVURLAsset加载不能识别的URL资源的时候，才会回调代理方法，所以在初始化AVURLAsset的时候把目标视频URL地址的scheme替换成系统不能识别的schemen。</p>
 <p><img src="https://i.loli.net/2020/05/19/BJWvbsLajEKHDFr.png" srcset="/img/loading.gif" alt="引用zltunes中的图片"></p>
 <h4 id="（1）AVAssetResourceLoaderDelegate-代理有两个必须要实现的方法"><a href="#（1）AVAssetResourceLoaderDelegate-代理有两个必须要实现的方法" class="headerlink" title="（1）AVAssetResourceLoaderDelegate 代理有两个必须要实现的方法"></a>（1）AVAssetResourceLoaderDelegate 代理有两个必须要实现的方法</h4><p>要求加载资源的代理方法</p>
@@ -223,7 +223,7 @@
 <h4 id="（2）流程原理"><a href="#（2）流程原理" class="headerlink" title="（2）流程原理"></a>（2）流程原理</h4><p><img src="https://i.loli.net/2020/05/21/MPngKXNyshlxWLi.png" srcset="/img/loading.gif" alt="image-20200521141931947"></p>
 <p>AVPlayer是分片式下载策略，可能会发起多个LoadingRequest请求，但触发下载的时候，会先发起一个Range为0~2的数据请求，获取视频资源的描述信息，比如文件类型、文件大小，这需要我们填充到<code>AVAssetResourceLoadingRequest</code>类中的<code>contentInformationRequest</code>属性，而获取到的data填充至<code>AVAssetResourceLoadingRequest</code>的<code>dataRequest</code>，<code>dataRequest</code>属性中有个方法可以接收增量连续的data数据:<code>- (void)respondWithData:(NSData *)data</code>，当<code>AVAssetResourceLoadingRequest</code>要求下载的数据都下载完毕，则调用<code>- (void)finishLoading</code>完成请求，并且AVPlayer会在调用<code>finishLoading</code>时判断接下来要怎么处理，比如视频文件类型是否支持、是否要发起下一个LoadingRequest等</p>
 <h4 id="（3）重试机制"><a href="#（3）重试机制" class="headerlink" title="（3）重试机制"></a>（3）重试机制</h4><p>AVAssetResourceLoader在执行加载的时候，会时不时触发取消下载方法<code>\- (void)resourceLoader:(AVAssetResourceLoader *)resourceLoader didCancelLoa</code>，然后重新发起加载请求策略，如果下载了部分，重新发起的下载请求会从还没下载的部分开始。</p>
-<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><h4 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h4><p>完整代码：链接:<a href="https://pan.baidu.com/s/1BR9MkKHxrk_T-mH5vV7NIQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1BR9MkKHxrk_T-mH5vV7NIQ</a>  密码:st0g</p>
+<h1 id="三、实践"><a href="#三、实践" class="headerlink" title="三、实践"></a>三、实践</h1><h4 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h4><p>完整代码：链接:<a href="https://pan.baidu.com/s/1BR9MkKHxrk_T-mH5vV7NIQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1BR9MkKHxrk_T-mH5vV7NIQ</a>  密码:st0g</p>
 <p><img src="https://i.loli.net/2020/05/21/p1Y4sXlwrFnbHx8.png" srcset="/img/loading.gif" alt="image-20200521134545223"></p>
 <pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">"ViewController.h"</span></span>
 <span class="hljs-meta">#import <span class="hljs-meta-string">&lt;AVFoundation/AVFoundation.h&gt;</span></span>
@@ -550,8 +550,157 @@
 
 <span class="hljs-keyword">@end</span></code></pre>
 
+<p>突然心情开朗，终于知道第二种方式问题的关键点(测试代码下载地址：链接:<a href="https://pan.baidu.com/s/16hFRJaDgFJzj2IQadaW87w" target="_blank" rel="noopener">https://pan.baidu.com/s/16hFRJaDgFJzj2IQadaW87w</a>  密码:z0cw）</p>
+<p>前面说的resourceLoader触发下载，会先发起一个range为0~2的request，来获取视频资源的详情，比如文件长度，接着就是将获取的文件详情填充至<code>contentInformationRequest</code>，到这为止是没有错的，但是，<code>contentInformationRequest</code>是相对于整个视频资源文件的，这非常关键，也就是说设置的文件格式、文件长度都是指整个文件，而并不是指每一个发起的<code>AVAssetResourceLoadingRequest</code>的长度。</p>
+<p>所以在第二种方式中，由于每一个<code>AVAssetResourceLoadingRequest</code>单独发起一个request请求，并且设置request请求数据范围range值，所以获取到的文件长度是对应于当前请求范围range，并不是指整个文件的长度。因此才会在发起第一个<code>AVAssetResourceLoadingRequest</code>请求range为0~2后，就没有继续发起第二个<code>AVAssetResourceLoadingRequest</code>了，因为resourceLoader会判断整个视频资源已经下载完成了。</p>
+<p>激动<del>~</del>终于知道原因了，可以继续往前走，太不容易了，每一个小细节都可能导致失败</p>
+<p><strong>好了，问题来了，那要怎么分片下载，并且获取整个视频文件的长度？</strong></p>
+<p>貌似很矛盾的一个问题，其实是文件长度的取的字段有问题，通过答应服务器响应的<code>NSURLResponse</code>如下图，使用，代码改为如下就能解决问题了</p>
+<pre><code class="hljs objc">- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session dataTask:(<span class="hljs-built_in">NSURLSessionDataTask</span> *)dataTask didReceiveResponse:(<span class="hljs-built_in">NSURLResponse</span> *)response completionHandler:(<span class="hljs-keyword">void</span> (^)(<span class="hljs-built_in">NSURLSessionResponseDisposition</span>))completionHandler &#123;
+    completionHandler(<span class="hljs-built_in">NSURLSessionResponseAllow</span>);
+    <span class="hljs-built_in">BOOL</span> byteRangeAccessSupported = <span class="hljs-literal">NO</span>;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> contentLength = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> ([response isKindOfClass:<span class="hljs-built_in">NSHTTPURLResponse</span>.class]) &#123;
+        <span class="hljs-built_in">NSHTTPURLResponse</span> *httpResponse = (<span class="hljs-built_in">NSHTTPURLResponse</span> *)response;
+        <span class="hljs-built_in">NSString</span> *acceptRange = httpResponse.allHeaderFields[<span class="hljs-string">@"Accept-Ranges"</span>];
+        byteRangeAccessSupported = [acceptRange isEqualToString:<span class="hljs-string">@"bytes"</span>];
+        contentLength = [[[httpResponse.allHeaderFields[<span class="hljs-string">@"Content-Range"</span>] componentsSeparatedByString:<span class="hljs-string">@"/"</span>] lastObject] longLongValue];
+    &#125;
+    
+    <span class="hljs-built_in">NSString</span> *mimeType = [response MIMEType];
+    <span class="hljs-built_in">CFStringRef</span> contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge <span class="hljs-built_in">CFStringRef</span>)(mimeType), <span class="hljs-literal">NULL</span>);
+    <span class="hljs-keyword">if</span> (contentType &amp;&amp; contentLength&gt;<span class="hljs-number">0</span>) &#123;
+        <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.contentLength = contentLength;
+        <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.contentType = <span class="hljs-built_in">CFBridgingRelease</span>(contentType);
+        <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.byteRangeAccessSupported = byteRangeAccessSupported;
+    &#125;
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"视频大小：%f M"</span>,response.expectedContentLength/<span class="hljs-number">1024.0</span>f/<span class="hljs-number">1024.0</span>f);
+&#125;</code></pre>
+
+<p><img src="https://i.loli.net/2020/05/22/jSz4NmBFy3TR8LV.png" srcset="/img/loading.gif" alt="image-20200522120244479"></p>
+<p><strong>修改后完整的代码</strong></p>
+<p>下载地址：链接:<a href="https://pan.baidu.com/s/1voLndB23xy8Jcggrf_fYCQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1voLndB23xy8Jcggrf_fYCQ</a>  密码:2kc2</p>
+<pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">"RequestDownder.h"</span></span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">&lt;AVFoundation/AVFoundation.h&gt;</span></span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">&lt;MobileCoreServices/MobileCoreServices.h&gt;</span></span>
+
+<span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">RequestDownder</span>()&lt;<span class="hljs-title">NSURLSessionDataDelegate</span>&gt;</span>
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSURLSession</span> *session;
+<span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">NSURLSessionTask</span> *task;
+<span class="hljs-keyword">@end</span>
 
 
+<span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">RequestDownder</span></span>
+
+<span class="hljs-comment">/// 开始下载</span>
+<span class="hljs-comment">/// @param loadingRequest loadingRequest</span>
++ (<span class="hljs-keyword">instancetype</span>)startDownLoadWithLoadingRequest:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest &#123;
+    RequestDownder *downer = [[RequestDownder alloc]initWithLoadingRequest:loadingRequest];
+    <span class="hljs-keyword">return</span> downer;
+&#125;
+
+
+- (<span class="hljs-keyword">instancetype</span>)initWithLoadingRequest:(<span class="hljs-built_in">AVAssetResourceLoadingRequest</span> *)loadingRequest &#123;
+    <span class="hljs-keyword">self</span> = [<span class="hljs-keyword">super</span> init];
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>) &#123;
+        <span class="hljs-keyword">self</span>.loadingRequest = loadingRequest;
+        [<span class="hljs-keyword">self</span> setup];
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>;
+&#125;
+
+
+- (<span class="hljs-keyword">void</span>)cancle &#123;
+    [<span class="hljs-keyword">self</span>.session invalidateAndCancel];
+&#125;
+
+
+<span class="hljs-comment">/// 发起请求</span>
+- (<span class="hljs-keyword">void</span>)setup  &#123;
+    <span class="hljs-comment">// 获取请求范围</span>
+    <span class="hljs-built_in">AVAssetResourceLoadingDataRequest</span> *dataRequest = <span class="hljs-keyword">self</span>.loadingRequest.dataRequest;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> offset = dataRequest.requestedOffset;
+    <span class="hljs-built_in">NSInteger</span> length = dataRequest.requestedLength;
+    <span class="hljs-keyword">if</span> (dataRequest.currentOffset != <span class="hljs-number">0</span>) &#123;
+        offset = dataRequest.currentOffset;
+    &#125;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> endOffset = offset + length - <span class="hljs-number">1</span>;
+    
+    <span class="hljs-comment">// 获取请求连接URL</span>
+    <span class="hljs-built_in">NSString</span> *urlStr = <span class="hljs-keyword">self</span>.loadingRequest.request.URL.absoluteString;
+    <span class="hljs-keyword">if</span> ([urlStr hasPrefix:<span class="hljs-string">@"scheme"</span>]) &#123;
+       urlStr = [urlStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"scheme"</span> withString:<span class="hljs-string">@""</span>];
+    &#125;
+    
+    <span class="hljs-comment">// 发起请求</span>
+    <span class="hljs-built_in">NSMutableURLRequest</span> *request = [<span class="hljs-built_in">NSMutableURLRequest</span> requestWithURL:[<span class="hljs-built_in">NSURL</span> URLWithString:urlStr] cachePolicy:<span class="hljs-built_in">NSURLRequestReloadIgnoringCacheData</span> timeoutInterval:<span class="hljs-number">20.0</span>];
+    <span class="hljs-built_in">NSString</span> *range = [<span class="hljs-built_in">NSString</span> stringWithFormat:<span class="hljs-string">@"bytes=%lld-%lld"</span>,offset,endOffset];
+    [request setValue:range forHTTPHeaderField:<span class="hljs-string">@"Range"</span>];
+    
+    <span class="hljs-comment">// 开始下载</span>
+    <span class="hljs-keyword">self</span>.task = [<span class="hljs-keyword">self</span>.session dataTaskWithRequest:request];
+    [<span class="hljs-keyword">self</span>.task resume];
+&#125;
+
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - NSURLSessionDataDelegate</span>
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session dataTask:(<span class="hljs-built_in">NSURLSessionDataTask</span> *)dataTask didReceiveResponse:(<span class="hljs-built_in">NSURLResponse</span> *)response completionHandler:(<span class="hljs-keyword">void</span> (^)(<span class="hljs-built_in">NSURLSessionResponseDisposition</span>))completionHandler &#123;
+    completionHandler(<span class="hljs-built_in">NSURLSessionResponseAllow</span>);
+    <span class="hljs-built_in">BOOL</span> byteRangeAccessSupported = <span class="hljs-literal">NO</span>;
+    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> contentLength = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> ([response isKindOfClass:<span class="hljs-built_in">NSHTTPURLResponse</span>.class]) &#123;
+        <span class="hljs-built_in">NSHTTPURLResponse</span> *httpResponse = (<span class="hljs-built_in">NSHTTPURLResponse</span> *)response;
+        <span class="hljs-built_in">NSString</span> *acceptRange = httpResponse.allHeaderFields[<span class="hljs-string">@"Accept-Ranges"</span>];
+        byteRangeAccessSupported = [acceptRange isEqualToString:<span class="hljs-string">@"bytes"</span>];
+        contentLength = [[[httpResponse.allHeaderFields[<span class="hljs-string">@"Content-Range"</span>] componentsSeparatedByString:<span class="hljs-string">@"/"</span>] lastObject] longLongValue];
+    &#125;
+    
+    <span class="hljs-built_in">NSString</span> *mimeType = [response MIMEType];
+    <span class="hljs-built_in">CFStringRef</span> contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge <span class="hljs-built_in">CFStringRef</span>)(mimeType), <span class="hljs-literal">NULL</span>);
+    <span class="hljs-keyword">if</span> (contentType &amp;&amp; contentLength&gt;<span class="hljs-number">0</span>) &#123;
+        <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.contentLength = contentLength;
+        <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.contentType = <span class="hljs-built_in">CFBridgingRelease</span>(contentType);
+        <span class="hljs-keyword">self</span>.loadingRequest.contentInformationRequest.byteRangeAccessSupported = byteRangeAccessSupported;
+    &#125;
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"视频大小：%f M"</span>,response.expectedContentLength/<span class="hljs-number">1024.0</span>f/<span class="hljs-number">1024.0</span>f);
+&#125;
+
+
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session dataTask:(<span class="hljs-built_in">NSURLSessionDataTask</span> *)dataTask didReceiveData:(<span class="hljs-built_in">NSData</span> *)data &#123;
+    [<span class="hljs-keyword">self</span>.loadingRequest.dataRequest respondWithData:data];
+&#125;
+
+
+- (<span class="hljs-keyword">void</span>)URLSession:(<span class="hljs-built_in">NSURLSession</span> *)session task:(<span class="hljs-built_in">NSURLSessionTask</span> *)task didCompleteWithError:(<span class="hljs-built_in">NSError</span> *)error &#123;
+    [<span class="hljs-keyword">self</span>.loadingRequest finishLoading];
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.delegate &amp;&amp; [<span class="hljs-keyword">self</span>.delegate respondsToSelector:<span class="hljs-keyword">@selector</span>(requestDowner:didComplete:)]) &#123;
+        [<span class="hljs-keyword">self</span>.delegate requestDowner:<span class="hljs-keyword">self</span> didComplete:error];
+    &#125;
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"下载完成"</span>);
+&#125;
+
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - Getter</span>
+- (<span class="hljs-built_in">NSURLSession</span> *)session &#123;
+    <span class="hljs-keyword">if</span> (!_session) &#123;
+        <span class="hljs-built_in">NSURLSessionConfiguration</span> *configuration = [<span class="hljs-built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration];
+        _session = [<span class="hljs-built_in">NSURLSession</span> sessionWithConfiguration:configuration delegate:<span class="hljs-keyword">self</span> delegateQueue:[<span class="hljs-built_in">NSOperationQueue</span> mainQueue]];
+    &#125;
+    <span class="hljs-keyword">return</span> _session;
+&#125;
+
+<span class="hljs-keyword">@end</span></code></pre>
+
+<p>到这为止，已经能完成一个通过自己自定义的下载，再将下载数据填充给AVPlayer播放器播放的例子，距离封装一个自己的播放器的路很有很远，继续前行…为自己加油</p>
+<h1 id="四、参考文章"><a href="#四、参考文章" class="headerlink" title="四、参考文章"></a>四、参考文章</h1><p>1、 <a href="https://juejin.im/post/5cb69acbf265da03b4460955" target="_blank" rel="noopener">AVPlayer详解系列（一）参数设置</a></p>
+<p>2、 <a href="https://mp.weixin.qq.com/s/v1sw_Sb8oKeZ8sWyjBUXGA?#%23" target="_blank" rel="noopener">可能是目前最好的 AVPlayer 音视频缓存方案</a></p>
+<p>3、 <a href="https://zltunes.github.io/2019/04/23/avplayer-best-practice/" target="_blank" rel="noopener">AVPlayer 边下边播与最佳实践</a></p>
+<p>4、  <a href="http://chuquan.me/2019/12/03/ios-avplayer-support-cache/" target="_blank" rel="noopener">iOS AVPlayer 视频缓存的设计与实现</a></p>
+<p>5、  <a href="http://xferris.cn/avplayer_cache/" target="_blank" rel="noopener">AVPlayer初体验之边下边播与视频缓存</a></p>
+<p>6、  <a href="https://juejin.im/post/5a1e94b7f265da4326529995" target="_blank" rel="noopener">唱吧 iOS 音视频缓存处理框架</a></p>
+<p>7、  <a href="https://chenzhengying.com/html/iOS/ZYPlayer/ZYPlayer.html" target="_blank" rel="noopener">基于AVPlayer封装的播放器细节</a></p>
+<p>8、  <a href="https://msching.github.io/blog/2016/05/24/audio-in-ios-9/" target="_blank" rel="noopener">iOS音频播放 (九)：边播边缓存</a></p>
+<p>9、<a href="https://www.jianshu.com/p/c157476474f1" target="_blank" rel="noopener">基于AVPlayer实现边缓存边播放</a></p>
 <p>PPT下载地址</p>
 <p>链接:<a href="https://pan.baidu.com/s/1Jx88y25EmNu7SMpkVyTr4Q" target="_blank" rel="noopener">https://pan.baidu.com/s/1Jx88y25EmNu7SMpkVyTr4Q</a>  密码:8rt3</p>
 <center class="half"> <div>感谢你的“一分”支持</div>  <img src="https://i.loli.net/2020/05/11/OJmWIEMseCDVjzx.jpg" srcset="/img/loading.gif" width="300"/><img src="https://i.loli.net/2020/05/11/qSd9hCbynVMkGv5.jpg" srcset="/img/loading.gif" width="300"/> </center>
