@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    2.9k 字
+                    2.5k 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    41
+                    34
                      分钟
                   </span>
                 
@@ -213,351 +213,351 @@
 
 @end</code></pre>
 
-<h1 id="1、数据库基本使用：增删改查"><a href="#1、数据库基本使用：增删改查" class="headerlink" title="1、数据库基本使用：增删改查"></a>1、数据库基本使用：增删改查</h1><pre><code class="hljs objective-c">#pragma mark - FMDB 增删改查
-- (void)baseUseDemo &#123;
-    &#x2F;*
-     三大类
-     (1)FMDatabase
-     一个FMDatabase对象就代表一个单独的SQLite数据库
-     用来执行SQL语句
-     (2)FMResultSet
-     使用FMDatabase执行查询后的结果集
-     (3)FMDatabaseQueue
-     用于在多线程中执行多个查询或更新，它是线程安全的
-     *&#x2F;
+<h1 id="1、数据库基本使用：增删改查"><a href="#1、数据库基本使用：增删改查" class="headerlink" title="1、数据库基本使用：增删改查"></a>1、数据库基本使用：增删改查</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - FMDB 增删改查</span>
+- (<span class="hljs-keyword">void</span>)baseUseDemo &#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     三大类</span>
+<span class="hljs-comment">     (1)FMDatabase</span>
+<span class="hljs-comment">     一个FMDatabase对象就代表一个单独的SQLite数据库</span>
+<span class="hljs-comment">     用来执行SQL语句</span>
+<span class="hljs-comment">     (2)FMResultSet</span>
+<span class="hljs-comment">     使用FMDatabase执行查询后的结果集</span>
+<span class="hljs-comment">     (3)FMDatabaseQueue</span>
+<span class="hljs-comment">     用于在多线程中执行多个查询或更新，它是线程安全的</span>
+<span class="hljs-comment">     */</span>
     
     
-    &#x2F;&#x2F; 获得数据库
-    &#x2F;*
-     有三种情况
-     （1）具体文件路径
-     　　如果不存在会自动创建
-     （2）空字符串@&quot;&quot;
-     　　会在临时目录创建一个空的数据库
-     　　当FMDatabase连接关闭时，数据库文件也被删除
-     （3）nil
-     　　会创建一个内存中临时数据库，当FMDatabase连接关闭时，数据库会被销毁
-     *&#x2F;
-    FMDatabase *db &#x3D; [FMDatabase databaseWithPath:self.fileName];
+    <span class="hljs-comment">// 获得数据库</span>
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     有三种情况</span>
+<span class="hljs-comment">     （1）具体文件路径</span>
+<span class="hljs-comment">     　　如果不存在会自动创建</span>
+<span class="hljs-comment">     （2）空字符串@""</span>
+<span class="hljs-comment">     　　会在临时目录创建一个空的数据库</span>
+<span class="hljs-comment">     　　当FMDatabase连接关闭时，数据库文件也被删除</span>
+<span class="hljs-comment">     （3）nil</span>
+<span class="hljs-comment">     　　会创建一个内存中临时数据库，当FMDatabase连接关闭时，数据库会被销毁</span>
+<span class="hljs-comment">     */</span>
+    FMDatabase *db = [FMDatabase databaseWithPath:<span class="hljs-keyword">self</span>.fileName];
     
-    &#x2F;&#x2F; 打开数据库
-    if ([db open]) &#123;
-        NSString *sqlString &#x3D; @&quot;CREATE TABLE IF NOT EXISTS t_student(id integer PRIMARY KEY AUTOINCREMENT,name text NOT NULL , age integer NOT NULL);&quot;;
-        BOOL result &#x3D; [db executeUpdate:sqlString];
-        if (result) &#123;
-            NSLog(@&quot;创表成功&quot;);
+    <span class="hljs-comment">// 打开数据库</span>
+    <span class="hljs-keyword">if</span> ([db open]) &#123;
+        <span class="hljs-built_in">NSString</span> *sqlString = <span class="hljs-string">@"CREATE TABLE IF NOT EXISTS t_student(id integer PRIMARY KEY AUTOINCREMENT,name text NOT NULL , age integer NOT NULL);"</span>;
+        <span class="hljs-built_in">BOOL</span> result = [db executeUpdate:sqlString];
+        <span class="hljs-keyword">if</span> (result) &#123;
+            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"创表成功"</span>);
         &#125;
-        else&#123;
-            NSLog(@&quot;创表失败&quot;);
+        <span class="hljs-keyword">else</span>&#123;
+            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"创表失败"</span>);
         &#125;
     &#125;
     
-    self.db &#x3D; db;
+    <span class="hljs-keyword">self</span>.db = db;
 &#125;
 
 
-#pragma mark - 数据库sql语句
-&#x2F;&#x2F; w3school sql 语句学习：http:&#x2F;&#x2F;www.w3school.com.cn&#x2F;sql&#x2F;sql_distinct.asp
-&#x2F;**
- 插入数据
- *&#x2F;
-- (void)insert &#123;
-    for (int i&#x3D;0; i&lt;10; i++) &#123;
-        NSString *name &#x3D; [NSString stringWithFormat:@&quot;liven-%d&quot;,arc4random_uniform(100)];
-        [self.db executeUpdate:@&quot;INSERT INTO t_student (name,age) VALUES (?,?)&quot;,name,@(arc4random_uniform(40))];
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 数据库sql语句</span>
+<span class="hljs-comment">// w3school sql 语句学习：http://www.w3school.com.cn/sql/sql_distinct.asp</span>
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> 插入数据</span>
+<span class="hljs-comment"> */</span>
+- (<span class="hljs-keyword">void</span>)insert &#123;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">10</span>; i++) &#123;
+        <span class="hljs-built_in">NSString</span> *name = [<span class="hljs-built_in">NSString</span> stringWithFormat:<span class="hljs-string">@"liven-%d"</span>,arc4random_uniform(<span class="hljs-number">100</span>)];
+        [<span class="hljs-keyword">self</span>.db executeUpdate:<span class="hljs-string">@"INSERT INTO t_student (name,age) VALUES (?,?)"</span>,name,@(arc4random_uniform(<span class="hljs-number">40</span>))];
     &#125;
 &#125;
 
 
-&#x2F;**
- 删除
- *&#x2F;
-- (void)delete &#123;
-    &#x2F;&#x2F; 清空数据库表的数据(这只是删除所有行的数据，并不会对表的结构、属性和索性有影响)
-    &#x2F;&#x2F;（即使数据库没有这张表，删除也不会崩溃，只会报错）
-    [self.db executeUpdate:@&quot;DELETE FROM t_student&quot;];
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> 删除</span>
+<span class="hljs-comment"> */</span>
+- (<span class="hljs-keyword">void</span>)delete &#123;
+    <span class="hljs-comment">// 清空数据库表的数据(这只是删除所有行的数据，并不会对表的结构、属性和索性有影响)</span>
+    <span class="hljs-comment">//（即使数据库没有这张表，删除也不会崩溃，只会报错）</span>
+    [<span class="hljs-keyword">self</span>.db executeUpdate:<span class="hljs-string">@"DELETE FROM t_student"</span>];
     
-    &#x2F;&#x2F; 删除某一行：DELETE FROM 表名称 WHERE 列名称 &#x3D; 值
+    <span class="hljs-comment">// 删除某一行：DELETE FROM 表名称 WHERE 列名称 = 值</span>
 &#125;
 
 
-&#x2F;**
- 更新
- *&#x2F;
-- (void)update &#123;
-    &#x2F;&#x2F; 公式：UPDATE 表名称 SET 列名称 &#x3D; 新值 WHERE 列名称 &#x3D; 某值
-  [self.db executeUpdate:@&quot;UPDATE t_student SET age&#x3D;? WHERE name&#x3D;&#39;大力&#39;&quot;,@(18)];
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> 更新</span>
+<span class="hljs-comment"> */</span>
+- (<span class="hljs-keyword">void</span>)update &#123;
+    <span class="hljs-comment">// 公式：UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值</span>
+  [<span class="hljs-keyword">self</span>.db executeUpdate:<span class="hljs-string">@"UPDATE t_student SET age=? WHERE name='大力'"</span>,@(<span class="hljs-number">18</span>)];
 &#125;
 
 
-&#x2F;**
- 查询
- *&#x2F;
-- (void)query &#123;
-    FMResultSet *resultSet &#x3D; [self.db executeQuery:@&quot;SELECT * FROM t_student&quot;];
-    while ([resultSet next]) &#123;
-        int ID &#x3D; [resultSet intForColumn:@&quot;id&quot;];
-        NSString *name &#x3D; [resultSet stringForColumn:@&quot;name&quot;];
-        int age &#x3D; [resultSet intForColumn:@&quot;age&quot;];
-        NSLog(@&quot;%d %@ %d&quot;,ID,name,age);
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> 查询</span>
+<span class="hljs-comment"> */</span>
+- (<span class="hljs-keyword">void</span>)query &#123;
+    FMResultSet *resultSet = [<span class="hljs-keyword">self</span>.db executeQuery:<span class="hljs-string">@"SELECT * FROM t_student"</span>];
+    <span class="hljs-keyword">while</span> ([resultSet next]) &#123;
+        <span class="hljs-keyword">int</span> ID = [resultSet intForColumn:<span class="hljs-string">@"id"</span>];
+        <span class="hljs-built_in">NSString</span> *name = [resultSet stringForColumn:<span class="hljs-string">@"name"</span>];
+        <span class="hljs-keyword">int</span> age = [resultSet intForColumn:<span class="hljs-string">@"age"</span>];
+        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"%d %@ %d"</span>,ID,name,age);
     &#125;
 &#125;</code></pre>
 
 
 
-<h1 id="2、批处理"><a href="#2、批处理" class="headerlink" title="2、批处理"></a>2、批处理</h1><pre><code class="hljs objective-c">#pragma mark - 批处理
-- (void)lotOperation &#123;
-    NSString *creatSqlString &#x3D; @&quot;CREATE TABLE IF NOT EXISTS t_person (id integer PRINARY KEY AUTOINCREMENT,name text NOT NULL, age integer NOT NULL, age integer NOT NULL);&quot;
-    @&quot;CREATE TABLE IF NOT EXISTS t_student (id integer PRINARY KEY AUTOINCREMENT,name text NOT NULL, age integer NOT NULL, age integer NOT NULL);&quot;;
-    [self.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
+<h1 id="2、批处理"><a href="#2、批处理" class="headerlink" title="2、批处理"></a>2、批处理</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 批处理</span>
+- (<span class="hljs-keyword">void</span>)lotOperation &#123;
+    <span class="hljs-built_in">NSString</span> *creatSqlString = <span class="hljs-string">@"CREATE TABLE IF NOT EXISTS t_person (id integer PRINARY KEY AUTOINCREMENT,name text NOT NULL, age integer NOT NULL, age integer NOT NULL);"</span>
+    <span class="hljs-string">@"CREATE TABLE IF NOT EXISTS t_student (id integer PRINARY KEY AUTOINCREMENT,name text NOT NULL, age integer NOT NULL, age integer NOT NULL);"</span>;
+    [<span class="hljs-keyword">self</span>.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
         [db executeStatements:creatSqlString];
     &#125;];
 &#125;</code></pre>
 
 
 
-<h1 id="3、线程安全databaseQueue"><a href="#3、线程安全databaseQueue" class="headerlink" title="3、线程安全databaseQueue"></a>3、线程安全databaseQueue</h1><pre><code class="hljs objective-c">#pragma mark - dataBaseQueue线程安全
-- (void)dataBaseQueueAction &#123;
+<h1 id="3、线程安全databaseQueue"><a href="#3、线程安全databaseQueue" class="headerlink" title="3、线程安全databaseQueue"></a>3、线程安全databaseQueue</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - dataBaseQueue线程安全</span>
+- (<span class="hljs-keyword">void</span>)dataBaseQueueAction &#123;
     
-    &#x2F;*
-      备注：
-        1、FMDatabaseQueue初始化时已将数据库打开和关闭封装好了，所以操作时不需要单独调用FMDatabase的open和close方法
-        2、FMDatabaseQueue是基于同步串行队列保证数据库访问的安全性，所以不能叠加使用，避免死锁
-     *&#x2F;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">      备注：</span>
+<span class="hljs-comment">        1、FMDatabaseQueue初始化时已将数据库打开和关闭封装好了，所以操作时不需要单独调用FMDatabase的open和close方法</span>
+<span class="hljs-comment">        2、FMDatabaseQueue是基于同步串行队列保证数据库访问的安全性，所以不能叠加使用，避免死锁</span>
+<span class="hljs-comment">     */</span>
     
-    &#x2F;&#x2F; 获取数据库队列
-    FMDatabaseQueue *queue &#x3D; [FMDatabaseQueue databaseQueueWithPath:self.fileName];
+    <span class="hljs-comment">// 获取数据库队列</span>
+    FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:<span class="hljs-keyword">self</span>.fileName];
     [queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
-        BOOL resutl &#x3D; [db executeUpdate:@&quot;CREATE TABLE IF NOT EXISTS t_person (id integer PRIMARY KEY AUTOINCREMENT, name text NOT NULL, age integer NOT NULL);&quot;];
-        if (resutl) &#123;
-            NSLog(@&quot;创表成功&quot;);
+        <span class="hljs-built_in">BOOL</span> resutl = [db executeUpdate:<span class="hljs-string">@"CREATE TABLE IF NOT EXISTS t_person (id integer PRIMARY KEY AUTOINCREMENT, name text NOT NULL, age integer NOT NULL);"</span>];
+        <span class="hljs-keyword">if</span> (resutl) &#123;
+            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"创表成功"</span>);
         &#125;
-        else&#123;
-            NSLog(@&quot;创表失败&quot;);
-        &#125;
-    &#125;];
-    self.queue &#x3D; queue;
-    
-    &#x2F;&#x2F; 插入数据
-    [self.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
-        [db executeUpdate:@&quot;INSERT INTO t_person (name,age) VALUES (?,?);&quot;,@&quot;wendingding&quot;,@(22)];
-    &#125;];
-    
-    &#x2F;&#x2F; 查询
-    [self.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
-        FMResultSet *resultSet &#x3D; [db executeQuery:@&quot;SELECT * FROM t_person&quot;];
-        while ([resultSet next]) &#123;
-            int ID &#x3D; [resultSet intForColumn:@&quot;id&quot;];
-            NSString *name &#x3D; [resultSet stringForColumn:@&quot;name&quot;];
-            int age &#x3D; [resultSet intForColumn:@&quot;age&quot;];
-            NSLog(@&quot;%d %@ %d&quot;,ID,name,age);
+        <span class="hljs-keyword">else</span>&#123;
+            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"创表失败"</span>);
         &#125;
     &#125;];
+    <span class="hljs-keyword">self</span>.queue = queue;
     
-    &#x2F;*
-     备注：
-     https:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;15720272&#x2F;when-to-close-sqlite-database-using-fmdb
-     数据库不需频繁的切换open和close两种状态，否则会造成不小的性能损耗(如cpu使用率)，FMDB的作者也提到
-     只有在需要更改数据库模式的时候才需要切换状态，即使是退到后台线程也是不需要关闭的，维持数据打开的状态就可以
-     *&#x2F;
+    <span class="hljs-comment">// 插入数据</span>
+    [<span class="hljs-keyword">self</span>.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
+        [db executeUpdate:<span class="hljs-string">@"INSERT INTO t_person (name,age) VALUES (?,?);"</span>,<span class="hljs-string">@"wendingding"</span>,@(<span class="hljs-number">22</span>)];
+    &#125;];
+    
+    <span class="hljs-comment">// 查询</span>
+    [<span class="hljs-keyword">self</span>.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
+        FMResultSet *resultSet = [db executeQuery:<span class="hljs-string">@"SELECT * FROM t_person"</span>];
+        <span class="hljs-keyword">while</span> ([resultSet next]) &#123;
+            <span class="hljs-keyword">int</span> ID = [resultSet intForColumn:<span class="hljs-string">@"id"</span>];
+            <span class="hljs-built_in">NSString</span> *name = [resultSet stringForColumn:<span class="hljs-string">@"name"</span>];
+            <span class="hljs-keyword">int</span> age = [resultSet intForColumn:<span class="hljs-string">@"age"</span>];
+            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"%d %@ %d"</span>,ID,name,age);
+        &#125;
+    &#125;];
+    
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     备注：</span>
+<span class="hljs-comment">     https://stackoverflow.com/questions/15720272/when-to-close-sqlite-database-using-fmdb</span>
+<span class="hljs-comment">     数据库不需频繁的切换open和close两种状态，否则会造成不小的性能损耗(如cpu使用率)，FMDB的作者也提到</span>
+<span class="hljs-comment">     只有在需要更改数据库模式的时候才需要切换状态，即使是退到后台线程也是不需要关闭的，维持数据打开的状态就可以</span>
+<span class="hljs-comment">     */</span>
     
 &#125;</code></pre>
 
 
 
-<h1 id="4、事务"><a href="#4、事务" class="headerlink" title="4、事务"></a>4、事务</h1><pre><code class="hljs objective-c">&#x2F;&#x2F; 事务:所有任务执行完成后才再将结果一次性提交到数据库
-&#x2F;&#x2F; 特点:要么全部成功，要么全部失败(如果中途出现问题，则会回滚)
-&#x2F;&#x2F; 注意：开启事务比不开事务的耗时更少
-[self.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
-    &#x2F;&#x2F; 开启事务
+<h1 id="4、事务"><a href="#4、事务" class="headerlink" title="4、事务"></a>4、事务</h1><pre><code class="hljs objc"><span class="hljs-comment">// 事务:所有任务执行完成后才再将结果一次性提交到数据库</span>
+<span class="hljs-comment">// 特点:要么全部成功，要么全部失败(如果中途出现问题，则会回滚)</span>
+<span class="hljs-comment">// 注意：开启事务比不开事务的耗时更少</span>
+[<span class="hljs-keyword">self</span>.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
+    <span class="hljs-comment">// 开启事务</span>
     [db beginTransaction];
-    BOOL first &#x3D; [db executeUpdate:@&quot;INSERT INTO t_person (name,age) VALUES (?,?);&quot;,@&quot;lucky&quot;,@(22)];
-    BOOL second &#x3D; [db executeUpdate:@&quot;INSERT INTO t_person (name,age) VALUES (?,?);&quot;,@&quot;james&quot;,@(22)];
-    &#x2F;&#x2F; 如果其中一个失败，则结束，数据回滚
-    if (!first || !second) &#123;
+    <span class="hljs-built_in">BOOL</span> first = [db executeUpdate:<span class="hljs-string">@"INSERT INTO t_person (name,age) VALUES (?,?);"</span>,<span class="hljs-string">@"lucky"</span>,@(<span class="hljs-number">22</span>)];
+    <span class="hljs-built_in">BOOL</span> second = [db executeUpdate:<span class="hljs-string">@"INSERT INTO t_person (name,age) VALUES (?,?);"</span>,<span class="hljs-string">@"james"</span>,@(<span class="hljs-number">22</span>)];
+    <span class="hljs-comment">// 如果其中一个失败，则结束，数据回滚</span>
+    <span class="hljs-keyword">if</span> (!first || !second) &#123;
         [db rollback];
-        return ;
+        <span class="hljs-keyword">return</span> ;
     &#125;
-    &#x2F;&#x2F; 提交事务
+    <span class="hljs-comment">// 提交事务</span>
     [db commit];
 &#125;];
 
-&#x2F;&#x2F; 另外一种实现方式
-[self.queue inTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) &#123;
-    BOOL first &#x3D; [db executeUpdate:@&quot;INSERT INTO t_person (name,age) VALUES (?,?);&quot;,@&quot;wendi&quot;,@(22)];
-    BOOL second &#x3D; [db executeUpdate:@&quot;INSERT INTO t_person (name,age) VALUES (?,?);&quot;,@&quot;davi&quot;,@(22)];
-    if (!first || !second) &#123;
-        *rollback &#x3D; YES;
-        return ;
+<span class="hljs-comment">// 另外一种实现方式</span>
+[<span class="hljs-keyword">self</span>.queue inTransaction:^(FMDatabase * _Nonnull db, <span class="hljs-built_in">BOOL</span> * _Nonnull rollback) &#123;
+    <span class="hljs-built_in">BOOL</span> first = [db executeUpdate:<span class="hljs-string">@"INSERT INTO t_person (name,age) VALUES (?,?);"</span>,<span class="hljs-string">@"wendi"</span>,@(<span class="hljs-number">22</span>)];
+    <span class="hljs-built_in">BOOL</span> second = [db executeUpdate:<span class="hljs-string">@"INSERT INTO t_person (name,age) VALUES (?,?);"</span>,<span class="hljs-string">@"davi"</span>,@(<span class="hljs-number">22</span>)];
+    <span class="hljs-keyword">if</span> (!first || !second) &#123;
+        *rollback = <span class="hljs-literal">YES</span>;
+        <span class="hljs-keyword">return</span> ;
     &#125;
 &#125;];</code></pre>
 
 
 
-<h1 id="5、判断某张表是否存在"><a href="#5、判断某张表是否存在" class="headerlink" title="5、判断某张表是否存在"></a>5、判断某张表是否存在</h1><pre><code class="hljs objective-c">#pragma mark - 判断某张表是否存在
-- (void)chectDatabaseTableExists &#123;
-    &#x2F;*
-     备注：
-        sqlite中有一个内k建表sqlite_master,这个表中存储这个所有自建表的表名称等信息
-        可以通过：select * from sqlite_master 查看这个内建表的所有记录
-     
-     
-        引申：判断指定的表是否存在，可以用如下语句
-        select count(*) from sqlite_master wheretype&#x3D;&#39;table&#39; and name&#x3D;&#39;要查询的表名&#39;
-        如果查询结果大于0，表示该表存在于数据库中，否则不存在
-     
-        详情：
-        https:&#x2F;&#x2F;blog.csdn.net&#x2F;aflyeaglenku&#x2F;article&#x2F;details&#x2F;50884837
-     *&#x2F;
+<h1 id="5、判断某张表是否存在"><a href="#5、判断某张表是否存在" class="headerlink" title="5、判断某张表是否存在"></a>5、判断某张表是否存在</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 判断某张表是否存在</span>
+- (<span class="hljs-keyword">void</span>)chectDatabaseTableExists &#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     备注：</span>
+<span class="hljs-comment">        sqlite中有一个内k建表sqlite_master,这个表中存储这个所有自建表的表名称等信息</span>
+<span class="hljs-comment">        可以通过：select * from sqlite_master 查看这个内建表的所有记录</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">        引申：判断指定的表是否存在，可以用如下语句</span>
+<span class="hljs-comment">        select count(*) from sqlite_master wheretype='table' and name='要查询的表名'</span>
+<span class="hljs-comment">        如果查询结果大于0，表示该表存在于数据库中，否则不存在</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">        详情：</span>
+<span class="hljs-comment">        https://blog.csdn.net/aflyeaglenku/article/details/50884837</span>
+<span class="hljs-comment">     */</span>
 &#125;</code></pre>
 
 
 
-<h1 id="6、检测字段是否存在-并且添加字段"><a href="#6、检测字段是否存在-并且添加字段" class="headerlink" title="6、检测字段是否存在(并且添加字段)"></a>6、检测字段是否存在(并且添加字段)</h1><pre><code class="hljs objective-c">#pragma mark - 检测字段是否存在(并且添加字段)
-- (void)checkDatabaseColumn &#123;
-    &#x2F;*
-        sqlite中并没有直接删除列和重命名列名称的sql语句，但是可以使用下面的思路实现同样的效果
-        1、新建一个新表(新表的字段除了要删除的字段外，其余的都要)
-        2、将旧表的值copy到新表
-        3、删除旧表
-        4、重命名表表名
-     
-        详情：
-        https:&#x2F;&#x2F;blog.csdn.net&#x2F;aflyeaglenku&#x2F;article&#x2F;details&#x2F;50884837
-     *&#x2F;
+<h1 id="6、检测字段是否存在-并且添加字段"><a href="#6、检测字段是否存在-并且添加字段" class="headerlink" title="6、检测字段是否存在(并且添加字段)"></a>6、检测字段是否存在(并且添加字段)</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 检测字段是否存在(并且添加字段)</span>
+- (<span class="hljs-keyword">void</span>)checkDatabaseColumn &#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">        sqlite中并没有直接删除列和重命名列名称的sql语句，但是可以使用下面的思路实现同样的效果</span>
+<span class="hljs-comment">        1、新建一个新表(新表的字段除了要删除的字段外，其余的都要)</span>
+<span class="hljs-comment">        2、将旧表的值copy到新表</span>
+<span class="hljs-comment">        3、删除旧表</span>
+<span class="hljs-comment">        4、重命名表表名</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">        详情：</span>
+<span class="hljs-comment">        https://blog.csdn.net/aflyeaglenku/article/details/50884837</span>
+<span class="hljs-comment">     */</span>
     
-    [self.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
-        if ([db columnExists:@&quot;phone&quot; inTableWithName:@&quot;t_person&quot;]) &#123;
-            &#x2F;&#x2F; 如果t_person表中存在phone这个字段，不需要操作
-        &#125;else&#123;
-            &#x2F;&#x2F; 如果t_person表中不存在phone这个字段，插入列
-            [db executeUpdate:@&quot;ALTER TABLE t_person ADD phone text&quot;];
+    [<span class="hljs-keyword">self</span>.queue inDatabase:^(FMDatabase * _Nonnull db) &#123;
+        <span class="hljs-keyword">if</span> ([db columnExists:<span class="hljs-string">@"phone"</span> inTableWithName:<span class="hljs-string">@"t_person"</span>]) &#123;
+            <span class="hljs-comment">// 如果t_person表中存在phone这个字段，不需要操作</span>
+        &#125;<span class="hljs-keyword">else</span>&#123;
+            <span class="hljs-comment">// 如果t_person表中不存在phone这个字段，插入列</span>
+            [db executeUpdate:<span class="hljs-string">@"ALTER TABLE t_person ADD phone text"</span>];
         &#125;
     &#125;];
 &#125;</code></pre>
 
 
 
-<h1 id="7、表迁移"><a href="#7、表迁移" class="headerlink" title="7、表迁移"></a>7、表迁移</h1><pre><code class="hljs objective-c">#pragma mark - 表迁移
-- (void)updateToNewTable &#123;
-    &#x2F;*
-     这功能主要是表设计结构变更的时候需要使用
-     思路：
-        重新创建一个表
-        将旧表数据导入到新的表中
-        删除旧表
-     *&#x2F;
+<h1 id="7、表迁移"><a href="#7、表迁移" class="headerlink" title="7、表迁移"></a>7、表迁移</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 表迁移</span>
+- (<span class="hljs-keyword">void</span>)updateToNewTable &#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     这功能主要是表设计结构变更的时候需要使用</span>
+<span class="hljs-comment">     思路：</span>
+<span class="hljs-comment">        重新创建一个表</span>
+<span class="hljs-comment">        将旧表数据导入到新的表中</span>
+<span class="hljs-comment">        删除旧表</span>
+<span class="hljs-comment">     */</span>
 &#125;</code></pre>
 
 
 
-<h1 id="8、多表联查-重点：此处先介绍左连、右连、内连的概念"><a href="#8、多表联查-重点：此处先介绍左连、右连、内连的概念" class="headerlink" title="8、多表联查(重点：此处先介绍左连、右连、内连的概念)"></a>8、多表联查(重点：此处先介绍左连、右连、内连的概念)</h1><pre><code class="hljs objective-c">#pragma mark - 多表连查 join
-- (void)mulTable &#123;
-    &#x2F;*
-     左连接：左边有的，右边没有的为null
-     右连接：左边没有的，右边有的为null
-     内连接：显示左边右边共有的
-     
-     详情介绍：
-     https:&#x2F;&#x2F;blog.csdn.net&#x2F;wang0112233&#x2F;article&#x2F;details&#x2F;78418698
-     https:&#x2F;&#x2F;blog.csdn.net&#x2F;plg17&#x2F;article&#x2F;details&#x2F;78758593
-     *&#x2F;
+<h1 id="8、多表联查-重点：此处先介绍左连、右连、内连的概念"><a href="#8、多表联查-重点：此处先介绍左连、右连、内连的概念" class="headerlink" title="8、多表联查(重点：此处先介绍左连、右连、内连的概念)"></a>8、多表联查(重点：此处先介绍左连、右连、内连的概念)</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 多表连查 join</span>
+- (<span class="hljs-keyword">void</span>)mulTable &#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     左连接：左边有的，右边没有的为null</span>
+<span class="hljs-comment">     右连接：左边没有的，右边有的为null</span>
+<span class="hljs-comment">     内连接：显示左边右边共有的</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">     详情介绍：</span>
+<span class="hljs-comment">     https://blog.csdn.net/wang0112233/article/details/78418698</span>
+<span class="hljs-comment">     https://blog.csdn.net/plg17/article/details/78758593</span>
+<span class="hljs-comment">     */</span>
     
-    &#x2F;&#x2F; 实例：比如有两个表A和B,联查条件A.a字段与B.b字段相同
-    NSLog(@&quot;select A.*,B.* from A left join B on(A.a &#x3D; B.b)&quot;);
+    <span class="hljs-comment">// 实例：比如有两个表A和B,联查条件A.a字段与B.b字段相同</span>
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"select A.*,B.* from A left join B on(A.a = B.b)"</span>);
 &#125;</code></pre>
 
 
 
-<h1 id="9、创建索引"><a href="#9、创建索引" class="headerlink" title="9、创建索引"></a>9、创建索引</h1><pre><code class="hljs objective-c">#pragma mark - 创建索引(有索引后查找速度更快速)
-- (void)createIndex &#123;
-    &#x2F;*
-        备注：
-        1、在不读取整个表的情况下，索引使数据库应用程序可以更快地查找数据。
-        2、更新一个包含索引的表需要比更新一个没有索引的表更多的时间，这是由于索引本身也需要更新。
-           因此，理想的做法是仅仅在常常被搜索的列（以及表）上面创建索引
-     
-        公式：CREATE INDEX index_name ON table_name (column_name)
-        详情介绍：
-        http:&#x2F;&#x2F;www.w3school.com.cn&#x2F;sql&#x2F;sql_create_index.asp
-     *&#x2F;
+<h1 id="9、创建索引"><a href="#9、创建索引" class="headerlink" title="9、创建索引"></a>9、创建索引</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 创建索引(有索引后查找速度更快速)</span>
+- (<span class="hljs-keyword">void</span>)createIndex &#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">        备注：</span>
+<span class="hljs-comment">        1、在不读取整个表的情况下，索引使数据库应用程序可以更快地查找数据。</span>
+<span class="hljs-comment">        2、更新一个包含索引的表需要比更新一个没有索引的表更多的时间，这是由于索引本身也需要更新。</span>
+<span class="hljs-comment">           因此，理想的做法是仅仅在常常被搜索的列（以及表）上面创建索引</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">        公式：CREATE INDEX index_name ON table_name (column_name)</span>
+<span class="hljs-comment">        详情介绍：</span>
+<span class="hljs-comment">        http://www.w3school.com.cn/sql/sql_create_index.asp</span>
+<span class="hljs-comment">     */</span>
     
-    &#x2F;&#x2F; 实例：创建一个简单的索引，名为 &quot;PersonIndex&quot;，在 Person 表的 LastName 列：
-    NSLog(@&quot;CREATE INDEX PersonIndex ON Person(LastName)&quot;);
+    <span class="hljs-comment">// 实例：创建一个简单的索引，名为 "PersonIndex"，在 Person 表的 LastName 列：</span>
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"CREATE INDEX PersonIndex ON Person(LastName)"</span>);
 &#125;</code></pre>
 
 
 
-<h1 id="10、数据库的删除-清空"><a href="#10、数据库的删除-清空" class="headerlink" title="10、数据库的删除(清空)"></a>10、数据库的删除(清空)</h1><pre><code class="hljs objective-c">#pragma mark - 数据库的删除(清空)
-- (void)clearTable &#123;
-    &#x2F;*
-        1、删除表(表的结构、属性以及索引也会被删除)
-        DROP TABLE表名称
-     
-        2、删除数据库
-        DROP DATABASE数据库名称
-     
-        3、清空表内的数据，但并不删除表本身
-        TRUNCATE TABLE表名称
-     
-     *&#x2F;
+<h1 id="10、数据库的删除-清空"><a href="#10、数据库的删除-清空" class="headerlink" title="10、数据库的删除(清空)"></a>10、数据库的删除(清空)</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 数据库的删除(清空)</span>
+- (<span class="hljs-keyword">void</span>)clearTable &#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">        1、删除表(表的结构、属性以及索引也会被删除)</span>
+<span class="hljs-comment">        DROP TABLE表名称</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">        2、删除数据库</span>
+<span class="hljs-comment">        DROP DATABASE数据库名称</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">        3、清空表内的数据，但并不删除表本身</span>
+<span class="hljs-comment">        TRUNCATE TABLE表名称</span>
+<span class="hljs-comment">     </span>
+<span class="hljs-comment">     */</span>
 &#125;</code></pre>
 
 
 
-<h1 id="11、统计表的数据"><a href="#11、统计表的数据" class="headerlink" title="11、统计表的数据"></a>11、统计表的数据</h1><pre><code class="hljs objective-c">#pragma mark - 统计表的数据
-- (void)tableCount &#123;
+<h1 id="11、统计表的数据"><a href="#11、统计表的数据" class="headerlink" title="11、统计表的数据"></a>11、统计表的数据</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 统计表的数据</span>
+- (<span class="hljs-keyword">void</span>)tableCount &#123;
     
-    &#x2F;&#x2F; 统计某表（如Person）的数据量
-    NSLog(@&quot;SELECT COUNT(*) FROM Person&quot;);
+    <span class="hljs-comment">// 统计某表（如Person）的数据量</span>
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"SELECT COUNT(*) FROM Person"</span>);
     
-    &#x2F;&#x2F; 统计某表某列的数据量（如：Person中name的数量，备注：NULL不计入）
-    NSLog(@&quot;SELECT COUNT(name) FROM Person&quot;);
+    <span class="hljs-comment">// 统计某表某列的数据量（如：Person中name的数量，备注：NULL不计入）</span>
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"SELECT COUNT(name) FROM Person"</span>);
 
 &#125;</code></pre>
 
 
 
-<h1 id="12、分页读取数据"><a href="#12、分页读取数据" class="headerlink" title="12、分页读取数据"></a>12、分页读取数据</h1><pre><code class="hljs objective-c">#pragma mark - 分页读取数据
-- (void)pageData &#123;
-    &#x2F;&#x2F; 实例：分页获取表Person中数据，每页20条
-    &#x2F;&#x2F; 从第0行开始获取 一次获取20条
-    NSLog(@&quot;SELECT * FROM Person LIMIT 0,20&quot;);
-    &#x2F;&#x2F; 从第21行开始获取 一次获取20条
-    NSLog(@&quot;SELECT * FROM Person LIMIT 20,20&quot;);
+<h1 id="12、分页读取数据"><a href="#12、分页读取数据" class="headerlink" title="12、分页读取数据"></a>12、分页读取数据</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 分页读取数据</span>
+- (<span class="hljs-keyword">void</span>)pageData &#123;
+    <span class="hljs-comment">// 实例：分页获取表Person中数据，每页20条</span>
+    <span class="hljs-comment">// 从第0行开始获取 一次获取20条</span>
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"SELECT * FROM Person LIMIT 0,20"</span>);
+    <span class="hljs-comment">// 从第21行开始获取 一次获取20条</span>
+    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@"SELECT * FROM Person LIMIT 20,20"</span>);
     
 &#125;</code></pre>
 
 
 
-<h1 id="13、数据写入和读出处理-如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理"><a href="#13、数据写入和读出处理-如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理" class="headerlink" title="13、数据写入和读出处理(如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理)"></a>13、数据写入和读出处理(如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理)</h1><pre><code class="hljs objective-c">#pragma mark - 数据写入和读出处理(如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理)
-- (NSString *)inDBReplaceStr:(NSString *)inStr &#123;
-    NSString *tempStr &#x3D; inStr;
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;&quot; withString:@&quot;&#x2F;&#x2F;&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#39;&quot; withString:@&quot;&#39;&#39;&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;[&quot; withString:@&quot;&#x2F;[&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;]&quot; withString:@&quot;&#x2F;]&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;%&quot; withString:@&quot;&#x2F;%&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&amp;&quot; withString:@&quot;&#x2F;&amp;&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;_&quot; withString:@&quot;&#x2F;_&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;(&quot; withString:@&quot;&#x2F;(&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;)&quot; withString:@&quot;&#x2F;)&quot;];
-    return tempStr;
+<h1 id="13、数据写入和读出处理-如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理"><a href="#13、数据写入和读出处理-如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理" class="headerlink" title="13、数据写入和读出处理(如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理)"></a>13、数据写入和读出处理(如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理)</h1><pre><code class="hljs objc"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> mark - 数据写入和读出处理(如写入的内容包括一些特殊的转义字符，这些直接写入会导致失败，所以需要特殊处理)</span>
+- (<span class="hljs-built_in">NSString</span> *)inDBReplaceStr:(<span class="hljs-built_in">NSString</span> *)inStr &#123;
+    <span class="hljs-built_in">NSString</span> *tempStr = inStr;
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/"</span> withString:<span class="hljs-string">@"//"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"'"</span> withString:<span class="hljs-string">@"''"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"["</span> withString:<span class="hljs-string">@"/["</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"]"</span> withString:<span class="hljs-string">@"/]"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"%"</span> withString:<span class="hljs-string">@"/%"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"&amp;"</span> withString:<span class="hljs-string">@"/&amp;"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"_"</span> withString:<span class="hljs-string">@"/_"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"("</span> withString:<span class="hljs-string">@"/("</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@")"</span> withString:<span class="hljs-string">@"/)"</span>];
+    <span class="hljs-keyword">return</span> tempStr;
 &#125;
 
 
-- (NSString *)outDBReplaceStr:(NSString *)outStr &#123;
-    NSString *tempStr &#x3D; outStr;
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;&#x2F;&quot; withString:@&quot;&#x2F;&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#39;&#39;&quot; withString:@&quot;&#39;&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;[&quot; withString:@&quot;[&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;]&quot; withString:@&quot;]&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;%&quot; withString:@&quot;%&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;&amp;&quot; withString:@&quot;&amp;&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;_&quot; withString:@&quot;_&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;(&quot; withString:@&quot;(&quot;];
-    tempStr &#x3D; [tempStr stringByReplacingOccurrencesOfString:@&quot;&#x2F;)&quot; withString:@&quot;)&quot;];
-    return tempStr;
+- (<span class="hljs-built_in">NSString</span> *)outDBReplaceStr:(<span class="hljs-built_in">NSString</span> *)outStr &#123;
+    <span class="hljs-built_in">NSString</span> *tempStr = outStr;
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"//"</span> withString:<span class="hljs-string">@"/"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"''"</span> withString:<span class="hljs-string">@"'"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/["</span> withString:<span class="hljs-string">@"["</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/]"</span> withString:<span class="hljs-string">@"]"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/%"</span> withString:<span class="hljs-string">@"%"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/&amp;"</span> withString:<span class="hljs-string">@"&amp;"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/_"</span> withString:<span class="hljs-string">@"_"</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/("</span> withString:<span class="hljs-string">@"("</span>];
+    tempStr = [tempStr stringByReplacingOccurrencesOfString:<span class="hljs-string">@"/)"</span> withString:<span class="hljs-string">@")"</span>];
+    <span class="hljs-keyword">return</span> tempStr;
 &#125;</code></pre>
 
 
