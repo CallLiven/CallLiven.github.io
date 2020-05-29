@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    563 字
+                    677 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    5
+                    6
                      分钟
                   </span>
                 
@@ -193,6 +193,13 @@
 <p>创建一个CacheFileManager类用于管理缓存文件，这个类我是这么定义的，一个视频只对应一个CacheFileManager对象，便于管理一个视频多个下载的情况。</p>
 <p>到这一步，由于是在上文中的第二种方式的基础上添加，就有点困难的，混乱中……对于整体架构没什么概念…单一职责…..工厂模式…..观察者模式……</p>
 <p>当思索了许久都没有idea，则可以参考其他人的实现方式，这里推荐<a href="https://mp.weixin.qq.com/s/v1sw_Sb8oKeZ8sWyjBUXGA" target="_blank" rel="noopener">VIMediaCache</a>这篇文章，模块职责分得比较细，嵌套的有点多，所以要多看几次，方能了解结构（VIMediaCache第三方库，貌似还有点问题，本地已缓存整个视频的数据了，但是如果我关闭了网络，视频会出现播放不了的问题，并且经测试，在播放视频的时候，绝大部分数据依然是从线上拉取的。可能是我没搞清楚而出现这些疑问）</p>
+<p><a href="https://sm.ms/image/LGARJkYIt3uUFre" target="_blank"><img src="https://i.loli.net/2020/05/27/LGARJkYIt3uUFre.png" srcset="/img/loading.gif" ></p>
+</a>
+
+<p>以上是初步的结构流程，虽不完整但是很关键。基于设计模式的单一职能，可以将上图划分2大模块，一个是缓存处理模块，一个是下载模块；而这两个对于视频资源URL和LoadingRequest对于关系是这样的</p>
+<p>（1）一个视频URL —— &gt; 若干个LoadingRequest</p>
+<p>（2）一个视频URL ——–&gt; 一个缓存处理模块</p>
+<p>（3）一个LoadingRequest ——–&gt; 一个下载模块</p>
 
             </article>
             <hr>
