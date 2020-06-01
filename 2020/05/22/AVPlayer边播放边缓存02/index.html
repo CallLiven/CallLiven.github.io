@@ -182,7 +182,8 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h1 id="续集"><a href="#续集" class="headerlink" title="续集"></a>续集</h1><p><a href="https://callliven.github.io/2020/05/19/AVPlayer边播放边缓存01/" target="_blank" rel="noopener">上文</a>完成了一个简单的自定义下载数据播放器，在这之后我们可以拿到下载的数据，接下来就是保存下载的数据，</p>
+              <p><strong>边缓存边播放库：<a href="https://github.com/CallLiven/LEAVPlayerCache" target="_blank" rel="noopener">LEAVPlayerCache</a></strong></p>
+<h1 id="续集"><a href="#续集" class="headerlink" title="续集"></a>续集</h1><p><a href="https://callliven.github.io/2020/05/19/AVPlayer边播放边缓存01/" target="_blank" rel="noopener">上文</a>完成了一个简单的自定义下载数据播放器，在这之后我们可以拿到下载的数据，接下来就是保存下载的数据，</p>
 <p>既然要保存，首先就是要确定保存在什么位置，关于<a href="https://www.jianshu.com/p/b841ea19a8de" target="_blank" rel="noopener">苹果的沙盒</a>机制这里就不细聊了。</p>
 <p>出于对短视频用户操作习惯的分析，对同一个视频，在不同时间，比如数小时之后，是不会再多次播放，也就是说我们做的缓存更多为了优化是以下的操作：</p>
 <p>第一：观看短视频，会重播，可以直接读取上次的数据，避免流量浪费</p>
@@ -552,7 +553,7 @@
 
 
 
-<h3 id="六、LERequestContentInfo"><a href="#六、LERequestContentInfo" class="headerlink" title="六、LERequestContentInfo"></a>六、LERequestContentInfo</h3><blockquote>
+<h3 id="五、LERequestContentInfo"><a href="#五、LERequestContentInfo" class="headerlink" title="五、LERequestContentInfo"></a>五、LERequestContentInfo</h3><blockquote>
 <p>归档，资源文件的描述信息，比如长度、文件格式、是否能分片下载、以及本地缓存的range片段</p>
 <p>有个注意点就是NSRange数组在归档的时候，需要转换为NSString，而转为NSValue是没用的，</p>
 <p>并且在解档的时候，需要表示解档对象的类型，否则会解档失败。本人在这里卡了一会，好不容易才知道原因</p>
@@ -583,7 +584,7 @@
 
 
 
-<h3 id="七：如何使用"><a href="#七：如何使用" class="headerlink" title="七：如何使用"></a>七：如何使用</h3><p>超级简单哦！只要使用LEResourceLoaderManager创建AVPlayerItem，就能实现边播边缓存。</p>
+<h3 id="六：如何使用"><a href="#六：如何使用" class="headerlink" title="六：如何使用"></a>六：如何使用</h3><p>超级简单哦！只要使用LEResourceLoaderManager创建AVPlayerItem，就能实现边播边缓存。</p>
 <p>提示：AVPlayer的<code>automaticallyWaitsToMinimizeStalling</code>属性一定要设置为YES，这样能在缓存尽可能少的数据时就能播放视频，否则可能要等到视频缓存完成了才播放视频</p>
 <pre><code class="hljs objc"><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">ViewController</span> ()</span>
 <span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-built_in">AVPlayer</span> *player;
