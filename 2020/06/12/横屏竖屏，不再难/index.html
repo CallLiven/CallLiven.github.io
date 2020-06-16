@@ -326,7 +326,8 @@
 <p>这样写，是正确的写法，不过对于有些项目可能会出错，因为keyWindow并不是windows中的第0个，而是第1个，这是为什么了，是不是跟iOS13有关系？</p>
 <p>解惑：这是因为有些人新建项目的时候没有将info.plist列表中的Main storyboard file base name置为空的同时，还在appdelegate方法中返回自定义的window，最终导致在windows中多了一个window。所以如果要在appdelegate中返回自定义的window，那么要将这个参数置为空</p>
 <p><img src="https://i.loli.net/2020/06/15/kFY4j8NLgbmEJhT.png" srcset="/img/loading.gif" alt="image-20200615145518809"></p>
-<h3 id="七、下载地址"><a href="#七、下载地址" class="headerlink" title="七、下载地址"></a>七、下载地址</h3><p><a href="https://github.com/CallLiven/LERotationManager" target="_blank" rel="noopener">CallMeLiven</a></p>
+<h3 id="七、框架下载地址"><a href="#七、框架下载地址" class="headerlink" title="七、框架下载地址"></a>七、框架下载地址</h3><p><a href="https://github.com/CallLiven/LERotationManager" target="_blank" rel="noopener">CallMeLiven</a></p>
+<p>如果喜欢的或者对你有一丝丝的帮助，请给个星星，谢谢</p>
 <h3 id="八、勘误"><a href="#八、勘误" class="headerlink" title="八、勘误"></a>八、勘误</h3><p><strong>2020年06月16=======勘误1：第二节配置的勘误（很重要）</strong></p>
 <p>上文提到设置InterfaceOrientation支持方向的三种方法是同步的，实质上会有所不同，</p>
 <p>但是第一种info.plist和第二种General方法就是真的完全同步。</p>
