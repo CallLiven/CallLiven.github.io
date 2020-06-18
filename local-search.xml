@@ -4,6 +4,46 @@
   
   
   <entry>
+    <title>viewController坐标系的讲解</title>
+    <link href="/2020/06/18/viewController%E5%9D%90%E6%A0%87%E7%B3%BB%E7%9A%84%E8%AE%B2%E8%A7%A3/"/>
+    <url>/2020/06/18/viewController%E5%9D%90%E6%A0%87%E7%B3%BB%E7%9A%84%E8%AE%B2%E8%A7%A3/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>导航栏顺畅的过渡</title>
+    <link href="/2020/06/17/%E5%AF%BC%E8%88%AA%E6%A0%8F%E9%9A%90%E8%97%8F%E6%98%BE%E7%A4%BA%E5%8F%8B%E5%A5%BD%E8%BF%87%E6%B8%A1/"/>
+    <url>/2020/06/17/%E5%AF%BC%E8%88%AA%E6%A0%8F%E9%9A%90%E8%97%8F%E6%98%BE%E7%A4%BA%E5%8F%8B%E5%A5%BD%E8%BF%87%E6%B8%A1/</url>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><center class="half"> <div></div>   <img src="https://i.loli.net/2020/06/17/VDUBibe2vO1CAxw.png" srcset="/img/loading.gif" width="300"/><img src="https://i.loli.net/2020/06/17/hpDQmxuOYjAl2WV.png" srcset="/img/loading.gif" width="300"/> </center><p>以上是当前项目中视频文章详情页导航栏在切换的时候，出现过渡不友好的情况，相对于今天头条，就是渣渣app。同时文章详情页的样式也是有多种的，有一种是视频置顶导航栏透明的，有一种的是导航栏显示不透明，为了简化文章详情的入口，所以现在所有的文章详情样式都是在同一个ViewController中显示的，也就是导航栏需要动态的修改隐藏或者显示的样式。</p><h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>项目已迭代多个版本，所以如果是重构导航栏，那工作比较大，不符合实际的情况，所以选择在原有的基础上做修改。</p><p>视频文章详情样式的需求：<strong>视频是置于顶部固定不变，不会顺着上下滑动</strong></p><p>原代码的做法就比较粗暴，直接将导航栏隐藏，然后自定义返回按钮；由于隐藏了导航栏，那么系统自带的侧滑返回的手势就关闭了，所以引入了<strong>FDFullscreenPopGesture</strong>的第三方库。</p><p><strong>修改后的代码如下：</strong></p><pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">"SecondViewController.h"</span></span><span class="hljs-meta">#import <span class="hljs-meta-string">&lt;FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h&gt;</span></span><span class="hljs-meta">#import <span class="hljs-meta-string">"ThirdViewController.h"</span></span><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">SecondViewController</span></span>- (<span class="hljs-keyword">void</span>)viewDidLoad &#123;    [<span class="hljs-keyword">super</span> viewDidLoad];        <span class="hljs-keyword">self</span>.title = <span class="hljs-string">@"第二个界面"</span>;    <span class="hljs-keyword">self</span>.view.backgroundColor = [<span class="hljs-built_in">UIColor</span> yellowColor];        <span class="hljs-built_in">UIButton</span> *actionBtn = [<span class="hljs-built_in">UIButton</span> buttonWithType:<span class="hljs-built_in">UIButtonTypeCustom</span>];    actionBtn.frame = <span class="hljs-built_in">CGRectMake</span>(<span class="hljs-number">20</span>, <span class="hljs-number">200</span>, [<span class="hljs-built_in">UIScreen</span> mainScreen].bounds.size.width<span class="hljs-number">-40</span>, <span class="hljs-number">60</span>);    actionBtn.backgroundColor = [<span class="hljs-built_in">UIColor</span> blueColor];    [actionBtn setTitle:<span class="hljs-string">@"动态修改导航栏的隐藏或显示"</span> forState:<span class="hljs-built_in">UIControlStateNormal</span>];    [actionBtn addTarget:<span class="hljs-keyword">self</span> action:<span class="hljs-keyword">@selector</span>(btnAction) forControlEvents:<span class="hljs-built_in">UIControlEventTouchUpInside</span>];    [<span class="hljs-keyword">self</span>.view addSubview:actionBtn];            <span class="hljs-built_in">UIButton</span> *jumpBtn = [<span class="hljs-built_in">UIButton</span> buttonWithType:<span class="hljs-built_in">UIButtonTypeCustom</span>];    jumpBtn.frame = <span class="hljs-built_in">CGRectMake</span>(<span class="hljs-number">20</span>, <span class="hljs-number">300</span>, [<span class="hljs-built_in">UIScreen</span> mainScreen].bounds.size.width<span class="hljs-number">-40</span>, <span class="hljs-number">60</span>);    jumpBtn.backgroundColor = [<span class="hljs-built_in">UIColor</span> blueColor];    [jumpBtn setTitle:<span class="hljs-string">@"跳转"</span> forState:<span class="hljs-built_in">UIControlStateNormal</span>];    [jumpBtn addTarget:<span class="hljs-keyword">self</span> action:<span class="hljs-keyword">@selector</span>(jumpAction) forControlEvents:<span class="hljs-built_in">UIControlEventTouchUpInside</span>];    [<span class="hljs-keyword">self</span>.view addSubview:jumpBtn];&#125;<span class="hljs-comment">/// 这是关键代码部分</span>- (<span class="hljs-keyword">void</span>)btnAction &#123;    <span class="hljs-built_in">BOOL</span> isHidden = <span class="hljs-keyword">self</span>.navigationController.navigationBarHidden;    <span class="hljs-comment">/// 这个方法是监听viewWillAppear调用时候设置setNavigationBarHidden的值</span>    <span class="hljs-keyword">self</span>.fd_prefersNavigationBarHidden = !isHidden;    <span class="hljs-comment">/// 这是即使设置导航栏的隐藏</span>    [<span class="hljs-keyword">self</span>.navigationController setNavigationBarHidden:!isHidden];    <span class="hljs-comment">/// 同时设置这两个属性是为了在侧滑的时候，如果只是滑动一小段，但又没跳转，导致导航栏的隐藏显示不统一或跳闪的问题</span>&#125;- (<span class="hljs-keyword">void</span>)jumpAction &#123;    [<span class="hljs-keyword">self</span>.navigationController pushViewController:[ThirdViewController new] animated:<span class="hljs-literal">YES</span>];&#125;<span class="hljs-keyword">@end</span></code></pre><p><strong>完整DEMO下载</strong></p><p>链接:<a href="https://pan.baidu.com/s/1MmxVrbQPWMmV2o5Y2da_DQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1MmxVrbQPWMmV2o5Y2da_DQ</a>  密码:8fw4</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Object-C</category>
+      
+      <category>iOS</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Summary</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>横屏竖屏，不再难</title>
     <link href="/2020/06/12/%E6%A8%AA%E5%B1%8F%E7%AB%96%E5%B1%8F%EF%BC%8C%E4%B8%8D%E5%86%8D%E9%9A%BE/"/>
     <url>/2020/06/12/%E6%A8%AA%E5%B1%8F%E7%AB%96%E5%B1%8F%EF%BC%8C%E4%B8%8D%E5%86%8D%E9%9A%BE/</url>
