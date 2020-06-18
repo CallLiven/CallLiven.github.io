@@ -202,6 +202,8 @@
 
 <img src="https://i.loli.net/2020/06/18/pxiTdz6LsKSHQ91.png" srcset="/img/loading.gif" alt="image-20200618112733491" style="zoom:25%;" />
 
+
+
 <p>备注：以下都以tableView作为滚动视图的描述，blueView作为非滚动视图的描述</p>
 <p>从上面的两张效果图可以看出，blueView会被导航栏遮盖，而tableView不会。</p>
 <p>这里就不做过多的探讨，直接说出结论：</p>
@@ -249,24 +251,34 @@
 <h3 id="第三节：实际应用"><a href="#第三节：实际应用" class="headerlink" title="第三节：实际应用"></a><strong>第三节：实际应用</strong></h3><p>从上面的逻辑图，可以看出view.frame要实现全屏，或者在bars之间，都有两种方式</p>
 <p><strong>全屏</strong></p>
 <p>（1）同时设置以下参数</p>
-<p>​    viewController.edgesForExtendedLaout =  UIRectEdageAll；</p>
-<p>​    viewController.extendedLayoutIncludesOpaqueBars = YES;</p>
+<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
+viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">YES</span>;</code></pre>
+
 <p>（2）同时设置以下参数</p>
-<p>​    viewController.edgesForExtendedLaout =  UIRectEdageAll；</p>
-<p>​    viewController.extendedLayoutIncludesOpaqueBars = NO;</p>
-<p>​    bars.translucent = YES;</p>
+<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
+viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
+bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
+
+
+
 <p><strong>bars之间</strong></p>
 <p>（1）设置viewController.edgesForExtendedLaout = UIRectEdageNone;（PS：不建议这种做法）</p>
 <p>（2）同时设置以下三个参数</p>
-<p>​    viewController.edgesForExtendedLaout =  UIRectEdageAll；</p>
-<p>​    viewController.extendedLayoutIncludesOpaqueBars = NO;</p>
-<p>​    bars.translucent = NO;</p>
+<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
+viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
+bars.translucent = <span class="hljs-literal">NO</span>;</code></pre>
+
+
+
 <p><strong>项目中的使用，建议使用以下的参数配置</strong>，理由：<br>（1）导航栏可能需要设置背景色，所以要将translucent的半透明关闭，否则会有一个白色的蒙层（由于第三点的原因，只能是动态改变这个值，至于这里提到的修改背景颜色的问题，要另辟蹊径）</p>
 <p>（2）导航栏可能需要动态的变动，比如是隐藏或显示的切换</p>
 <p>（3）view.bouns的尺寸在viewWillAppear之后就是确定下来的，不会动态改变，只有在下方配置的情况下viewController.view.frame是会动态改变的</p>
-<p>​    <strong>viewController.edgesForExtendedLaout =  UIRectEdageAll；</strong></p>
-<p>​    <strong>viewController.extendedLayoutIncludesOpaqueBars = YES;</strong></p>
-<p>​    <strong>bars.translucent = <code>可以动态修改</code>;</strong></p>
+<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
+viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">YES</span>;
+bars.translucent = 可以动态修改;</code></pre>
+
+
+
 <h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p><strong>（1）该何时获取viewController.view.frame?</strong></p>
 <p>viewController.view.bounds的值在生命周期不同阶段是不一样的，</p>
 <p>viewDidLoad：bounds的size是手机设备全屏的尺寸</p>
