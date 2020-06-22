@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    17
+                    18
                      分钟
                   </span>
                 
@@ -270,21 +270,21 @@ bars.translucent = <span class="hljs-literal">NO</span>;</code></pre>
 
 
 
-<p><strong>项目中的使用，建议使用以下的参数配置</strong>，理由：<br>（1）导航栏可能需要设置背景色，所以要将translucent的半透明关闭，否则会有一个白色的蒙层（由于第三点的原因，只能是动态改变这个值，至于这里提到的修改背景颜色的问题，要另辟蹊径）</p>
-<p>（2）导航栏可能需要动态的变动，比如是隐藏或显示的切换</p>
-<p>（3）view.bouns的尺寸在viewWillAppear之后就是确定下来的，不会动态改变，只有在下方配置的情况下viewController.view.frame是会动态改变的</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">YES</span>;
-bars.translucent = 可以动态修改;</code></pre>
+<p><strong>项目中的使用，建议使用以下的参数配置</strong>，理由：<br>（1）导航栏可能需要设置背景色，所以要将translucent的半透明关闭，否则会有一个白色的蒙层，并且navigationBar是全局公用一个，所以不见修改translucent的值，避免对其他的控制器造成莫名其妙的布局影响</p>
+<p>（2）导航栏可能需要动态的变动，比如是隐藏或显示的切换，更多需求的是导航栏透明多的变化</p>
+<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；（修改这个值来达到布局的效果）
+viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
+bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
 
 
 
-<h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p><strong>（1）该何时获取viewController.view.frame?</strong></p>
+<h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p><strong>（1）该何时获取viewController.view.frame? 什么时候布局最合适了？</strong></p>
 <p>viewController.view.bounds的值在生命周期不同阶段是不一样的，</p>
 <p>viewDidLoad：bounds的size是手机设备全屏的尺寸</p>
-<p>viewWillAppear：bounds的size才是系统根据多重约束关系重新设置的尺寸，比如在有导航栏的情况下，bounds的高度是屏幕的高度减去导航栏的高度，也和上面提到的参数设置有关</p>
-<p>所以，在设置viewController子视图frame，不能在viewDidLoad里，应放在viewWillAppear或之后的生命周期中</p>
-<p><strong>（2）translucent=YES的情况下，如果设置navigationBar的背景颜色，不会出现白色蒙层？</strong></p>
+<p>在view.frame在viewDidLoad（这时superView和window都是空的）和viewWillAppear（有superView,但window还是空的，并且AutoLayout是发生在viewWillAppear之后(来源于<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">Casa大神文章</a>)）都是不准确的</p>
+<p>在<code>viewWillLayoutSubviews</code>，<code>viewDidLayoutSubviews</code>和<code>viewDidAppear</code>中是准确的（尤其是设置了<code>translucent</code>和<code>edgesForExtendedLayout</code>）,但是<code>viewWillLayoutSubviews</code>、<code>viewDidLayoutSubviews</code>会被多次调用，<code>viewDidAppear</code>视图已经显示再去布局子控件会有刷新的效果，也是不合适的。</p>
+<p>最后根据<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">Casa大神文章</a>的建议：设置viewController.view的子视图的布局，应该在<code>viewWillLayoutSubviews</code>或者<code>viewDidLayoutSubviews</code>中比较合适，即使这两个方法会被多次调用，但都是页面需要调整的时候才会调用</p>
+<p><strong>（2）translucent=YES的情况下，如何设置navigationBar的背景颜色，不会出现白色蒙层？</strong></p>
 <pre><code class="hljs objc">[<span class="hljs-keyword">self</span>.navigationController.navigationBar setBackgroundImage:[<span class="hljs-built_in">UIImage</span> imageWithColor:[<span class="hljs-built_in">UIColor</span> colorWithHexString:<span class="hljs-string">@"#12B3B3"</span>]] forBarMetrics:<span class="hljs-built_in">UIBarMetricsDefault</span>];</code></pre>
 
 
