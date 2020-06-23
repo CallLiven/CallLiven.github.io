@@ -157,6 +157,62 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/06/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96-%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/" target="_self">
+          <img src="/img/articleCover/memory_cover.jpg" srcset="/img/loading.gif" alt="性能优化笔记-内存优化">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/2020/06/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96-%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/">性能优化笔记-内存优化</a>
+
+      <a href="/2020/06/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96-%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/" class="index-excerpt">
+        
+        
+          
+        
+        <div>前言内存问题主要包括两部分
+
+iOS常见的循环引用导致的内存泄漏
+大量数据加载及使用导致的内存警告
+
+补充：
+内存泄漏：是指当一个对象或变量在使用完成后没有被释放掉，一直占用着这部分内存，直到应用停止。
+内存溢出：是指程序在申请内存时，没有足够的内存空间供其使用，出现内存溢出；比如申请一个interger，但是给它存了long才能存下的数，那就是内存溢出
+一、循环引用循环引用是iOS开发中经常遇到</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-06-22
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Object-C/">Object-C</a>
+            
+              <a href="/categories/Object-C/iOS/">iOS</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/06/18/viewController%E5%9D%90%E6%A0%87%E7%B3%BB%E7%9A%84%E8%AE%B2%E8%A7%A3/" target="_self">
           <img src="/img/articleCover/viewController_cover.jpg" srcset="/img/loading.gif" alt="viewController坐标系的详解">
         </a>
@@ -613,59 +669,19 @@
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2020/04/28/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" target="_self">
-          <img src="/img/articleCover/hexo_git_cover.jpg" srcset="/img/loading.gif" alt="Hexo + Github 搭建博客完整版">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/04/28/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">Hexo + Github 搭建博客完整版</a>
-
-      <a href="/2020/04/28/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" class="index-excerpt">
-        
-        
-          
-        
-        <div>一、Hexo搭建1.0 环境准备(具体的参考百度文章)a&gt; npm安装
-b&gt; Git 安装
-c&gt; node.js 安装（建议安装10.0以上版本）
-2.0 Hexo安装$ npm install -g hexo-cli
-
-可以输入hexo -v ，检查hexo是否安装成功
-3.0 搭建网站3.1 创建一个文件夹存放网站文件，比如在桌面中添加一个 Blog 文件夹3.2 初始化Bl</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-04-28
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E5%85%B6%E4%BB%96/">其他</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Tool/">Tool</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
 
 
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 

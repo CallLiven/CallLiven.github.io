@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>viewController坐标系的详解 - Liven技术博客</title>
+  <title>性能优化笔记-内存优化 - Liven技术博客</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
@@ -132,8 +132,8 @@
               
                 <div class="mt-3 post-meta">
                   <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2020-06-18 10:41">
-                    2020年6月18日 上午
+                  <time datetime="2020-06-22 15:21">
+                    2020年6月22日 下午
                   </time>
                 </div>
               
@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    1.6k 字
+                    1.1k 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    18
+                    12
                      分钟
                   </span>
                 
@@ -182,110 +182,99 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>你是否还在疑惑为什么ViewController中的布局有时会被导航栏遮罩住，有时又不会了？</p>
-<p>你是否还在疑惑两个ViewController，一个有滚动视图，一个没有滚动视图，他们的布局起点不一致的问题？</p>
-<p>你是否还在疑惑导航栏透明的时候，要怎么把视图布局都从屏幕的最左上角开始？</p>
-<p>你是否还在疑惑关于布局的属性设置还有那么多种，要怎么区分和使用？</p>
-<p>本文将详细的讲解，相信你读后能解开上面的疑问</p>
-<p>开始之前请下载<a href="">Demo</a>代码</p>
-<p>链接:<a href="https://pan.baidu.com/s/18gNFhuQO29KDJ3PxTI7A3w" target="_blank" rel="noopener">https://pan.baidu.com/s/18gNFhuQO29KDJ3PxTI7A3w</a>  密码:myec</p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>首先全文讨论的场景都是在有导航栏情况下的ViewController（如果是没有导航栏，那么毫无疑问坐标的起点都是屏幕的最左上角，也没有必要设置布局的属性）</p>
-<p>并且对于下面参数的设置，请记得一定要对比其设置的值对于坐标起点(0,0)的影响，这是本文的<strong>重点</strong>、<strong>重点</strong>、<strong>重点</strong></p>
-<p>对于影响坐标系起点的属性，常用的有如下三个</p>
+              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>内存问题主要包括两部分</p>
 <ul>
-<li><code>extendedLayoutIncludesOpaqueBars</code> 默认值：NO</li>
-<li><code>edgesForExtendedLayout</code> 默认值：UIRectEdgeAll</li>
-<li><code>translucent</code> 默认值：YES (navigationBar 和 tabBar)</li>
+<li>iOS常见的循环引用导致的内存泄漏</li>
+<li>大量数据加载及使用导致的内存警告</li>
 </ul>
-<h3 id="第一节：滚动视图与非滚动视图的区别"><a href="#第一节：滚动视图与非滚动视图的区别" class="headerlink" title="第一节：滚动视图与非滚动视图的区别"></a><strong>第一节：滚动视图与非滚动视图的区别</strong></h3><p>这里需要先对比<code>滚动视图</code>(比如tableView)和<code>非滚动视图</code>(比如UIView)，在没有设置如何布局相关属性的情况下，设置的frame坐标是(0,0)，效果如下</p>
-<img src="https://i.loli.net/2020/06/18/xUZM8h4WCsegyIc.png" srcset="/img/loading.gif" alt="image-20200618112606669" style="zoom:25%;" />
-
-<img src="https://i.loli.net/2020/06/18/pxiTdz6LsKSHQ91.png" srcset="/img/loading.gif" alt="image-20200618112733491" style="zoom:25%;" />
-
-
-
-<p>备注：以下都以tableView作为滚动视图的描述，blueView作为非滚动视图的描述</p>
-<p>从上面的两张效果图可以看出，blueView会被导航栏遮盖，而tableView不会。</p>
-<p>这里就不做过多的探讨，直接说出结论：</p>
-<p>一个ViewContrller只有一个坐标系，也就是说坐标(0,0)是指向同一个点；</p>
-<p>blueView和tableView的frame坐标都是(0,0)，而tableView不被遮盖，不是改变了其frame的坐标，主要是因为滚动视图都有一个<code>contentInset</code>的属性，通过改变contentInset的值，实现不被遮盖的原理。</p>
-<p><code>重点：以下属性设置的作用是 滚动视图 会不会自动调整contentInset的值，实现不被导航栏遮挡</code>，跟我们上面要讲的三个改变坐标系起点的属性是完全无关的，这要区分开来，因为很多人都会搞混</p>
-<pre><code class="hljs objc"><span class="hljs-keyword">if</span> (@available(iOS <span class="hljs-number">11</span>,*)) &#123;
-        <span class="hljs-comment">// iOS11 引入的“安全区域”的概念，废弃了iOS7之后出现的 topLayoutGuide/bottomLayoutGuide</span>
-        <span class="hljs-comment">// iOS11是2017年9月20日发布，第一部全屏手机iPhoneX是2017年11月3日上市的，所以安全区域是为了更好的适配全屏手机</span>
-        <span class="hljs-comment">// 常用的两个值</span>
-        <span class="hljs-comment">// UIScrollViewContentInsetAdjustmentAutomatic (默认值，设置ScrollView的显示区域范围在safeArea的范围内，不被stateBar、TabBar、NavigationBar遮盖)</span>
-        <span class="hljs-comment">// UIScrollViewContentInsetAdjustmentNever （contentInset is not adjusted）</span>
-        <span class="hljs-comment">// 其原理与iOS11的不一样，scrollView.contentInset的值不会变，而是设置了安全区域的值ajustedContentInset</span>
-        <span class="hljs-comment">// scrollView.ajustedContentInset的值（提供给用户的是只读属性）</span>
-        <span class="hljs-keyword">self</span>.tableView.contentInsetAdjustmentBehavior = <span class="hljs-built_in">UIScrollViewContentInsetAdjustmentNever</span>;
-        <span class="hljs-comment">// 另外用户还可以增加“安全区域”的范围</span>
-        <span class="hljs-comment">// 备注：设置的值是在原来得基础上设置的，不能减少</span>
-        <span class="hljs-comment">// self.additionalSafeAreaInsets = UIEdgeInsetsMake(200, 0, 0, 0);</span>
-        <span class="hljs-comment">// 备注：contentInsett和additionalSafeAreaInsets 两个同时设置，作用不会重叠，是以设置最大的为准</span>
-        <span class="hljs-comment">// self.tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0);</span>
-    &#125;
-    <span class="hljs-keyword">else</span>&#123;
-        <span class="hljs-comment">// 在iOS11.0系统之后，被弃用了</span>
-        <span class="hljs-comment">// 其原理是设置scrollView.contentInset，可以在viewDidAppear方法打印其值</span>
-        <span class="hljs-keyword">self</span>.automaticallyAdjustsScrollViewInsets = <span class="hljs-literal">YES</span>;
-    &#125;</code></pre>
+<p><strong>补充：</strong></p>
+<p><strong>内存泄漏</strong>：是指当一个对象或变量在使用完成后没有被释放掉，一直占用着这部分内存，直到应用停止。</p>
+<p><strong>内存溢出</strong>：是指程序在申请内存时，没有足够的内存空间供其使用，出现内存溢出；比如申请一个interger，但是给它存了long才能存下的数，那就是内存溢出</p>
+<h1 id="一、循环引用"><a href="#一、循环引用" class="headerlink" title="一、循环引用"></a>一、循环引用</h1><p>循环引用是iOS开发中经常遇到的问题，尤其是对于新手来说是个头疼的问题。循环引用对App有潜在的危害，会使内存消耗过高，性能变差和Crash等，iOS常见的主要以下三种情况：</p>
+<h4 id="（1）Delegate"><a href="#（1）Delegate" class="headerlink" title="（1）Delegate"></a>（1）Delegate</h4><p>代理协议是一个典型的场景，需要你使用弱引用来避免循环应用。ARC时代，需要将代理声明为<code>weak</code>是一个即好又安全的做法</p>
+<pre><code class="hljs objc"><span class="hljs-keyword">@property</span>(<span class="hljs-keyword">nonatomic</span>,<span class="hljs-keyword">weak</span>) <span class="hljs-keyword">id</span>&lt;testDelegate&gt; delegate;</code></pre>
 
 
 
-<h3 id="第二节：修改viewController的坐标系"><a href="#第二节：修改viewController的坐标系" class="headerlink" title="第二节：修改viewController的坐标系"></a><strong>第二节：修改viewController的坐标系</strong></h3><p><code>extendedLayoutIncludesOpaqueBars</code>、<code>edgesForExtendedLayout</code>、<code>translucent</code> 这三个属性值是会互相影响的。</p>
-<blockquote>
-<p>这三个值的优先次序：<code>edgesForExtendedLayout</code> &gt; <code>extendedLayoutIncludesOpaqueBars</code> &gt; <code>translucent</code></p>
-</blockquote>
-<p>首先了解一下它们各自的定义</p>
-<p><code>edgesForExtendedLayout</code> 是设置viewController的view是否向四周延伸，默认值是<code>UIRectEdgeAll</code>向四周延伸，<code>UIRectEdgeNone</code>是不延伸，view只会从navigationBar的底部到tabBar上边结束</p>
-<p><code>extendedLayoutIncludesOpaqueBars</code>设置view是否延伸<code>不透明</code>的bars，默认值是YES。</p>
-<p>YES 表示bars如果是不透明的话，那么也是会延伸的；</p>
-<p>NO 表示bars在不透明的情况下是不延伸，只有半透明的时候才会延伸</p>
-<p><code>translucent</code> 设置bars是否半透明（包括navigationBar 和 tabBar），默认是YES（半透明状态）</p>
-<p>通过对上面属性定义的解释后，你是不是有点开始豁然开朗。以下是完整的逻辑图</p>
-<img src="https://i.loli.net/2020/06/18/gKOoatvxbCWp62m.png" srcset="/img/loading.gif" alt="image-20200618143814120" style="zoom:50%;" />
+<h4 id="（2）NSTimer"><a href="#（2）NSTimer" class="headerlink" title="（2）NSTimer"></a>（2）NSTimer</h4><p>NSTimer 是我们开发很常用的定时器，比如下面的代码：</p>
+<pre><code class="hljs objc">- (<span class="hljs-keyword">void</span>)viewDidLoad &#123;
+    [<span class="hljs-keyword">super</span> viewDidLoad];
+    
+    <span class="hljs-keyword">self</span>.timer = [<span class="hljs-built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="hljs-number">1</span> target:<span class="hljs-keyword">self</span> selector:<span class="hljs-keyword">@selector</span>(doSomeThing) userInfo:<span class="hljs-literal">nil</span> repeats:<span class="hljs-literal">YES</span>];
+    
+&#125;
 
+- (<span class="hljs-keyword">void</span>)doSomeThing &#123;
+    
+&#125;
 
+- (<span class="hljs-keyword">void</span>)dealloc &#123;
+    [<span class="hljs-keyword">self</span>.timer invalidate];
+    <span class="hljs-keyword">self</span>.timer = <span class="hljs-literal">nil</span>;
+&#125;</code></pre>
 
-<h3 id="第三节：实际应用"><a href="#第三节：实际应用" class="headerlink" title="第三节：实际应用"></a><strong>第三节：实际应用</strong></h3><p>从上面的逻辑图，可以看出view.frame要实现全屏，或者在bars之间，都有两种方式</p>
-<p><strong>全屏</strong></p>
-<p>（1）同时设置以下参数</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">YES</span>;</code></pre>
+<p>这是典型的循环引用，因为timer会强引用self，而self又持有了timer，所以就造成了循环引用。可能有人会说，使用一个weak指针，比如</p>
+<pre><code class="hljs objc">__<span class="hljs-keyword">weak</span> <span class="hljs-keyword">typeof</span>(<span class="hljs-keyword">self</span>) wself = <span class="hljs-keyword">self</span>;
+<span class="hljs-keyword">self</span>.timer = [<span class="hljs-built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="hljs-number">1</span> target:wself selector:<span class="hljs-keyword">@selector</span>(doSomeThing) userInfo:<span class="hljs-literal">nil</span> repeats:<span class="hljs-literal">YES</span>];</code></pre>
 
-<p>（2）同时设置以下参数</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
-bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
+<p>但是其实并没有作用，因为不管是wself还是strongSelf，最终在NSTimer内部都会重新生成一个新的指针指向self，这是一个强引用的指针，结果就会导致循环引用。</p>
+<p>解决方法主要以下儿种方式：</p>
+<ul>
+<li>使用<code>类方法</code> （请参考文章底部的写法）</li>
+<li>使用<code>GCD timer</code></li>
+</ul>
+<h4 id="（3）Block"><a href="#（3）Block" class="headerlink" title="（3）Block"></a>（3）Block</h4><p>Block 的循环引用，主要是发生在ViewController中持有了block，比如：</p>
+<pre><code class="hljs objc"><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>,<span class="hljs-keyword">copy</span>) LECallbackBlock callbackBlock;</code></pre>
 
+<p>同时在对callbackBlock进行赋值的时候又调用了viewController的方法，比如：</p>
+<pre><code class="hljs objc"><span class="hljs-keyword">self</span>.callbackBlock = ^&#123;
+	[<span class="hljs-keyword">self</span> doSomeThing];
+&#125;;</code></pre>
 
+<p>就会发生循环引用，因为：viewController—&gt;强引用了callbackBlock—&gt;强引用了ViewController,解决的方法很简单：</p>
+<pre><code class="hljs objc">_<span class="hljs-keyword">weak</span> <span class="hljs-keyword">typeof</span>(<span class="hljs-keyword">self</span>) wself = <span class="hljs-keyword">self</span>;
+<span class="hljs-keyword">self</span>.callbackBlock = ^&#123;
+	[wself doSomeThing];
+&#125;;</code></pre>
 
-<p><strong>bars之间</strong></p>
-<p>（1）设置viewController.edgesForExtendedLaout = UIRectEdageNone;（PS：不建议这种做法）</p>
-<p>（2）同时设置以下三个参数</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
-bars.translucent = <span class="hljs-literal">NO</span>;</code></pre>
-
-
-
-<p><strong>项目中的使用，建议使用以下的参数配置</strong>，理由：<br>（1）导航栏可能需要设置背景色，所以要将translucent的半透明关闭，否则会有一个白色的蒙层，并且navigationBar是全局公用一个，所以不见修改translucent的值，避免对其他的控制器造成莫名其妙的布局影响</p>
-<p>（2）导航栏可能需要动态的变动，比如是隐藏或显示的切换，更多需求的是导航栏透明多的变化</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；（修改这个值来达到布局的效果）
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
-bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
-
-
-
-<h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p><strong>（1）该何时获取viewController.view.frame? 什么时候布局最合适了？</strong></p>
-<p>viewController.view.bounds的值在生命周期不同阶段是不一样的，</p>
-<p>viewDidLoad：bounds的size是手机设备全屏的尺寸</p>
-<p>在view.frame在viewDidLoad（这时superView和window都是空的）和viewWillAppear（有superView,但window还是空的，并且AutoLayout是发生在viewWillAppear之后(来源于<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">Casa大神文章</a>)）都是不准确的</p>
-<p>在<code>viewWillLayoutSubviews</code>，<code>viewDidLayoutSubviews</code>和<code>viewDidAppear</code>中是准确的（尤其是设置了<code>translucent</code>和<code>edgesForExtendedLayout</code>）,但是<code>viewWillLayoutSubviews</code>、<code>viewDidLayoutSubviews</code>会被多次调用，<code>viewDidAppear</code>视图已经显示再去布局子控件会有刷新的效果，也是不合适的。</p>
-<p>最后根据<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">Casa大神文章</a>的建议：设置viewController.view的子视图的布局，应该在<code>viewWillLayoutSubviews</code>或者<code>viewDidLayoutSubviews</code>中比较合适，即使这两个方法会被多次调用，但都是页面需要调整的时候才会调用</p>
-<p><strong>（2）translucent=YES的情况下，如何设置navigationBar的背景颜色，不会出现白色蒙层？</strong></p>
-<pre><code class="hljs objc">[<span class="hljs-keyword">self</span>.navigationController.navigationBar setBackgroundImage:[<span class="hljs-built_in">UIImage</span> imageWithColor:[<span class="hljs-built_in">UIColor</span> colorWithHexString:<span class="hljs-string">@"#12B3B3"</span>]] forBarMetrics:<span class="hljs-built_in">UIBarMetricsDefault</span>];</code></pre>
+<p><code>循环引用的解决方法</code>：</p>
+<p><strong>ARC</strong>环境下：</p>
+<ul>
+<li><code>__weak</code>、<code>__unsafe_unretained</code>解决（首选__weak，因为指向的对象被销毁的时候，会自动让指针置nil）</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1923392-055b3a0078ec1fb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200" srcset="/img/loading.gif" alt="img"></p>
+<ul>
+<li>用<code>__block</code>解决（缺点：必须要调用过block，才会解决循环引用）</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1923392-8f0d93b74599e78c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200" srcset="/img/loading.gif" alt="img"></p>
+<p><strong>MRC</strong>环境下：</p>
+<ul>
+<li>用__unsafe_unretained 解决</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1923392-60ad7b5283f14530.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/832" srcset="/img/loading.gif" alt="img"></p>
+<ul>
+<li>用__block 解决</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1923392-22b5afb5654e46f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/610" srcset="/img/loading.gif" alt="img"></p>
+<h4 id="（4）其他"><a href="#（4）其他" class="headerlink" title="（4）其他"></a><strong>（4）其他</strong></h4><p>1、比如NSNotification addObserver之后，没有remove</p>
+<p>2、动画的repeat count无限大，而且不主动停止动画，基本就等于无限循环（解决方法：在视图控制器即将消失的时候，移除动画）</p>
+<h1 id="二、大量数据加载及使用导致内存警告"><a href="#二、大量数据加载及使用导致内存警告" class="headerlink" title="二、大量数据加载及使用导致内存警告"></a>二、大量数据加载及使用导致内存警告</h1><p>一般在占用系统内存超过20%的时候会有内存警告，而超过50%的时候，就很容易Crash了，所以内容使用率还是尽量要少，对于数据量比较大的应用，可以采用<code>分布式加载数据</code>的方式，或者采用<code>文件内存映射(mmap)</code>方式。</p>
+<p>mmap是使用逻辑内存对磁盘文件进行映射，中间只是进行映射没有任何拷贝操作，避免了写文件饿数据拷贝。操作内存就相当于操作文件，避免了内核空间和用户空间的频繁切换</p>
+<h1 id="三、工具"><a href="#三、工具" class="headerlink" title="三、工具"></a>三、工具</h1><ul>
+<li>通过<code>Instruments</code>来查看leaks（推荐此教程，很详细<a href="https://www.cnblogs.com/lxlx1798/p/6933485.html" target="_blank" rel="noopener">教程</a>）</li>
+<li>集成Facebook开源的<a href="https://github.com/facebook/FBRetainCycleDetector" target="_blank" rel="noopener">FBRetainCycleDetector</a></li>
+<li>集成<a href="https://github.com/Tencent/MLeaksFinder" target="_blank" rel="noopener">MLeaksFinder</a></li>
+</ul>
+<h1 id="四、心得"><a href="#四、心得" class="headerlink" title="四、心得"></a>四、心得</h1><p>使用Instruments查看leaks，具体使用教程请看此<a href="https://www.cnblogs.com/lxlx1798/p/6933485.html" target="_blank" rel="noopener">教程</a>，此处主要是本人在使用过程中的一点点心得</p>
+<h4 id="（1）Call-Tree-中-显示的是十六进制的代码，不是具体的类名称"><a href="#（1）Call-Tree-中-显示的是十六进制的代码，不是具体的类名称" class="headerlink" title="（1）Call Tree 中 显示的是十六进制的代码，不是具体的类名称"></a><strong>（1）Call Tree 中 显示的是十六进制的代码，不是具体的类名称</strong></h4><p><img src="https://i.loli.net/2020/06/23/bmN5O2YlZDt7EeQ.png" srcset="/img/loading.gif" alt="image-20200623140954367"></p>
+<p>解决方法</p>
+<p><img src="https://i.loli.net/2020/06/23/y4L5bEmv6dKZIt8.png" srcset="/img/loading.gif" alt="image-20200623140549667"></p>
+<h4 id="（2）单独查看某个引发红点内存泄漏的代码"><a href="#（2）单独查看某个引发红点内存泄漏的代码" class="headerlink" title="（2）单独查看某个引发红点内存泄漏的代码"></a><strong>（2）单独查看某个引发红点内存泄漏的代码</strong></h4><p><img src="https://i.loli.net/2020/06/23/jTUlgYLM569kOEZ.png" srcset="/img/loading.gif" alt="image-20200623141217807"></p>
+<p>Call Tree 列表中默认是显示所有红点的内存泄漏地方，如果要只查看某个红点的内存泄漏的代码，可以如下操作</p>
+<p><img src="https://i.loli.net/2020/06/23/XkUl153b8xQRe4j.png" srcset="/img/loading.gif" alt="image-20200623141649446"></p>
+<h4 id="（3）内存泄漏分析"><a href="#（3）内存泄漏分析" class="headerlink" title="（3）内存泄漏分析"></a><strong>（3）内存泄漏分析</strong></h4><p><img src="https://i.loli.net/2020/06/23/vEIjoylJLrwNiSb.png" srcset="/img/loading.gif" alt="image-20200623142224243"></p>
+<h4 id="（4）如何设置只有在DEBUG模式下才添加FBRetainCycleDetector或者MLeaksFinder"><a href="#（4）如何设置只有在DEBUG模式下才添加FBRetainCycleDetector或者MLeaksFinder" class="headerlink" title="（4）如何设置只有在DEBUG模式下才添加FBRetainCycleDetector或者MLeaksFinder"></a><strong>（4）如何设置只有在DEBUG模式下才添加<a href="https://github.com/facebook/FBRetainCycleDetector" target="_blank" rel="noopener">FBRetainCycleDetector</a>或者<a href="https://github.com/Tencent/MLeaksFinder" target="_blank" rel="noopener">MLeaksFinder</a></strong></h4><pre><code class="hljs objc">pod <span class="hljs-string">'FBRetainCycleDetector'</span>, :configuration =&gt; [<span class="hljs-string">'Debug'</span>]
+pod <span class="hljs-string">'MLeaksFinder'</span> , :configuration =&gt; [<span class="hljs-string">'Debug'</span>]</code></pre>
 
 
             </article>
@@ -306,7 +295,7 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Summary/">Summary</a>
+                      <a class="hover-with-bg" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
                     
                   </div>
                 
@@ -319,18 +308,12 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/06/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96-%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">性能优化笔记-内存优化</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/06/17/%E5%AF%BC%E8%88%AA%E6%A0%8F%E9%9A%90%E8%97%8F%E6%98%BE%E7%A4%BA%E5%8F%8B%E5%A5%BD%E8%BF%87%E6%B8%A1/">
-                        <span class="hidden-mobile">导航栏顺畅的过渡</span>
+                      <a href="/2020/06/18/viewController%E5%9D%90%E6%A0%87%E7%B3%BB%E7%9A%84%E8%AE%B2%E8%A7%A3/">
+                        <span class="hidden-mobile">viewController坐标系的详解</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -570,7 +553,7 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "viewController坐标系的详解&nbsp;",
+        "性能优化笔记-内存优化&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 100,
