@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>viewController frame的详解 - Liven技术博客</title>
+  <title>Flutter学习资料 - Liven技术博客</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
@@ -132,8 +132,8 @@
               
                 <div class="mt-3 post-meta">
                   <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2020-06-18 10:41">
-                    2020年6月18日 上午
+                  <time datetime="2020-07-27 11:16">
+                    2020年7月27日 上午
                   </time>
                 </div>
               
@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    1.6k 字
+                    125 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    18
+                    1
                      分钟
                   </span>
                 
@@ -182,112 +182,7 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>你是否还在疑惑为什么ViewController中的布局有时会被导航栏遮罩住，有时又不会了？</p>
-<p>你是否还在疑惑两个ViewController，一个有滚动视图，一个没有滚动视图，他们的布局起点不一致的问题？</p>
-<p>你是否还在疑惑导航栏透明的时候，要怎么把视图布局都从屏幕的最左上角开始？</p>
-<p>你是否还在疑惑关于布局的属性设置还有那么多种，要怎么区分和使用？</p>
-<p>本文将详细的讲解，相信你读后能解开上面的疑问</p>
-<p>开始之前请下载<a href="">Demo</a>代码</p>
-<p>链接:<a href="https://pan.baidu.com/s/18gNFhuQO29KDJ3PxTI7A3w" target="_blank" rel="noopener">https://pan.baidu.com/s/18gNFhuQO29KDJ3PxTI7A3w</a>  密码:myec</p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>首先全文讨论的场景都是在有导航栏情况下的ViewController（如果是没有导航栏，那么毫无疑问坐标的起点都是屏幕的最左上角，也没有必要设置布局的属性）</p>
-<p>并且对于下面参数的设置，请记得一定要对比其设置的值对于坐标起点(0,0)的影响，这是本文的<strong>重点</strong>、<strong>重点</strong>、<strong>重点</strong></p>
-<p>对于影响坐标系起点的属性，常用的有如下三个</p>
-<ul>
-<li><code>extendedLayoutIncludesOpaqueBars</code> 默认值：NO</li>
-<li><code>edgesForExtendedLayout</code> 默认值：UIRectEdgeAll</li>
-<li><code>translucent</code> 默认值：YES (navigationBar 和 tabBar)</li>
-</ul>
-<h3 id="第一节：滚动视图与非滚动视图的区别"><a href="#第一节：滚动视图与非滚动视图的区别" class="headerlink" title="第一节：滚动视图与非滚动视图的区别"></a><strong>第一节：滚动视图与非滚动视图的区别</strong></h3><p>这里需要先对比<code>滚动视图</code>(比如tableView)和<code>非滚动视图</code>(比如UIView)，在没有设置如何布局相关属性的情况下，设置的frame坐标是(0,0)，效果如下</p>
-<img src="https://i.loli.net/2020/06/18/xUZM8h4WCsegyIc.png" srcset="/img/loading.gif" alt="image-20200618112606669" style="zoom:25%;" />
-
-<img src="https://i.loli.net/2020/06/18/pxiTdz6LsKSHQ91.png" srcset="/img/loading.gif" alt="image-20200618112733491" style="zoom:25%;" />
-
-
-
-<p>备注：以下都以tableView作为滚动视图的描述，blueView作为非滚动视图的描述</p>
-<p>从上面的两张效果图可以看出，blueView会被导航栏遮盖，而tableView不会。</p>
-<p>这里就不做过多的探讨，直接说出结论：</p>
-<p>一个ViewContrller只有一个坐标系，也就是说坐标(0,0)是指向同一个点；</p>
-<p>blueView和tableView的frame坐标都是(0,0)，而tableView不被遮盖，不是改变了其frame的坐标，主要是因为滚动视图都有一个<code>contentInset</code>的属性，通过改变contentInset的值，实现不被遮盖的原理。</p>
-<p><code>重点：以下属性设置的作用是 滚动视图 会不会自动调整contentInset的值，实现不被导航栏遮挡</code>，跟我们上面要讲的三个改变坐标系起点的属性是完全无关的，这要区分开来，因为很多人都会搞混</p>
-<pre><code class="hljs objc"><span class="hljs-keyword">if</span> (@available(iOS <span class="hljs-number">11</span>,*)) &#123;
-        <span class="hljs-comment">// iOS11 引入的“安全区域”的概念，废弃了iOS7之后出现的 topLayoutGuide/bottomLayoutGuide</span>
-        <span class="hljs-comment">// iOS11是2017年9月20日发布，第一部全屏手机iPhoneX是2017年11月3日上市的，所以安全区域是为了更好的适配全屏手机</span>
-        <span class="hljs-comment">// 常用的两个值</span>
-        <span class="hljs-comment">// UIScrollViewContentInsetAdjustmentAutomatic (默认值，设置ScrollView的显示区域范围在safeArea的范围内，不被stateBar、TabBar、NavigationBar遮盖)</span>
-        <span class="hljs-comment">// UIScrollViewContentInsetAdjustmentNever （contentInset is not adjusted）</span>
-        <span class="hljs-comment">// 其原理与iOS11的不一样，scrollView.contentInset的值不会变，而是设置了安全区域的值ajustedContentInset</span>
-        <span class="hljs-comment">// scrollView.ajustedContentInset的值（提供给用户的是只读属性）</span>
-        <span class="hljs-keyword">self</span>.tableView.contentInsetAdjustmentBehavior = <span class="hljs-built_in">UIScrollViewContentInsetAdjustmentNever</span>;
-        <span class="hljs-comment">// 另外用户还可以增加“安全区域”的范围</span>
-        <span class="hljs-comment">// 备注：设置的值是在原来得基础上设置的，不能减少</span>
-        <span class="hljs-comment">// self.additionalSafeAreaInsets = UIEdgeInsetsMake(200, 0, 0, 0);</span>
-        <span class="hljs-comment">// 备注：contentInsett和additionalSafeAreaInsets 两个同时设置，作用不会重叠，是以设置最大的为准</span>
-        <span class="hljs-comment">// self.tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0);</span>
-    &#125;
-    <span class="hljs-keyword">else</span>&#123;
-        <span class="hljs-comment">// 在iOS11.0系统之后，被弃用了</span>
-        <span class="hljs-comment">// 其原理是设置scrollView.contentInset，可以在viewDidAppear方法打印其值</span>
-        <span class="hljs-keyword">self</span>.automaticallyAdjustsScrollViewInsets = <span class="hljs-literal">YES</span>;
-    &#125;</code></pre>
-
-
-
-<h3 id="第二节：修改viewController的坐标系"><a href="#第二节：修改viewController的坐标系" class="headerlink" title="第二节：修改viewController的坐标系"></a><strong>第二节：修改viewController的坐标系</strong></h3><p><code>extendedLayoutIncludesOpaqueBars</code>、<code>edgesForExtendedLayout</code>、<code>translucent</code> 这三个属性值是会互相影响的。</p>
-<blockquote>
-<p>这三个值的优先次序：<code>edgesForExtendedLayout</code> &gt; <code>extendedLayoutIncludesOpaqueBars</code> &gt; <code>translucent</code></p>
-</blockquote>
-<p>首先了解一下它们各自的定义</p>
-<p><code>edgesForExtendedLayout</code> 是设置viewController的view是否向四周延伸，默认值是<code>UIRectEdgeAll</code>向四周延伸，<code>UIRectEdgeNone</code>是不延伸，view只会从navigationBar的底部到tabBar上边结束</p>
-<p><code>extendedLayoutIncludesOpaqueBars</code>设置view是否延伸<code>不透明</code>的bars，默认值是YES。</p>
-<p>YES 表示bars如果是不透明的话，那么也是会延伸的；</p>
-<p>NO 表示bars在不透明的情况下是不延伸，只有半透明的时候才会延伸</p>
-<p><code>translucent</code> 设置bars是否半透明（包括navigationBar 和 tabBar），默认是YES（半透明状态）</p>
-<p>通过对上面属性定义的解释后，你是不是有点开始豁然开朗。以下是完整的逻辑图</p>
-<img src="https://i.loli.net/2020/06/18/gKOoatvxbCWp62m.png" srcset="/img/loading.gif" alt="image-20200618143814120" style="zoom:50%;" />
-
-
-
-<h3 id="第三节：实际应用"><a href="#第三节：实际应用" class="headerlink" title="第三节：实际应用"></a><strong>第三节：实际应用</strong></h3><p>从上面的逻辑图，可以看出view.frame要实现全屏，或者在bars之间，都有两种方式</p>
-<p><strong>全屏</strong></p>
-<p>（1）同时设置以下参数</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">YES</span>;</code></pre>
-
-<p>（2）同时设置以下参数</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
-bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
-
-
-
-<p><strong>bars之间</strong></p>
-<p>（1）设置viewController.edgesForExtendedLaout = UIRectEdageNone;（PS：不建议这种做法）</p>
-<p>（2）同时设置以下三个参数</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
-bars.translucent = <span class="hljs-literal">NO</span>;</code></pre>
-
-
-
-<p><strong>项目中的使用，建议使用以下的参数配置</strong>，理由：<br>（1）导航栏可能需要设置背景色，所以要将translucent的半透明关闭，否则会有一个白色的蒙层，并且navigationBar是全局公用一个，所以不见修改translucent的值，避免对其他的控制器造成莫名其妙的布局影响</p>
-<p>（2）导航栏可能需要动态的变动，比如是隐藏或显示的切换，更多需求的是导航栏透明多的变化</p>
-<pre><code class="hljs objc">viewController.edgesForExtendedLaout =  <span class="hljs-built_in">UIRectEdageAll</span>；（修改这个值来达到布局的效果）
-viewController.extendedLayoutIncludesOpaqueBars = <span class="hljs-literal">NO</span>;
-bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
-
-
-
-<h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p><strong>（1）该何时获取viewController.view.frame? 什么时候布局最合适了？</strong></p>
-<p>viewController.view.bounds的值在生命周期不同阶段是不一样的，</p>
-<p>viewDidLoad：bounds的size是手机设备全屏的尺寸</p>
-<p>在view.frame在viewDidLoad（这时superView和window都是空的）和viewWillAppear（有superView,但window还是空的，并且AutoLayout是发生在viewWillAppear之后(来源于<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">Casa大神文章</a>)）都是不准确的</p>
-<p>在<code>viewWillLayoutSubviews</code>，<code>viewDidLayoutSubviews</code>和<code>viewDidAppear</code>中是准确的（尤其是设置了<code>translucent</code>和<code>edgesForExtendedLayout</code>）,但是<code>viewWillLayoutSubviews</code>、<code>viewDidLayoutSubviews</code>会被多次调用，<code>viewDidAppear</code>视图已经显示再去布局子控件会有刷新的效果，也是不合适的。</p>
-<p>最后根据<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">Casa大神文章</a>的建议：设置viewController.view的子视图的布局，应该在<code>viewWillLayoutSubviews</code>或者<code>viewDidLayoutSubviews</code>中比较合适，即使这两个方法会被多次调用，但都是页面需要调整的时候才会调用</p>
-<p><strong>（2）translucent=YES的情况下，如何设置navigationBar的背景颜色，不会出现白色蒙层？</strong></p>
-<pre><code class="hljs objc">[<span class="hljs-keyword">self</span>.navigationController.navigationBar setBackgroundImage:[<span class="hljs-built_in">UIImage</span> imageWithColor:[<span class="hljs-built_in">UIColor</span> colorWithHexString:<span class="hljs-string">@"#12B3B3"</span>]] forBarMetrics:<span class="hljs-built_in">UIBarMetricsDefault</span>];</code></pre>
-
-
+              <h2 id="Dart基础"><a href="#Dart基础" class="headerlink" title="Dart基础"></a>Dart基础</h2><h4 id="Flutter之搞定Dart-一"><a href="#Flutter之搞定Dart-一" class="headerlink" title="Flutter之搞定Dart(一)"></a><a href="https://mp.weixin.qq.com/s/Ygs-sOtrohNf4vGpZcrnYw" target="_blank" rel="noopener">Flutter之搞定Dart(一)</a></h4><h4 id="Flutter之搞定Dart-二"><a href="#Flutter之搞定Dart-二" class="headerlink" title="Flutter之搞定Dart(二)"></a><a href="https://mp.weixin.qq.com/s/xdSYvqSYOXTOCeb89C1uvg" target="_blank" rel="noopener">Flutter之搞定Dart(二)</a></h4><h4 id="彻底搞定Dart的异步"><a href="#彻底搞定Dart的异步" class="headerlink" title="彻底搞定Dart的异步"></a><a href="https://mp.weixin.qq.com/s/Ygs-sOtrohNf4vGpZcrnYw" target="_blank" rel="noopener">彻底搞定Dart的异步</a></h4><h2 id="Flutter-基础"><a href="#Flutter-基础" class="headerlink" title="Flutter 基础"></a>Flutter 基础</h2><h4 id="Flutter-一-之Flutter开发初体验"><a href="#Flutter-一-之Flutter开发初体验" class="headerlink" title="Flutter(一) 之Flutter开发初体验"></a><a href="https://mp.weixin.qq.com/s/UU2WO_YSoobthTTbniBm5Q" target="_blank" rel="noopener">Flutter(一) 之Flutter开发初体验</a></h4><h4 id="Flutter-二-之有状态的StatefulWidget"><a href="#Flutter-二-之有状态的StatefulWidget" class="headerlink" title="Flutter(二) 之有状态的StatefulWidget"></a><a href="https://mp.weixin.qq.com/s/UU2WO_YSoobthTTbniBm5Q" target="_blank" rel="noopener">Flutter(二) 之有状态的StatefulWidget</a></h4><h4 id="Flutter-三-之Flutter的基础Widget"><a href="#Flutter-三-之Flutter的基础Widget" class="headerlink" title="Flutter(三) 之Flutter的基础Widget"></a><a href="https://mp.weixin.qq.com/s/xuECuEW3MLJpXBIwkREgCA" target="_blank" rel="noopener">Flutter(三) 之Flutter的基础Widget</a></h4><h4 id="Flutter-四-之Flutter的布局Widget"><a href="#Flutter-四-之Flutter的布局Widget" class="headerlink" title="Flutter(四) 之Flutter的布局Widget"></a><a href="https://mp.weixin.qq.com/s/w33dctz-TmaYBZ9hXr4oig" target="_blank" rel="noopener">Flutter(四) 之Flutter的布局Widget</a></h4><h4 id="Flutter-五-之Flutter滚动Widget"><a href="#Flutter-五-之Flutter滚动Widget" class="headerlink" title="Flutter(五) 之Flutter滚动Widget"></a><a href="https://mp.weixin.qq.com/s/rdmfeUECLtnZz6GeQKzOqA" target="_blank" rel="noopener">Flutter(五) 之Flutter滚动Widget</a></h4><h4 id="Flutter-六-之豆瓣电影列表"><a href="#Flutter-六-之豆瓣电影列表" class="headerlink" title="Flutter(六) 之豆瓣电影列表"></a><a href="https://mp.weixin.qq.com/s/-aJ2EPEj6yzCgQBOy60zXw" target="_blank" rel="noopener">Flutter(六) 之豆瓣电影列表</a></h4><h2 id="Flutter进阶"><a href="#Flutter进阶" class="headerlink" title="Flutter进阶"></a>Flutter进阶</h2><h4 id="Flutter网络请求"><a href="#Flutter网络请求" class="headerlink" title="Flutter网络请求"></a><a href="https://mp.weixin.qq.com/s/EYluKpa7NxTKiTTrXFbhLQ" target="_blank" rel="noopener">Flutter网络请求</a></h4><h4 id="Flutter如何JSON转Model"><a href="#Flutter如何JSON转Model" class="headerlink" title="Flutter如何JSON转Model"></a><a href="https://mp.weixin.qq.com/s/4x8ZCXuw6BlQ0pYV3svmMQ" target="_blank" rel="noopener">Flutter如何JSON转Model</a></h4><h4 id="Flutter中Dart的回收机制"><a href="#Flutter中Dart的回收机制" class="headerlink" title="Flutter中Dart的回收机制"></a><a href="https://mp.weixin.qq.com/s/J4XoXJHJSmn8VaMoz3BZJQ" target="_blank" rel="noopener">Flutter中Dart的回收机制</a></h4><h4 id="Flutter的Widget-Element-RenderObject"><a href="#Flutter的Widget-Element-RenderObject" class="headerlink" title="Flutter的Widget-Element-RenderObject"></a><a href="https://mp.weixin.qq.com/s/ljzG9c-fQIJ21s7nZ2pjBg" target="_blank" rel="noopener">Flutter的Widget-Element-RenderObject</a></h4><h4 id="Flutter状态State管理"><a href="#Flutter状态State管理" class="headerlink" title="Flutter状态State管理"></a><a href="https://mp.weixin.qq.com/s/ywGQnaYpioPxlYvYTSpR4w" target="_blank" rel="noopener">Flutter状态State管理</a></h4><h4 id="Flutter事件监听"><a href="#Flutter事件监听" class="headerlink" title="Flutter事件监听"></a><a href="https://mp.weixin.qq.com/s/Z-2NL6Fe5z0AkSG0yoOJzw" target="_blank" rel="noopener">Flutter事件监听</a></h4><h4 id="Flutter路由导航"><a href="#Flutter路由导航" class="headerlink" title="Flutter路由导航"></a><a href="https://mp.weixin.qq.com/s/K1yOOTIYEzB2N7tIJv5jtQ" target="_blank" rel="noopener">Flutter路由导航</a></h4><h4 id="Flutter实现动画"><a href="#Flutter实现动画" class="headerlink" title="Flutter实现动画"></a><a href="https://mp.weixin.qq.com/s/xNRTjDApabIXasUGiW160Q" target="_blank" rel="noopener">Flutter实现动画</a></h4><h4 id="Flutter主题风格"><a href="#Flutter主题风格" class="headerlink" title="Flutter主题风格"></a><a href="https://mp.weixin.qq.com/s/CsBh8RKbuGghrXnqHxg2Vw" target="_blank" rel="noopener">Flutter主题风格</a></h4><h4 id="Flutter屏幕适配"><a href="#Flutter屏幕适配" class="headerlink" title="Flutter屏幕适配"></a><a href="https://mp.weixin.qq.com/s/z21YZ4FhSswpDWn4KpK6jw" target="_blank" rel="noopener">Flutter屏幕适配</a></h4><h4 id="Flutter应用信息"><a href="#Flutter应用信息" class="headerlink" title="Flutter应用信息"></a><a href="https://mp.weixin.qq.com/s/TsXw0e6A0792gt_M9fHhog" target="_blank" rel="noopener">Flutter应用信息</a></h4><h4 id="Flutter实现国际化"><a href="#Flutter实现国际化" class="headerlink" title="Flutter实现国际化"></a><a href="https://mp.weixin.qq.com/s/yWA95mMLNk5J5m-XOfWXRQ" target="_blank" rel="noopener">Flutter实现国际化</a></h4><h4 id="Flutter测试"><a href="#Flutter测试" class="headerlink" title="Flutter测试"></a><a href="https://mp.weixin.qq.com/s/z0KeWWOVSRD9CJiMi8npYA" target="_blank" rel="noopener">Flutter测试</a></h4><h4 id="Flutter打包发布"><a href="#Flutter打包发布" class="headerlink" title="Flutter打包发布"></a><a href="https://mp.weixin.qq.com/s/PIxn7ZZ2WAR6PVMBU9F69Q" target="_blank" rel="noopener">Flutter打包发布</a></h4><h4 id="Flutter混合开发"><a href="#Flutter混合开发" class="headerlink" title="Flutter混合开发"></a><a href="https://mp.weixin.qq.com/s/dzt--_XWbYRBYq8vYI9Npw" target="_blank" rel="noopener">Flutter混合开发</a></h4>
             </article>
             <hr>
             <div>
@@ -296,9 +191,7 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Object-C/">Object-C</a>
-                    
-                      <a class="hover-with-bg" href="/categories/Object-C/iOS/">iOS</a>
+                      <a class="hover-with-bg" href="/categories/Flutter/">Flutter</a>
                     
                   </div>
                 
@@ -306,7 +199,7 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Summary/">Summary</a>
+                      <a class="hover-with-bg" href="/tags/Flutter-resource/">Flutter resource</a>
                     
                   </div>
                 
@@ -319,9 +212,9 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/06/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96-%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/">
+                      <a href="/2020/07/27/Flutter-%E6%A8%A1%E5%9D%97-%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%B0%81%E8%A3%85/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">性能优化笔记-内存优化</span>
+                        <span class="hidden-mobile">Flutter_模块_网络请求封装</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -329,8 +222,8 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/06/17/%E9%9B%B6%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%AF%BC%E8%88%AA%E6%A0%8F%E5%B9%B3%E6%BB%91%E8%BF%87%E6%B8%A1/">
-                        <span class="hidden-mobile">零代码实现导航栏平滑过渡</span>
+                      <a href="/2020/07/15/%E9%9A%BE%E6%90%9E%E7%9A%84navigationBar/">
+                        <span class="hidden-mobile">零代码实现导航栏</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -570,7 +463,7 @@ bars.translucent = <span class="hljs-literal">YES</span>;</code></pre>
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "viewController frame的详解&nbsp;",
+        "Flutter学习资料&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 100,
