@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    4.1k 字
+                    4.9k 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    43
+                    52
                      分钟
                   </span>
                 
@@ -182,7 +182,14 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h1 id="六大基本设计原则"><a href="#六大基本设计原则" class="headerlink" title="六大基本设计原则"></a>六大基本设计原则</h1><h3 id="（1）单一职责（Single-Responsibility-Principle）–-SRP"><a href="#（1）单一职责（Single-Responsibility-Principle）–-SRP" class="headerlink" title="（1）单一职责（Single Responsibility Principle）– SRP"></a>（1）单一职责（Single Responsibility Principle）– SRP</h3><blockquote>
+              <h1 id="重要结论"><a href="#重要结论" class="headerlink" title="重要结论"></a>重要结论</h1><h3 id="【继承】"><a href="#【继承】" class="headerlink" title="【继承】"></a>【继承】</h3><p><strong>Case</strong><a href="https://casatwy.com/tiao-chu-mian-xiang-dui-xiang-si-xiang-yi-ji-cheng.html" target="_blank" rel="noopener">跳出面向对象思想(一) 继承</a>文中提到继承是代码复用的一种方案，但是继承同时也是紧耦合的一种模式，体现在其一发动全身，尽量避免使用继承，可以使用组合设计模式代替，除非继承成为一种需求，那么就可以使用继承。</p>
+<p><strong>使用继承的三大要点：</strong></p>
+<ul>
+<li>父类只给子类提供服务，并不涉及子类的业务逻辑</li>
+<li>层级关系明显，功能划分清晰，父类和子类各做各的</li>
+<li>父类的所有变化，都需要在子类中体现，也就是说此时耦合已成为需求</li>
+</ul>
+<h1 id="六大基本设计原则"><a href="#六大基本设计原则" class="headerlink" title="六大基本设计原则"></a>六大基本设计原则</h1><h3 id="（1）单一职责（Single-Responsibility-Principle）–-SRP"><a href="#（1）单一职责（Single-Responsibility-Principle）–-SRP" class="headerlink" title="（1）单一职责（Single Responsibility Principle）– SRP"></a>（1）单一职责（Single Responsibility Principle）– SRP</h3><blockquote>
 <p>就一个类而言，应该仅有一个引起它变化的原因。</p>
 <p>也就是一个类值负责一个职责的工作</p>
 </blockquote>
@@ -336,6 +343,79 @@ TestModel *model = <span class="hljs-keyword">self</span>.dataList[indexPath.row
 <li>需要算法的各种变体。</li>
 <li>需要避免把复杂的、与算法相关的数据结构暴露给客户端。</li>
 </ul>
+<h3 id="（3）装饰设计模式"><a href="#（3）装饰设计模式" class="headerlink" title="（3）装饰设计模式"></a>（3）装饰设计模式</h3><blockquote>
+<p>装饰者模式可以动态的给指定的类添加一些行为和职责，而不用对原代码进行任何修改。就扩展功能来说，装饰设计模式相比于生成子类更为灵活。常见的实现方式：Category（类别）和 Delegation（委派）</p>
+</blockquote>
+<img src="https://i.loli.net/2020/08/06/7Fx62n4zSBWp9Ee.png" srcset="/img/loading.gif" alt="image-20200806100610345" style="zoom:50%;" />
+
+<p><strong>e.g.</strong></p>
+<p><a href="https://www.jianshu.com/p/f3408f3b548f" target="_blank" rel="noopener">原文</a> 有一个封面，后台返回的字段<code>&quot;pic&quot;: &quot;/image/20160826/d51285bb636281dce6974313eaf6f15d.png&quot;</code>只是一个路径，前面的域名<code>https://xxxxxx-aliyun.firstleap.cn</code>需要我们这边统一拼接，同事我们使用的阿里云存储服务，有对图片处理（包括图片压缩、减少图片分辨率），且iPhone和iPad的处理还不一样。</p>
+<p>我们对String添加一个扩展（OC中为category），File/New/File…，选择Swift File，命名为<code>String + Aliyun</code>，添加以下代码：</p>
+<pre><code class="hljs swift"><span class="hljs-comment">// 判断型号</span>
+<span class="hljs-keyword">let</span> isPad = ( <span class="hljs-type">UI_USER_INTERFACE_IDIOM</span>() == .pad)
+<span class="hljs-keyword">let</span> fileHost = <span class="hljs-string">"https://xxxxxx-aliyun.firstleap.cn"</span>
+
+<span class="hljs-class"><span class="hljs-keyword">extension</span> <span class="hljs-title">String</span> </span>&#123;
+  <span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">aliyunThumb</span><span class="hljs-params">()</span></span> -&gt; <span class="hljs-type">String</span> &#123;
+    <span class="hljs-keyword">if</span> isPad &#123;
+      <span class="hljs-keyword">return</span> <span class="hljs-string">"\(fileHost)\(self)"</span> + <span class="hljs-string">"!iPadThumb"</span>
+    &#125; <span class="hljs-keyword">else</span> &#123;
+      <span class="hljs-keyword">return</span> <span class="hljs-string">"\(fileHost)\(self)"</span> + <span class="hljs-string">"!thumb"</span>
+    &#125;
+  &#125;
+&#125;</code></pre>
+
+<p>使用Delegation委托的方式（苹果UIKit中有很多都是代理委托模式，比如UITableView、UIcollectionView、UITextView等等）</p>
+<pre><code class="hljs objc"><span class="hljs-comment">//Mydelegate.h</span>
+<span class="hljs-comment">//可以单独放在一个.h文件,也可以直接放入A.h中</span>
+<span class="hljs-class"><span class="hljs-keyword">@protocol</span> <span class="hljs-title">Mydelegate</span>//协议的声明 中</span>
+-(<span class="hljs-keyword">void</span>)Fun;
+<span class="hljs-keyword">@end</span>
+
+<span class="hljs-comment">//A.h</span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">"Mydelegate.h"</span></span>
+<span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">A</span>:<span class="hljs-title">NSObject</span> </span>&#123;
+   <span class="hljs-keyword">id</span>&lt;Mydelegate&gt; delegate;<span class="hljs-comment">//声明一个委托对象，我们要把事情委托给实现Mydelegate协议的类</span>
+&#125;
+<span class="hljs-keyword">@property</span>(<span class="hljs-keyword">assign</span>,<span class="hljs-keyword">nonatomic</span>) <span class="hljs-keyword">id</span>&lt;Mydelegate&gt; delegate;
+<span class="hljs-keyword">@end</span>
+
+<span class="hljs-comment">//A.m</span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">"A.h"</span></span>
+<span class="hljs-class"><span class="hljs-keyword">@implementation</span></span>
+-(<span class="hljs-keyword">void</span>)FunToOther &#123;
+    [delegate Fun];<span class="hljs-comment">//将消息发送给委托去处理</span>
+&#125;
+<span class="hljs-keyword">@end</span>
+
+<span class="hljs-comment">//B.h</span>
+<span class="hljs-meta">#import<span class="hljs-meta-string">"A.h"</span></span>
+<span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">B</span>:<span class="hljs-title">NSObject</span>&lt;<span class="hljs-title">MyDelegate</span>&gt;</span>
+<span class="hljs-keyword">@property</span>(<span class="hljs-keyword">strong</span>,<span class="hljs-keyword">nonatomic</span>) A *a;
+<span class="hljs-keyword">@end</span>
+
+<span class="hljs-comment">//B.m</span>
+<span class="hljs-meta">#import <span class="hljs-meta-string">"B.h"</span></span>
+<span class="hljs-class"><span class="hljs-keyword">@implementation</span></span>
+-(<span class="hljs-keyword">void</span>)init &#123;
+  _a = [[A alloc] init];
+  _a.delegate = <span class="hljs-keyword">self</span>;
+&#125;
+
+<span class="hljs-meta">#prage mark - MyDelegate</span>
+-(<span class="hljs-keyword">void</span>)fun &#123;
+    <span class="hljs-comment">//实现Mydelegate中制定的方法</span>
+&#125;
+<span class="hljs-keyword">@end</span></code></pre>
+
+
+
+<h3 id="（4）外观模式"><a href="#（4）外观模式" class="headerlink" title="（4）外观模式"></a>（4）外观模式</h3><blockquote>
+<p>外观设计模式为复杂的子系统提供单一的接口，只公开一个简单统一的API，而不是将一组类及其API暴露给用户。</p>
+</blockquote>
+<img src="https://i.loli.net/2020/08/06/65Qu1f9lkGYev4O.png" srcset="/img/loading.gif" alt="image-20200806104229560" style="zoom:50%;" />
+
+<p>API的用户完全不知道下面的复杂性。这种模式在使用大量类时非常理想，特别是当它们复杂使用或难以理解时。</p>
 <h3 id="面向接口编程-Interface-Oriented-Programming-–-IOP"><a href="#面向接口编程-Interface-Oriented-Programming-–-IOP" class="headerlink" title="面向接口编程(Interface Oriented Programming) – IOP"></a>面向接口编程(Interface Oriented Programming) – IOP</h3><h3 id="面向切片编程（Aspect-Oriented-Programming）AOP"><a href="#面向切片编程（Aspect-Oriented-Programming）AOP" class="headerlink" title="面向切片编程（Aspect Oriented Programming）AOP"></a>面向切片编程（Aspect Oriented Programming）AOP</h3><blockquote>
 <p>程序要完成一件事情，一定会有一些步骤，1，2，3，4这样。这里分解出来的每一个步骤我们可以认为是一个切片。</p>
 <p>面对切片编程就是针对每一个切片的间隙，塞一些代码进去，在程序正常运行1，2，3，4步的间隙可以跑到你塞进去的代码，那么你写的代码就是面向切片编程</p>
@@ -359,6 +439,20 @@ TestModel *model = <span class="hljs-keyword">self</span>.dataList[indexPath.row
             <div>
               <div class="post-metas mb-3">
                 
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%BC%80%E5%8F%91/">开发</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Collect-%E6%9E%B6%E6%9E%84%E5%8F%8A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">Collect,架构及设计模式</a>
+                    
+                  </div>
                 
               </div>
               
