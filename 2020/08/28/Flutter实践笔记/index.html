@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>flutter实践笔记 - Liven技术博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/xcode.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_ijqayz9ro8k.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>CALL ME LIVEN</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/page/page_cover.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-08-28 10:10">
+                    2020年8月28日 上午
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    2k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    28
+                     分钟
+                  </span>
+                
+
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <blockquote>
+<h2 id="导航栏自定义"><a href="#导航栏自定义" class="headerlink" title="导航栏自定义"></a>导航栏自定义</h2></blockquote>
+<ul>
+<li><p>必须是一个<code>statefuleWidget</code></p>
+</li>
+<li><p>实现抽象类<code>PreferredSizeWidget</code>，并实现抽象方法<code>Size get preferredSize</code></p>
+</li>
+<li><p>返回的是一个<code>PreferredSize</code> Widget</p>
+</li>
+</ul>
+<p>实例</p>
+<p><img src="https://i.loli.net/2020/08/28/aBbicmgPlfqxOX2.png" srcset="/img/loading.gif" alt="image-20200828101914158"></p>
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">以下是核心代码，UI构建的代码省略</span></span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyNavigationBar</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">PreferredSizeWidget</span> </span>&#123;
+  <span class="hljs-meta">@override</span>
+  _MyNavigationBarState createState() =&gt; _MyNavigationBarState();
+
+  Size <span class="hljs-keyword">get</span> preferredSize &#123;
+    <span class="hljs-comment">/// <span class="markdown">优先尺寸</span></span>
+    <span class="hljs-comment">/// <span class="markdown">尺寸返回的高度是指导航栏的高度，不包括状态栏的高度，所以正常的都是返回44</span></span>
+    <span class="hljs-comment">/// <span class="markdown">备注：double.infinity表示尽可能的大，所以这里等于全屏的宽度</span></span>
+    <span class="hljs-keyword">return</span> Size(<span class="hljs-built_in">double</span>.infinity, <span class="hljs-number">44</span>);
+  &#125;
+&#125;
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_RWStudyNavigationBarState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State</span>&lt;<span class="hljs-title">RWStudyNavigationBar</span>&gt; </span>&#123;
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-keyword">void</span> initState() &#123;
+    <span class="hljs-keyword">super</span>.initState();
+  &#125;
+
+  <span class="hljs-meta">@override</span>
+  Widget build(BuildContext context) &#123;
+    <span class="hljs-keyword">return</span> PreferredSize(
+      <span class="hljs-comment">/// <span class="markdown">这里设置的尺寸同上，不过这里既是设置为0，也没关系，实际以上面设置的尺寸为优先</span></span>
+      <span class="hljs-comment">/// <span class="markdown">由于这里是必传参数所以就按照上面的写，统一比较好</span></span>
+      preferredSize: Size(<span class="hljs-built_in">double</span>.infinity, <span class="hljs-number">44</span>),
+      child: Container(
+        <span class="hljs-comment">/// <span class="markdown">这里推荐在子widge第一层，指定高度，并且指定的高度与设置的优先尺寸一致</span></span>
+        <span class="hljs-comment">/// <span class="markdown">这里可以直接设置高度为:double.infinity，高度尽快能搞，那么其值就等于前面设置的preferredSize的高度</span></span>
+        height: <span class="hljs-built_in">double</span>.infinity,
+        color: Theme.of(context).primaryColor,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          <span class="hljs-comment">/// <span class="markdown">row的主轴对齐方式选择：MainAxisAlignment.spaceBetween</span></span>
+          <span class="hljs-comment">/// <span class="markdown">可以让子widget左右两边就紧靠着边缘对齐</span></span>
+          <span class="hljs-comment">/// <span class="markdown">再配合Expanded(),就能准确的布局子widget的位置</span></span>
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: &lt;Widget&gt;[
+            <span class="hljs-comment">/// <span class="markdown">具体子Widet代码</span></span>
+          ],
+        ),
+      ),
+    );
+  &#125;
+&#125;</code></pre>
+
+
+
+<blockquote>
+<h2 id="TabBar、TabBarView、TabController-构建分段视图"><a href="#TabBar、TabBarView、TabController-构建分段视图" class="headerlink" title="TabBar、TabBarView、TabController 构建分段视图"></a>TabBar、TabBarView、TabController 构建分段视图</h2><p>比如今日头条的分段视图</p>
+</blockquote>
+<p>实例</p>
+<img src="https://i.loli.net/2020/08/28/ROmyXUrxqHhoubi.png" srcset="/img/loading.gif" alt="image-20200828104607058" style="zoom: 25%;" />
+
+
+
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">以下是核心代码，忽略其细节</span></span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StudyPage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>&#123;
+  <span class="hljs-meta">@override</span>
+  _StudyPageState createState() =&gt; _StudyPageState();
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_StudyPageState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State</span>&lt;<span class="hljs-title">StudyPage</span>&gt; <span class="hljs-title">with</span> <span class="hljs-title">SingleTickerProviderStateMixin</span> </span>&#123;
+  <span class="hljs-comment">/// <span class="markdown">1.0 定义TabController，这是将TabBar与TabBarView关联的关键</span></span>
+  TabController _controller;
+  <span class="hljs-built_in">List</span>&lt;<span class="hljs-built_in">String</span>&gt; _titles;
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-keyword">void</span> initState() &#123;
+    <span class="hljs-keyword">super</span>.initState();
+    _titles = [<span class="hljs-string">'关注'</span>, <span class="hljs-string">'首页'</span>, <span class="hljs-string">'学科'</span>];
+    <span class="hljs-comment">/// <span class="markdown">2.0 初始化TabController</span></span>
+    <span class="hljs-comment">/// <span class="markdown">initialIndex：默认选择下标</span></span>
+    <span class="hljs-comment">/// <span class="markdown">length：个数</span></span>
+    <span class="hljs-comment">/// <span class="markdown">vsync：固定写法(一定要在StatefulWidget中)</span></span>
+    _controller = TabController(initialIndex: <span class="hljs-number">1</span>, length: _titles.length, vsync: <span class="hljs-keyword">this</span>);
+  &#125;
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-keyword">void</span> dispose() &#123;
+    <span class="hljs-keyword">super</span>.dispose();
+    <span class="hljs-comment">/// <span class="markdown">最后销毁TabController</span></span>
+    _controller.dispose();
+  &#125;
+
+  <span class="hljs-meta">@override</span>
+  Widget build(BuildContext context) &#123;
+    <span class="hljs-keyword">return</span> Scaffold(
+        appBar: RWStudyNavigationBar(controller: _controller, titles: _titles),
+      	<span class="hljs-comment">/// <span class="markdown">3.0 TabBarView定义分段视图的页面</span></span>
+	      <span class="hljs-comment">/// <span class="markdown">并将TabController传入</span></span>
+      	<span class="hljs-comment">/// <span class="markdown">页面的数量必须与TabController定义的长度length一致，否则报错</span></span>
+        body: TabBarView(
+          controller: _controller,
+          children: &lt;Widget&gt;[
+            RWStudyFoucsPage(),
+            RWStudyHomePage(),
+            RWStudySubjectPage()
+          ],
+        ));
+  &#125;
+&#125;
+
+
+<span class="hljs-comment">/// <span class="markdown">RWStudyNavigationBar 核心代码，其余无关代码都删除，避免混淆</span></span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RWStudyNavigationBar</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">PreferredSizeWidget</span> </span>&#123;
+  <span class="hljs-keyword">final</span> TabController controller;
+  <span class="hljs-keyword">final</span> <span class="hljs-built_in">List</span>&lt;<span class="hljs-built_in">String</span>&gt; titles;
+  RWStudyNavigationBar(&#123;<span class="hljs-meta">@required</span> <span class="hljs-keyword">this</span>.controller, <span class="hljs-meta">@required</span> <span class="hljs-keyword">this</span>.titles&#125;);
+
+  <span class="hljs-meta">@override</span>
+  _RWStudyNavigationBarState createState() =&gt; _RWStudyNavigationBarState();
+
+  Size <span class="hljs-keyword">get</span> preferredSize &#123;
+    <span class="hljs-keyword">return</span> Size(RWScreenFit.screenWidth, <span class="hljs-number">44</span>);
+  &#125;
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_RWStudyNavigationBarState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State</span>&lt;<span class="hljs-title">RWStudyNavigationBar</span>&gt; </span>&#123;
+  <span class="hljs-meta">@override</span>
+  Widget build(BuildContext context) &#123;
+    <span class="hljs-keyword">return</span> PreferredSize(
+      preferredSize: Size(<span class="hljs-built_in">double</span>.infinity, <span class="hljs-number">44</span>),
+      child: Container(
+        height: <span class="hljs-built_in">double</span>.infinity,
+        color: Theme.of(context).primaryColor,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: &lt;Widget&gt;[
+            Expanded(
+              child: Container(
+                  padding: EdgeInsets.only(left: <span class="hljs-number">10.</span>px),
+									<span class="hljs-comment">/// <span class="markdown">4.0 定义TabBar样式</span></span>
+                	<span class="hljs-comment">/// <span class="markdown">并将TabController传入</span></span>
+                	child: TabBar(
+                    indicatorSize: TabBarIndicatorSize.label,	<span class="hljs-comment">/// <span class="markdown">指示器尺寸与文字相同</span></span>
+                    indicatorColor: Colors.white,	<span class="hljs-comment">/// <span class="markdown">指示器颜色</span></span>
+                    indicatorWeight: <span class="hljs-number">3.0</span>.px,	<span class="hljs-comment">/// <span class="markdown">指示器宽度</span></span>
+                    labelColor: Colors.white,	<span class="hljs-comment">/// <span class="markdown">选中：文字颜色</span></span>
+                    labelStyle: TextStyle(fontSize: <span class="hljs-number">16.</span>px),	<span class="hljs-comment">/// <span class="markdown">选中：文字样色</span></span>
+                    labelPadding: EdgeInsets.fromLTRB(<span class="hljs-number">10.</span>px, <span class="hljs-number">0.0</span>, <span class="hljs-number">10.</span>px, <span class="hljs-number">0.0</span>), <span class="hljs-comment">/// <span class="markdown">文字内边距</span></span>
+                    unselectedLabelColor: Colors.white38,	<span class="hljs-comment">/// <span class="markdown">未选中：文字颜色</span></span>
+                    unselectedLabelStyle: TextStyle(fontSize: <span class="hljs-number">16.</span>px),	<span class="hljs-comment">/// <span class="markdown">未选中：文字样色</span></span>
+                    controller: widget.controller,	<span class="hljs-comment">/// <span class="markdown">传入TabController</span></span>
+                    isScrollable: <span class="hljs-keyword">true</span>,
+                    <span class="hljs-comment">/// <span class="markdown">5.0 使用Tab定义分段标题</span></span>
+                    tabs: widget.titles.map((e) =&gt; Tab(text: e)).toList(),
+                  )),
+            ),
+          ],
+        ),
+      ),
+    );
+  &#125;
+&#125;</code></pre>
+
+
+
+<blockquote>
+<h2 id="flutter-easyrefresh-上下拉刷新第三方使用"><a href="#flutter-easyrefresh-上下拉刷新第三方使用" class="headerlink" title="flutter_easyrefresh 上下拉刷新第三方使用"></a>flutter_easyrefresh 上下拉刷新第三方使用</h2></blockquote>
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">easyRefresh初始化有三种方式</span></span>
+<span class="hljs-comment">/// <span class="markdown">第一种</span></span>
+EasyRefresh(child:)
+<span class="hljs-comment">/// <span class="markdown">第二种</span></span>
+EasyRefresh.custom(slivers:)
+<span class="hljs-comment">/// <span class="markdown">第三种</span></span>
+EasyRefresh.builder(
+    builder: (context, physics, header, footer) &#123;
+      <span class="hljs-keyword">return</span> CustomScrollView(
+        physics: physics,
+        slivers: &lt;Widget&gt;[],
+      );
+    &#125;
+&#125;
+  
+<span class="hljs-comment">/// <span class="markdown">第二种和第三种要求传入的widget都是Sliver类型的</span></span>
+<span class="hljs-comment">/// <span class="markdown">如果不是Sliver类型，建议使用第一种方式</span></span>
+  
+<span class="hljs-comment">/// <span class="markdown">完成下拉刷新上拉加载的功能，以下是核心代码，以第一种方式为例子</span></span>
+EasyRefresh(
+ 			<span class="hljs-comment">/// <span class="markdown">必须要传入一个EasyRefreshController对象，关键</span></span>
+  		<span class="hljs-comment">/// <span class="markdown">这是控制刷新和加载的状态</span></span>
+      controller: _controller,
+ 			<span class="hljs-comment">/// <span class="markdown">是否第一次刷新</span></span>
+      firstRefresh: <span class="hljs-keyword">true</span>,
+  		<span class="hljs-comment">/// <span class="markdown">刷新和加载状态独立（推荐设置为true，否则如果加载或刷新在进行中，那么另外一个则会失效）</span></span>
+      taskIndependence: <span class="hljs-keyword">true</span>,
+  		<span class="hljs-comment">/// <span class="markdown">是否开启控制结束刷新 (这是必须设置true，这样controller才能控制刷新状态)</span></span>
+      enableControlFinishLoad: <span class="hljs-keyword">true</span>,
+  		<span class="hljs-comment">/// <span class="markdown">enableControlFinishLoad (这是必须设置true，这样controller才能控制加载状态)</span></span>
+      enableControlFinishRefresh: <span class="hljs-keyword">true</span>,
+      child: ListView(
+        children: [
+        ],
+      ),
+		  <span class="hljs-comment">/// <span class="markdown">下拉刷新触发方法</span></span>
+      onRefresh: () <span class="hljs-keyword">async</span> &#123;
+        <span class="hljs-keyword">await</span> _viewModel.requestRecommentArticleList((data) &#123;
+          setState(() &#123;
+            articleList.clear();
+            articleList.addAll(data);
+            <span class="hljs-comment">/// <span class="markdown">更新刷新的状态</span></span>
+            _controller.finishRefresh(success: <span class="hljs-keyword">true</span>);
+          &#125;);
+        &#125;, (code, msg) &#123;
+          _controller.finishLoad(success: <span class="hljs-keyword">false</span>);
+        &#125;);
+      &#125;,
+  		<span class="hljs-comment">/// <span class="markdown">上拉加载触发方法</span></span>
+      onLoad: () <span class="hljs-keyword">async</span> &#123;
+        <span class="hljs-keyword">await</span> _viewModel.requestNextPageRecommentArticleList((data) &#123;
+          setState(() &#123;
+            articleList.addAll(data);
+            <span class="hljs-comment">/// <span class="markdown">更新加载的状态</span></span>
+            _controller.finishLoad(success: <span class="hljs-keyword">true</span>);
+            <span class="hljs-comment">/// <span class="markdown">判断是否还有更多加载</span></span>
+            _controller.finishLoad(noMore: (data <span class="hljs-keyword">as</span> <span class="hljs-built_in">List</span>).length &lt; <span class="hljs-number">20</span>);
+          &#125;);
+        &#125;, (code, msg) &#123;
+          _controller.finishLoad(success: <span class="hljs-keyword">false</span>);
+        &#125;);
+      &#125;,
+    )</code></pre>
+
+
+
+<blockquote>
+<h2 id="ListView-嵌套-ListView"><a href="#ListView-嵌套-ListView" class="headerlink" title="ListView 嵌套 ListView"></a>ListView 嵌套 ListView</h2></blockquote>
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">ListView 嵌套 ListView 会出现一个报错'HasSize'</span></span>
+<span class="hljs-comment">/// <span class="markdown">必须将嵌套的子ListView，设置以下属性</span></span>
+<span class="hljs-comment">/// <span class="markdown">设置为true代表ListView会根据指示图的尺寸而定，子widget的尺寸是多少就占据多少</span></span>
+<span class="hljs-comment">/// <span class="markdown">shrinkWrap: true</span></span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RWStudySubjectPage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>&#123;
+  RWStudySubjectPage(&#123;Key key&#125;) : <span class="hljs-keyword">super</span>(key: key);
+
+  <span class="hljs-meta">@override</span>
+  _RWStudySubjectPageState createState() =&gt; _RWStudySubjectPageState();
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_RWStudySubjectPageState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State</span>&lt;<span class="hljs-title">RWStudySubjectPage</span>&gt; </span>&#123;
+  <span class="hljs-meta">@override</span>
+  Widget build(BuildContext context) &#123;
+    <span class="hljs-keyword">return</span> ListView(
+      children: [
+        Container(
+          height: <span class="hljs-number">50</span>,
+          color: Colors.red,
+        ),
+        ListView.builder(
+          <span class="hljs-comment">/// <span class="markdown">不尽可能扩大</span></span>
+          shrinkWrap: <span class="hljs-keyword">true</span>,
+          <span class="hljs-comment">/// <span class="markdown">取消滑动交互</span></span>
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: <span class="hljs-number">20</span>,
+          itemBuilder: (context, index) &#123;
+            <span class="hljs-keyword">return</span> ListTile(
+              title: Text(<span class="hljs-string">'这是第 <span class="hljs-subst">$index</span> 行'</span>),
+            );
+          &#125;,
+        )
+      ],
+    );
+  &#125;
+&#125;</code></pre>
+
+
+
+<blockquote>
+<h2 id="ListView在iOS手机运行在顶部和尾部会出现空白间隙"><a href="#ListView在iOS手机运行在顶部和尾部会出现空白间隙" class="headerlink" title="ListView在iOS手机运行在顶部和尾部会出现空白间隙"></a>ListView在iOS手机运行在顶部和尾部会出现空白间隙</h2></blockquote>
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">ListView头部、尾部有一段空白区域，是因为当ListView没有和AppBar一起使用时，头部和尾部会有一个padding，为了去掉padding，可以使用MediaQuery.removePadding</span></span>
+
+Widget _listView(BuildContext context)&#123;
+    <span class="hljs-keyword">return</span> MediaQuery.removePadding(
+      removeTop: <span class="hljs-keyword">true</span>,
+      removeBottom:<span class="hljs-keyword">true</span>,
+      context: context,
+      child: ListView.builder(
+        itemCount: <span class="hljs-number">10</span>,
+        itemBuilder: (context,index)&#123;
+          <span class="hljs-keyword">return</span> _item(context,index);
+        &#125;,
+
+      ),
+    );
+  &#125;</code></pre>
+
+
+
+
+
+<blockquote>
+<h2 id="多个组件要实现统一上下滑动，最佳实现方式CustomScrollView"><a href="#多个组件要实现统一上下滑动，最佳实现方式CustomScrollView" class="headerlink" title="多个组件要实现统一上下滑动，最佳实现方式CustomScrollView"></a>多个组件要实现统一上下滑动，最佳实现方式CustomScrollView</h2></blockquote>
+<p>实例</p>
+<img src="https://i.loli.net/2020/08/28/r3nxmRpbjMhlLT6.png" srcset="/img/loading.gif" alt="image-20200828164130724" style="zoom:25%;" />
+
+<p>以上是第一次构建“首页”页面的结构组成，最外层是以ListView为基本结构，内部再嵌套Swiper、GridView、ListView、ListView完成整体界面，为了解决ListView嵌套ListView的问题以及整体上下滑动，所以在嵌套中的两个ListView都设置shrinkWrap为true，并且禁止滑动交互。</p>
+<p>虽然功能上是实现了，也没有问题，但是在每个文章Cell的build方法中打印创建的方法调用记录，发现ListView的Item都是一次性全部加载完毕的，并非懒加载的，这就很销毁性能了。</p>
+<p>而整体通过CustomScrollView和Sliver子Widget来实现就没有这个问题。</p>
+<p>几个重要的SliverWidget使用记录</p>
+<p><code>SliverList</code>、<code>SliverFixedExtentList</code> 对应 <code>ListView</code></p>
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">备注</span></span>
+<span class="hljs-comment">/// <span class="markdown">SliverList和SliverFixedExtenList 设置横向布局</span></span>
+<span class="hljs-comment">/// <span class="markdown">如果要是实现横向布局，可以通过在ListView的外层包一层SliverToBoxAdapter</span></span>
+
+SliverFixedExtentList(
+  <span class="hljs-comment">/// <span class="markdown">行高</span></span>
+  itemExtent: <span class="hljs-number">50.0</span>,
+  delegate: <span class="hljs-keyword">new</span> SliverChildBuilderDelegate(
+    (BuildContext context, <span class="hljs-built_in">int</span> index) &#123;
+      <span class="hljs-comment">///<span class="markdown">创建列表项      </span></span>
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Container(
+        alignment: Alignment.center,
+        color: Colors.lightBlue[<span class="hljs-number">100</span> * (index % <span class="hljs-number">9</span>)],
+        child: <span class="hljs-keyword">new</span> Text(<span class="hljs-string">'list item <span class="hljs-subst">$index</span>'</span>),
+      );
+    &#125;,
+    <span class="hljs-comment">/// <span class="markdown">列表数量</span></span>
+    childCount: <span class="hljs-number">50</span> 
+  ),
+)
+
+  
+SliverList(
+   delegate: SliverChildBuilderDelegate((context, index) &#123;
+       <span class="hljs-keyword">return</span> _bulidArticleItem(context, index);
+   &#125;,
+   childCount: widget.data.length)
+)</code></pre>
+
+<p><code>SliverGrid</code> 对应 <code>GridView</code></p>
+<pre><code class="hljs dart">SliverGrid( <span class="hljs-comment">//Grid</span>
+  gridDelegate: <span class="hljs-keyword">new</span> SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: <span class="hljs-number">2</span>, <span class="hljs-comment">//Grid按两列显示</span>
+    mainAxisSpacing: <span class="hljs-number">10.0</span>,
+    crossAxisSpacing: <span class="hljs-number">10.0</span>,
+    childAspectRatio: <span class="hljs-number">4.0</span>,
+  ),
+  delegate: <span class="hljs-keyword">new</span> SliverChildBuilderDelegate(
+    (BuildContext context, <span class="hljs-built_in">int</span> index) &#123;
+      <span class="hljs-comment">//创建子widget      </span>
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Container(
+        alignment: Alignment.center,
+        color: Colors.cyan[<span class="hljs-number">100</span> * (index % <span class="hljs-number">9</span>)],
+        child: <span class="hljs-keyword">new</span> Text(<span class="hljs-string">'grid item <span class="hljs-subst">$index</span>'</span>),
+      );
+    &#125;,
+    childCount: <span class="hljs-number">20</span>,
+  ),
+)</code></pre>
+
+<p><code>SliverAppBar</code> 对应<code>AppBar</code> 如果要实现导航栏与整体一起滑动就要使用SliverBar，比如个人主页</p>
+<p><code>SliverPadding</code>对应<code>Padding</code></p>
+<p><code>SliverToBoxAdapter</code> 可以将非Sliver的widget包裹</p>
+<p>CustomScrollView更多使用请参考以下几篇文章</p>
+<p><a href="https://www.jianshu.com/p/cf8e92f76bdb" target="_blank" rel="noopener">https://www.jianshu.com/p/cf8e92f76bdb</a></p>
+<p><a href="https://book.flutterchina.club/chapter6/custom_scrollview.html" target="_blank" rel="noopener">https://book.flutterchina.club/chapter6/custom_scrollview.html</a></p>
+<p><a href="https://www.jianshu.com/p/4794f947d8b4" target="_blank" rel="noopener">https://www.jianshu.com/p/4794f947d8b4</a></p>
+<blockquote>
+<h2 id="CustomScrollView-滑动加载更多数据，内存暴涨，到最后内存溢出闪退"><a href="#CustomScrollView-滑动加载更多数据，内存暴涨，到最后内存溢出闪退" class="headerlink" title="CustomScrollView 滑动加载更多数据，内存暴涨，到最后内存溢出闪退"></a>CustomScrollView 滑动加载更多数据，内存暴涨，到最后内存溢出闪退</h2></blockquote>
+<blockquote>
+<h2 id="尺寸约束：宽度、高度"><a href="#尺寸约束：宽度、高度" class="headerlink" title="尺寸约束：宽度、高度"></a>尺寸约束：宽度、高度</h2></blockquote>
+<pre><code class="hljs dart">Container(
+  constraints: BoxConstraints(
+    minWidth: <span class="hljs-number">16.</span>px,
+    minHeight: <span class="hljs-number">16.</span>px,
+    maxHeight: <span class="hljs-number">16.</span>px,
+    maxWidth: <span class="hljs-number">16.</span>px
+  ),
+)</code></pre>
+
+
+
+<blockquote>
+<h2 id="时间戳与时间格式"><a href="#时间戳与时间格式" class="headerlink" title="时间戳与时间格式"></a>时间戳与时间格式</h2></blockquote>
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">引入第三库 intl</span></span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:intl/intl.dart'</span>;
+
+<span class="hljs-keyword">static</span> timeFormatString(&#123;<span class="hljs-built_in">int</span> timestamp, <span class="hljs-built_in">String</span> format&#125;) &#123;
+    <span class="hljs-built_in">DateTime</span> time = <span class="hljs-built_in">DateTime</span>.fromMillisecondsSinceEpoch(timestamp);
+    <span class="hljs-keyword">var</span> formatter = DateFormat(format);
+    <span class="hljs-keyword">return</span> formatter.format(time);
+&#125;</code></pre>
+
+
+
+<blockquote>
+<h2 id="时间今天、昨天、前天的判断"><a href="#时间今天、昨天、前天的判断" class="headerlink" title="时间今天、昨天、前天的判断"></a>时间今天、昨天、前天的判断</h2></blockquote>
+<pre><code class="hljs dart"><span class="hljs-comment">/// <span class="markdown">今天、昨天、前天</span></span>
+<span class="hljs-keyword">static</span> timeFormatDaysAgo(<span class="hljs-built_in">int</span> timestamp) &#123;
+  <span class="hljs-built_in">DateTime</span> targetday = <span class="hljs-built_in">DateTime</span>.fromMillisecondsSinceEpoch(timestamp);
+
+  <span class="hljs-comment">/// <span class="markdown">今天</span></span>
+  <span class="hljs-built_in">DateTime</span> today = <span class="hljs-built_in">DateTime</span>.now();
+
+  <span class="hljs-comment">/// <span class="markdown">今天的23：59：59</span></span>
+  <span class="hljs-built_in">DateTime</span> todayLast =
+    <span class="hljs-built_in">DateTime</span>(today.year, today.month, today.day, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span>);
+
+  <span class="hljs-comment">/// <span class="markdown">时间对比</span></span>
+  <span class="hljs-built_in">Duration</span> diff = todayLast.difference(targetday);
+
+  <span class="hljs-keyword">if</span> (diff &lt; <span class="hljs-built_in">Duration</span>(days: <span class="hljs-number">1</span>)) &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-string">'今天'</span>;
+  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (diff &gt;= <span class="hljs-built_in">Duration</span>(days: <span class="hljs-number">1</span>) &amp;&amp; diff &lt; <span class="hljs-built_in">Duration</span>(days: <span class="hljs-number">2</span>)) &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-string">'昨天'</span>;
+  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (diff &gt;= <span class="hljs-built_in">Duration</span>(days: <span class="hljs-number">2</span>) &amp;&amp; diff &lt; <span class="hljs-built_in">Duration</span>(days: <span class="hljs-number">3</span>)) &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-string">'前天'</span>;
+  &#125; <span class="hljs-keyword">else</span> &#123;
+    <span class="hljs-keyword">return</span> timeFormatForYYMMDD(timestamp);
+  &#125;
+&#125;</code></pre>
+
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Flutter/">Flutter</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Flutter/">Flutter</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/09/11/Flutter%20%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">学习资料合集</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/04/MVVM%E6%8E%A2%E8%AE%A8/">
+                        <span class="hidden-mobile">MVVM探讨</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script defer src="https://cdn.staticfile.org/valine/1.4.4/Valine.min.js" ></script>
+
+  <script type="text/javascript">
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+
+      new Valine({
+        el: "#vcomments",
+        app_id: "yXom8ixvXSnnf5ow9iuwTppi-gzGzoHsz",
+        app_key: "Tb7YxoXCUDQsdcJI8M95cAWU",
+        placeholder: "说点什么",
+        path: window.location.pathname,
+        avatar: "retro",
+        meta: ["昵称"],
+        pageSize: "20",
+        lang: "zh-CN",
+        highlight: false,
+        recordIP: false,
+        serverURLs: "",
+      });
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+    <!-- APlayer 音乐播放器 -->
+    <div id="aplayer"></div>
+    <script defer src="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.js" ></script>
+<link  rel="stylesheet" href="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.css" />
+<script type="text/javascript">
+  var oldLoadAp = window.onload;
+  window.onload = function () {
+    oldLoadAp && oldLoadAp();
+
+    new APlayer({
+      container: document.getElementById('aplayer'),
+      fixed: true,
+      autoplay: 'true' === 'true',
+      loop: 'all',
+      order: 'random',
+      theme: '#4169E1',
+      preload: 'none',
+      audio: [{"name":"Try","artist":"Marlisa","url":"/mp3/Try.mp3","cover":"/img/musicCover/Marlisa.jpeg"},{"name":"Love The Way You Lie + I need a doctor","artist":"Rihanna、Eminem","url":"/mp3/Love.mp3","cover":"/img/musicCover/Eminem.jpeg"}]
+    });
+  }
+</script>
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 6,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?26e6317c907495b6a9e0a92188348969";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "flutter实践笔记&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 100,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

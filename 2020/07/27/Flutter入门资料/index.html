@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>MVVM探讨 - Liven技术博客</title>
+  <title>Flutter 入门资料 - Liven技术博客</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
@@ -132,8 +132,8 @@
               
                 <div class="mt-3 post-meta">
                   <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2020-08-04 15:18">
-                    2020年8月4日 下午
+                  <time datetime="2020-07-27 11:16">
+                    2020年7月27日 上午
                   </time>
                 </div>
               
@@ -143,7 +143,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    221 字
+                    125 字
                   </span>
                 
 
@@ -153,7 +153,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    2
+                    1
                      分钟
                   </span>
                 
@@ -182,12 +182,7 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p>MVVM 是为了解决MassiveViewController而从MVC变形出来的，更直白点就是将MVC中C处理的部分抽一些出来交给VM处理。</p>
-<p>Casa<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">文章</a></p>
-<p>Model才进行数据处理，ViewModel不做数据处理。数据处理涉及的范围是数据的增删改查，这些都应该是Model去做。</p>
-<p>例如Model做的事情是：从网络获得数据，从数据库获得数据，从设备传感器获得数据，从文件获得数据。包括将这些数据转化成View层（也可以更笼统地说它就是业务层）可以理解的方式：JSON、对象、UIView、字典等</p>
-<p>VM只做数据转化这种级别的处理，这种处理极为有限。至于数据的增删改查，还是M去做。要区分VM和M，关键就在于区分数据转化和数据的增删改查</p>
-
+              <h2 id="Dart基础"><a href="#Dart基础" class="headerlink" title="Dart基础"></a>Dart基础</h2><h4 id="Flutter之搞定Dart-一"><a href="#Flutter之搞定Dart-一" class="headerlink" title="Flutter之搞定Dart(一)"></a><a href="https://mp.weixin.qq.com/s/Ygs-sOtrohNf4vGpZcrnYw" target="_blank" rel="noopener">Flutter之搞定Dart(一)</a></h4><h4 id="Flutter之搞定Dart-二"><a href="#Flutter之搞定Dart-二" class="headerlink" title="Flutter之搞定Dart(二)"></a><a href="https://mp.weixin.qq.com/s/xdSYvqSYOXTOCeb89C1uvg" target="_blank" rel="noopener">Flutter之搞定Dart(二)</a></h4><h4 id="彻底搞定Dart的异步"><a href="#彻底搞定Dart的异步" class="headerlink" title="彻底搞定Dart的异步"></a><a href="https://mp.weixin.qq.com/s/Ygs-sOtrohNf4vGpZcrnYw" target="_blank" rel="noopener">彻底搞定Dart的异步</a></h4><h2 id="Flutter-基础"><a href="#Flutter-基础" class="headerlink" title="Flutter 基础"></a>Flutter 基础</h2><h4 id="Flutter-一-之Flutter开发初体验"><a href="#Flutter-一-之Flutter开发初体验" class="headerlink" title="Flutter(一) 之Flutter开发初体验"></a><a href="https://mp.weixin.qq.com/s/UU2WO_YSoobthTTbniBm5Q" target="_blank" rel="noopener">Flutter(一) 之Flutter开发初体验</a></h4><h4 id="Flutter-二-之有状态的StatefulWidget"><a href="#Flutter-二-之有状态的StatefulWidget" class="headerlink" title="Flutter(二) 之有状态的StatefulWidget"></a><a href="https://mp.weixin.qq.com/s/UU2WO_YSoobthTTbniBm5Q" target="_blank" rel="noopener">Flutter(二) 之有状态的StatefulWidget</a></h4><h4 id="Flutter-三-之Flutter的基础Widget"><a href="#Flutter-三-之Flutter的基础Widget" class="headerlink" title="Flutter(三) 之Flutter的基础Widget"></a><a href="https://mp.weixin.qq.com/s/xuECuEW3MLJpXBIwkREgCA" target="_blank" rel="noopener">Flutter(三) 之Flutter的基础Widget</a></h4><h4 id="Flutter-四-之Flutter的布局Widget"><a href="#Flutter-四-之Flutter的布局Widget" class="headerlink" title="Flutter(四) 之Flutter的布局Widget"></a><a href="https://mp.weixin.qq.com/s/w33dctz-TmaYBZ9hXr4oig" target="_blank" rel="noopener">Flutter(四) 之Flutter的布局Widget</a></h4><h4 id="Flutter-五-之Flutter滚动Widget"><a href="#Flutter-五-之Flutter滚动Widget" class="headerlink" title="Flutter(五) 之Flutter滚动Widget"></a><a href="https://mp.weixin.qq.com/s/rdmfeUECLtnZz6GeQKzOqA" target="_blank" rel="noopener">Flutter(五) 之Flutter滚动Widget</a></h4><h4 id="Flutter-六-之豆瓣电影列表"><a href="#Flutter-六-之豆瓣电影列表" class="headerlink" title="Flutter(六) 之豆瓣电影列表"></a><a href="https://mp.weixin.qq.com/s/-aJ2EPEj6yzCgQBOy60zXw" target="_blank" rel="noopener">Flutter(六) 之豆瓣电影列表</a></h4><h2 id="Flutter进阶"><a href="#Flutter进阶" class="headerlink" title="Flutter进阶"></a>Flutter进阶</h2><h4 id="Flutter网络请求"><a href="#Flutter网络请求" class="headerlink" title="Flutter网络请求"></a><a href="https://mp.weixin.qq.com/s/EYluKpa7NxTKiTTrXFbhLQ" target="_blank" rel="noopener">Flutter网络请求</a></h4><h4 id="Flutter如何JSON转Model"><a href="#Flutter如何JSON转Model" class="headerlink" title="Flutter如何JSON转Model"></a><a href="https://mp.weixin.qq.com/s/4x8ZCXuw6BlQ0pYV3svmMQ" target="_blank" rel="noopener">Flutter如何JSON转Model</a></h4><h4 id="Flutter中Dart的回收机制"><a href="#Flutter中Dart的回收机制" class="headerlink" title="Flutter中Dart的回收机制"></a><a href="https://mp.weixin.qq.com/s/J4XoXJHJSmn8VaMoz3BZJQ" target="_blank" rel="noopener">Flutter中Dart的回收机制</a></h4><h4 id="Flutter的Widget-Element-RenderObject"><a href="#Flutter的Widget-Element-RenderObject" class="headerlink" title="Flutter的Widget-Element-RenderObject"></a><a href="https://mp.weixin.qq.com/s/ljzG9c-fQIJ21s7nZ2pjBg" target="_blank" rel="noopener">Flutter的Widget-Element-RenderObject</a></h4><h4 id="Flutter状态State管理"><a href="#Flutter状态State管理" class="headerlink" title="Flutter状态State管理"></a><a href="https://mp.weixin.qq.com/s/ywGQnaYpioPxlYvYTSpR4w" target="_blank" rel="noopener">Flutter状态State管理</a></h4><h4 id="Flutter事件监听"><a href="#Flutter事件监听" class="headerlink" title="Flutter事件监听"></a><a href="https://mp.weixin.qq.com/s/Z-2NL6Fe5z0AkSG0yoOJzw" target="_blank" rel="noopener">Flutter事件监听</a></h4><h4 id="Flutter路由导航"><a href="#Flutter路由导航" class="headerlink" title="Flutter路由导航"></a><a href="https://mp.weixin.qq.com/s/K1yOOTIYEzB2N7tIJv5jtQ" target="_blank" rel="noopener">Flutter路由导航</a></h4><h4 id="Flutter实现动画"><a href="#Flutter实现动画" class="headerlink" title="Flutter实现动画"></a><a href="https://mp.weixin.qq.com/s/xNRTjDApabIXasUGiW160Q" target="_blank" rel="noopener">Flutter实现动画</a></h4><h4 id="Flutter主题风格"><a href="#Flutter主题风格" class="headerlink" title="Flutter主题风格"></a><a href="https://mp.weixin.qq.com/s/CsBh8RKbuGghrXnqHxg2Vw" target="_blank" rel="noopener">Flutter主题风格</a></h4><h4 id="Flutter屏幕适配"><a href="#Flutter屏幕适配" class="headerlink" title="Flutter屏幕适配"></a><a href="https://mp.weixin.qq.com/s/z21YZ4FhSswpDWn4KpK6jw" target="_blank" rel="noopener">Flutter屏幕适配</a></h4><h4 id="Flutter应用信息"><a href="#Flutter应用信息" class="headerlink" title="Flutter应用信息"></a><a href="https://mp.weixin.qq.com/s/TsXw0e6A0792gt_M9fHhog" target="_blank" rel="noopener">Flutter应用信息</a></h4><h4 id="Flutter实现国际化"><a href="#Flutter实现国际化" class="headerlink" title="Flutter实现国际化"></a><a href="https://mp.weixin.qq.com/s/yWA95mMLNk5J5m-XOfWXRQ" target="_blank" rel="noopener">Flutter实现国际化</a></h4><h4 id="Flutter测试"><a href="#Flutter测试" class="headerlink" title="Flutter测试"></a><a href="https://mp.weixin.qq.com/s/z0KeWWOVSRD9CJiMi8npYA" target="_blank" rel="noopener">Flutter测试</a></h4><h4 id="Flutter打包发布"><a href="#Flutter打包发布" class="headerlink" title="Flutter打包发布"></a><a href="https://mp.weixin.qq.com/s/PIxn7ZZ2WAR6PVMBU9F69Q" target="_blank" rel="noopener">Flutter打包发布</a></h4><h4 id="Flutter混合开发"><a href="#Flutter混合开发" class="headerlink" title="Flutter混合开发"></a><a href="https://mp.weixin.qq.com/s/dzt--_XWbYRBYq8vYI9Npw" target="_blank" rel="noopener">Flutter混合开发</a></h4>
             </article>
             <hr>
             <div>
@@ -196,7 +191,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/iOS/">iOS</a>
+                      <a class="hover-with-bg" href="/categories/Flutter/">Flutter</a>
                     
                   </div>
                 
@@ -204,7 +199,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Collect-%E6%9E%B6%E6%9E%84%E5%8F%8A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">Collect,架构及设计模式</a>
+                      <a class="hover-with-bg" href="/tags/Flutter-resource/">Flutter resource</a>
                     
                   </div>
                 
@@ -217,9 +212,9 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/08/28/Flutter%E5%AE%9E%E8%B7%B5%E7%AC%94%E8%AE%B0/">
+                      <a href="/2020/07/27/Flutter-%E6%A8%A1%E5%9D%97-%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%B0%81%E8%A3%85/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">flutter实践笔记</span>
+                        <span class="hidden-mobile">Flutter_模块_网络请求封装</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -227,8 +222,8 @@
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/07/30/%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E9%9A%8F%E7%AC%94/">
-                        <span class="hidden-mobile">架构与设计模式随笔</span>
+                      <a href="/2020/07/15/%E9%9A%BE%E6%90%9E%E7%9A%84navigationBar/">
+                        <span class="hidden-mobile">零代码实现导航栏切换完美过渡</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -468,7 +463,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "MVVM探讨&nbsp;",
+        "Flutter 入门资料&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 100,

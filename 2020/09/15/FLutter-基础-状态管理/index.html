@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>FLutter_基础_状态管理 - Liven技术博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/xcode.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_ijqayz9ro8k.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>CALL ME LIVEN</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/page/page_cover.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-09-15 14:25">
+                    2020年9月15日 下午
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    1.4k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    18
+                     分钟
+                  </span>
+                
+
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="状态管理"><a href="#状态管理" class="headerlink" title="状态管理"></a>状态管理</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>管理状态的最常见方法：</strong></p>
+<ul>
+<li>Widget管理自己的状态</li>
+<li>Widget管理子Widget的状态</li>
+<li>混合管理(父Widget和子Widget都管理状态)</li>
+</ul>
+<p><strong>选择哪种方式的原则：</strong></p>
+<ul>
+<li>如果状态是用户数据，如复选框的选中状态、滑块的位置，则该状态最好由父Widget管理</li>
+<li>如果状态是有关界面外观效果的，如颜色、动画，那么状态最好由Widget本身来管理</li>
+<li>如果某一个状态是不同widget共享的，则最好由他们共同的父Widget管理</li>
+</ul>
+<p><code>在Widget内部管理状态封装性会好一点，而在父Widget中管理会比较灵活。</code></p>
+<p>有些时候，如果不确定到底该怎么管理状态，那么推荐的<code>首选是在父Widget中管理</code>（灵活会显得更重要一些）</p>
+<h2 id="一、InheritedWidget"><a href="#一、InheritedWidget" class="headerlink" title="一、InheritedWidget"></a>一、InheritedWidget</h2><p>官方<a href="https://book.flutterchina.club/chapter7/inherited_widget.html" target="_blank" rel="noopener">InheritedWidget</a>说明</p>
+<p><code>InheritedWidget</code>是Flutter非常重要的一个功能型组件，提供了一个数据在widget树中<code>从上到下传递、共享的方式</code>，比如我们在应用的根widget中通过InheritedWidget共享一个数据，那么我们便可以在任意widget中来获取该共享的数据。如Flutter SDK中正是通过InheritedWidget来共享应用主题和Locale信息的</p>
+<p><strong>如何判断子Widget有么有依赖InheritedWidget？</strong><br><code>依赖</code>关系是指子widget是否使用了父widget中InheritedWidget的数据，</p>
+<p>如果使用，则代表子widget依赖InheritedWidget,</p>
+<p>如果没有，则代表没有依赖</p>
+<p><strong><code>didChangeDependencies()</code>什么时候会被调用？</strong></p>
+<p>子widget依赖 父或祖先widget，并且父或祖widget中InheritedWidget改变(updateShouldNotify返回true)时会被调用</p>
+<p><strong>如果建立依赖的呢？</strong></p>
+<pre><code class="hljs dart">context.dependOnInheritedWidgetOfExactType&lt;T&gt;()
+ 
+<span class="hljs-comment">/// <span class="markdown">dependOnInheritedWidgetOfExactType 源码</span></span>
+<span class="hljs-meta">@override</span>
+InheritedWidget dependOnInheritedWidgetOfExactType(&#123; <span class="hljs-built_in">Object</span> aspect &#125;) &#123;
+  <span class="hljs-keyword">assert</span>(_debugCheckStateIsActiveForAncestorLookup());
+  <span class="hljs-keyword">final</span> InheritedElement ancestor = _inheritedWidgets == <span class="hljs-keyword">null</span> ? <span class="hljs-keyword">null</span> : _inheritedWidgets[T];
+  <span class="hljs-comment">// 注册依赖关系</span>
+  <span class="hljs-keyword">if</span> (ancestor != <span class="hljs-keyword">null</span>) &#123;
+    <span class="hljs-keyword">assert</span>(ancestor <span class="hljs-keyword">is</span> InheritedElement);
+    <span class="hljs-keyword">return</span> dependOnInheritedElement(ancestor, aspect: aspect) <span class="hljs-keyword">as</span> T;
+  &#125;
+  _hadUnsatisfiedDependencies = <span class="hljs-keyword">true</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+&#125;  
+
+T
+<span class="hljs-comment">/// <span class="markdown">如果不想注册依赖，那么可以改用以下的方法</span></span>
+context.getElementForInheritedWidgetOfExactType&lt;T&gt;().widget</code></pre>
+
+
+
+<p><strong>实例</strong></p>
+<pre><code class="hljs dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ShareDataWidget</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">InheritedWidget</span> </span>&#123;
+  ShareDataWidget(&#123;
+    <span class="hljs-meta">@required</span> <span class="hljs-keyword">this</span>.data,
+    Widget child
+  &#125;) :<span class="hljs-keyword">super</span>(child: child);
+
+  <span class="hljs-keyword">final</span> <span class="hljs-built_in">int</span> data; <span class="hljs-comment">//需要在子树中共享的数据，保存点击次数</span>
+
+  <span class="hljs-comment">//定义一个便捷方法，方便子树中的widget获取共享数据  </span>
+  <span class="hljs-keyword">static</span> ShareDataWidget of(BuildContext context) &#123;
+    <span class="hljs-keyword">return</span> context.dependOnInheritedWidgetOfExactType&lt;ShareDataWidget&gt;();
+  &#125;
+
+  <span class="hljs-comment">//该回调决定当data发生变化时，是否通知子树中依赖data的Widget  </span>
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-built_in">bool</span> updateShouldNotify(ShareDataWidget old) &#123;
+    <span class="hljs-comment">//如果返回true，则子树中依赖(build函数中有调用)本widget</span>
+    <span class="hljs-comment">//的子widget的`state.didChangeDependencies`会被调用</span>
+    <span class="hljs-keyword">return</span> old.data != data;
+  &#125;
+&#125;
+
+
+
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_TestWidget</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>&#123;
+  <span class="hljs-meta">@override</span>
+  __TestWidgetState createState() =&gt; <span class="hljs-keyword">new</span> __TestWidgetState();
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">__TestWidgetState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State</span>&lt;<span class="hljs-title">_TestWidget</span>&gt; </span>&#123;
+  <span class="hljs-meta">@override</span>
+  Widget build(BuildContext context) &#123;
+    <span class="hljs-comment">//使用InheritedWidget中的共享数据</span>
+    <span class="hljs-keyword">return</span> Text(ShareDataWidget
+        .of(context)
+        .data
+        .toString());
+  &#125;
+
+  <span class="hljs-meta">@override</span>
+  <span class="hljs-keyword">void</span> didChangeDependencies() &#123;
+    <span class="hljs-keyword">super</span>.didChangeDependencies();
+    <span class="hljs-comment">//父或祖先widget中的InheritedWidget改变(updateShouldNotify返回true)时会被调用。</span>
+    <span class="hljs-comment">//如果build中没有依赖InheritedWidget，则此回调不会被调用。</span>
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"Dependencies change"</span>);
+  &#125;
+&#125;
+
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">InheritedWidgetTestRoute</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>&#123;
+  <span class="hljs-meta">@override</span>
+  _InheritedWidgetTestRouteState createState() =&gt; <span class="hljs-keyword">new</span> _InheritedWidgetTestRouteState();
+&#125;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_InheritedWidgetTestRouteState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State</span>&lt;<span class="hljs-title">InheritedWidgetTestRoute</span>&gt; </span>&#123;
+  <span class="hljs-built_in">int</span> count = <span class="hljs-number">0</span>;
+
+  <span class="hljs-meta">@override</span>
+  Widget build(BuildContext context) &#123;
+    <span class="hljs-keyword">return</span>  Center(
+      child: ShareDataWidget( <span class="hljs-comment">//使用ShareDataWidget</span>
+        data: count,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: &lt;Widget&gt;[
+            Padding(
+              padding: <span class="hljs-keyword">const</span> EdgeInsets.only(bottom: <span class="hljs-number">20.0</span>),
+              child: _TestWidget(),<span class="hljs-comment">//子widget中依赖ShareDataWidget</span>
+            ),
+            RaisedButton(
+              child: Text(<span class="hljs-string">"Increment"</span>),
+              <span class="hljs-comment">//每点击一次，将count自增，然后重新build,ShareDataWidget的data将被更新  </span>
+              onPressed: () =&gt; setState(() =&gt; ++count),
+            )
+          ],
+        ),
+      ),
+    );
+  &#125;
+&#125;</code></pre>
+
+
+
+
+
+<h2 id="二、Provider"><a href="#二、Provider" class="headerlink" title="二、Provider"></a>二、Provider</h2><p>Provider<a href="https://juejin.im/post/6844903864852807694" target="_blank" rel="noopener">超详细使用</a></p>
+<p><strong>状态管理器 Provider 使用方法主要分三步：</strong></p>
+<p>1、创建一个数据Model（混入ChangeNotifier，并且通过notifyListeners通知刷新）</p>
+<p>2、在顶层注册共享数据</p>
+<p>3、监听数据通知(总共有3种方式：</p>
+<p>​        a: Provider<T>.value</p>
+<p>​        b: Consumer</p>
+<p>​        c: Selector    </p>
+<p>​    )</p>
+<h2 id="2-3-0-Provider-value"><a href="#2-3-0-Provider-value" class="headerlink" title="2.3.0 Provider.value"></a>2.3.0 Provider<T>.value</h2><h2 id="2-3-1-Consumer"><a href="#2-3-1-Consumer" class="headerlink" title="2.3.1 Consumer"></a>2.3.1 Consumer</h2><pre><code class="hljs dart">Consumer&lt;T&gt;(
+	builder: (BuildContext context, T , Widget child) &#123;
+		<span class="hljs-keyword">return</span> Widget;   
+	&#125;,
+	child: Widget,
+)
+  
+ <span class="hljs-comment">/// <span class="markdown">除了单个值的T之外，Consumer还支持多个值的方式</span></span>
+ <span class="hljs-comment">/// <span class="markdown">Consumer2<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">A,</span> <span class="hljs-attr">B</span>&gt;</span></span></span></span>
+ <span class="hljs-comment">/// <span class="markdown">Consumer3<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">A,</span> <span class="hljs-attr">B</span>, <span class="hljs-attr">C</span>&gt;</span></span></span></span>
+ <span class="hljs-comment">/// <span class="markdown">Consumer4<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">A,</span> <span class="hljs-attr">B</span>, <span class="hljs-attr">C</span>, <span class="hljs-attr">D</span>&gt;</span></span></span></span>
+ <span class="hljs-comment">/// <span class="markdown">Consumer5<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">A,</span> <span class="hljs-attr">B</span>, <span class="hljs-attr">C</span>, <span class="hljs-attr">D</span>, <span class="hljs-attr">E</span>&gt;</span></span></span></span>
+ <span class="hljs-comment">/// <span class="markdown">Consumer6<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">A,</span> <span class="hljs-attr">B</span>, <span class="hljs-attr">C</span>, <span class="hljs-attr">D</span>, <span class="hljs-attr">E</span>, <span class="hljs-attr">F</span>&gt;</span></span></span></span></code></pre>
+
+
+
+<h2 id="2-3-2-Selector"><a href="#2-3-2-Selector" class="headerlink" title="2.3.2 Selector"></a>2.3.2 Selector</h2><pre><code class="hljs dart">Selector&lt;A, S&gt;(
+  shouldRebuild: (pre, next) =&gt; <span class="hljs-keyword">false</span>,
+  selector: (context, A) =&gt; S,
+  builder: (context, S, child) &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+  &#125;,
+),
+
+<span class="hljs-comment">// A 是我们从顶层获取的Provider的类型</span>
+<span class="hljs-comment">// S 是我们关心的具体类型，也即是获取到的Provider中真正对我们有用的类型，需要在selector中返回该类型。这个Selector的刷新范围也就从整个Provider变成了S</span>
+
+<span class="hljs-comment">// Selector属性解析</span>
+<span class="hljs-comment">// selector: 是一个Function，入参会将我们获取到的顶层provider传入，我们再返回具体关注的那部分S</span>
+<span class="hljs-comment">// shouldRebuild: 这个属性会储存selector过滤后的值，也就是selector返回的S并拿收到通知之后新的S与cache的S比较，来判断这个Selector是否需要刷新，默认preview!=next就刷新</span>
+<span class="hljs-comment">// builder: 这个就是具体返回Widget的地方了，第二个参数provider，就是我们逛逛selector中返回的</span>
+<span class="hljs-comment">// child: 这个用于优化一些不用刷新的部分</span></code></pre>
+
+
+
+<pre><code class="hljs dart">实例：商品列表，具有点赞功能，
+优化：点赞一个商品，不刷新整个列表，只刷新这个商品Item
+  
+  
+<span class="hljs-comment">/// <span class="markdown">列表有两个Selector</span></span>
+<span class="hljs-comment">/// <span class="markdown">第一个Selector： shouldRebuild返回值是false</span></span>
+<span class="hljs-comment">/// <span class="markdown">这样做的目的是避免整个商品列表rebuild</span></span>
+<span class="hljs-comment">/// <span class="markdown">第二个Selector： selector返回的是一个商品模型good</span></span>
+<span class="hljs-comment">///	<span class="markdown">那么第二个Selector是否rebuild则有good来决定</span></span>
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GoodsListScreen</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;
+  <span class="hljs-meta">@override</span>
+  Widget build(BuildContext context) &#123;
+    <span class="hljs-keyword">return</span> ChangeNotifierProvider(
+      create: (_) =&gt; GoodsListProvider(),
+      child: Selector&lt;GoodsListProvider, GoodsListProvider&gt;(
+        shouldRebuild: (pre, next) =&gt; <span class="hljs-keyword">false</span>,
+        selector: (context, provider) =&gt; provider,
+        builder: (context, provider, child) &#123;
+          <span class="hljs-keyword">return</span> ListView.builder(
+            itemCount: provider.total,
+            itemBuilder: (context, index) &#123;
+              <span class="hljs-keyword">return</span> Selector&lt;GoodsListProvider, Goods&gt;(
+                selector: (context, provider) =&gt; provider.goodsList[index],
+                builder: (context, data, child) &#123;
+                  <span class="hljs-built_in">print</span>((<span class="hljs-string">'No.<span class="hljs-subst">$&#123;index + <span class="hljs-number">1</span>&#125;</span> rebuild'</span>));
+
+                  <span class="hljs-keyword">return</span> ListTile(
+                    title: Text(data.goodsName),
+                    trailing: GestureDetector(
+                      onTap: () =&gt; provider.collect(index),
+                      child: Icon(
+                          data.isCollection ? Icons.star : Icons.star_border),
+                    ),
+                  );
+                &#125;,
+              );
+            &#125;,
+          );
+        &#125;,
+      ),
+    );
+  &#125;
+&#125;</code></pre>
+
+
+
+
+
+
+
+
+
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Flutter/">Flutter</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Flutter/">Flutter</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/09/16/Flutter-%E6%98%93%E8%AF%AF%E7%82%B9/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Flutter_易误点</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/09/14/Flutter_%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6/">
+                        <span class="hidden-mobile">常用插件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script defer src="https://cdn.staticfile.org/valine/1.4.4/Valine.min.js" ></script>
+
+  <script type="text/javascript">
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+
+      new Valine({
+        el: "#vcomments",
+        app_id: "yXom8ixvXSnnf5ow9iuwTppi-gzGzoHsz",
+        app_key: "Tb7YxoXCUDQsdcJI8M95cAWU",
+        placeholder: "说点什么",
+        path: window.location.pathname,
+        avatar: "retro",
+        meta: ["昵称"],
+        pageSize: "20",
+        lang: "zh-CN",
+        highlight: false,
+        recordIP: false,
+        serverURLs: "",
+      });
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+    <!-- APlayer 音乐播放器 -->
+    <div id="aplayer"></div>
+    <script defer src="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.js" ></script>
+<link  rel="stylesheet" href="https://cdn.staticfile.org/aplayer/1.10.1/APlayer.min.css" />
+<script type="text/javascript">
+  var oldLoadAp = window.onload;
+  window.onload = function () {
+    oldLoadAp && oldLoadAp();
+
+    new APlayer({
+      container: document.getElementById('aplayer'),
+      fixed: true,
+      autoplay: 'true' === 'true',
+      loop: 'all',
+      order: 'random',
+      theme: '#4169E1',
+      preload: 'none',
+      audio: [{"name":"Try","artist":"Marlisa","url":"/mp3/Try.mp3","cover":"/img/musicCover/Marlisa.jpeg"},{"name":"Love The Way You Lie + I need a doctor","artist":"Rihanna、Eminem","url":"/mp3/Love.mp3","cover":"/img/musicCover/Eminem.jpeg"}]
+    });
+  }
+</script>
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 6,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?26e6317c907495b6a9e0a92188348969";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "FLutter_基础_状态管理&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 100,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

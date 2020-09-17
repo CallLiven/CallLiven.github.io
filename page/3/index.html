@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>MVVM探讨 - Liven技术博客</title>
+  <title>Liven技术博客</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
@@ -46,7 +46,7 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 100vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -129,40 +129,12 @@
             </span>
 
             
-              
-                <div class="mt-3 post-meta">
-                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2020-08-04 15:18">
-                    2020年8月4日 下午
-                  </time>
-                </div>
-              
-
-              <div class="mt-1">
-                
-                  
-                  <span class="post-meta mr-2">
-                    <i class="iconfont icon-chart"></i>
-                    221 字
-                  </span>
-                
-
-                
-                  
-                  <span class="post-meta mr-2">
-                      <i class="iconfont icon-clock-fill"></i>
-                    
-                    
-                    2
-                     分钟
-                  </span>
-                
-
-                
-              </div>
-            
           </div>
 
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
           
         </div>
       </div>
@@ -171,127 +143,188 @@
 
   <main>
     
-      
+      <div class="container nopadding-md">
+        <div class="py-5" id="board"
+          style=margin-top:0>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/05/14/iOS%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E4%B8%80%E5%AD%A6%E5%B0%B1%E4%BC%9A/" target="_self">
+          <img src="/img/articleCover/shell_cover.jpg" srcset="/img/loading.gif" alt="iOS脚本打包一学就会">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/2020/05/14/iOS%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E4%B8%80%E5%AD%A6%E5%B0%B1%E4%BC%9A/">iOS脚本打包一学就会</a>
+
+      <a href="/2020/05/14/iOS%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E4%B8%80%E5%AD%A6%E5%B0%B1%E4%BC%9A/" class="index-excerpt">
+        
+        
+          
+        
+        <div>上篇文章提到的Jenkins打包，因为需要配置参数比较多，并且坑也比较多，要运行起来确实比较不容易，本人虽然是很早就有接触到Jenkins，但由于一直配置不成功，而放弃了。所以在此之前另寻路径，学了其他比较简单的自动化打包方式，比如Python和接下来要讲的shell脚本。
+条条道路通罗马，不管哪种方式，能提高效率和解放双手的都可以。自动打包确实会比手动打包的快，操作简单，一句代码就解决。
+这种方</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-05-14
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-            <article class="markdown-body">
-              <p>MVVM 是为了解决MassiveViewController而从MVC变形出来的，更直白点就是将MVC中C处理的部分抽一些出来交给VM处理。</p>
-<p>Casa<a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">文章</a></p>
-<p>Model才进行数据处理，ViewModel不做数据处理。数据处理涉及的范围是数据的增删改查，这些都应该是Model去做。</p>
-<p>例如Model做的事情是：从网络获得数据，从数据库获得数据，从设备传感器获得数据，从文件获得数据。包括将这些数据转化成View层（也可以更笼统地说它就是业务层）可以理解的方式：JSON、对象、UIView、字典等</p>
-<p>VM只做数据转化这种级别的处理，这种处理极为有限。至于数据的增删改查，还是M去做。要区分VM和M，关键就在于区分数据转化和数据的增删改查</p>
-
-            </article>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/iOS/">iOS</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/Collect-%E6%9E%B6%E6%9E%84%E5%8F%8A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">Collect,架构及设计模式</a>
-                    
-                  </div>
-                
-              </div>
-              
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-              
-              
-                <div class="post-prevnext row">
-                  <div class="post-prev col-6">
-                    
-                    
-                      <a href="/2020/08/28/Flutter%E5%AE%9E%E8%B7%B5%E7%AC%94%E8%AE%B0/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">flutter实践笔记</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </div>
-                  <div class="post-next col-6">
-                    
-                    
-                      <a href="/2020/07/30/%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E9%9A%8F%E7%AC%94/">
-                        <span class="hidden-mobile">架构与设计模式随笔</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </div>
-                </div>
-              
-            </div>
-
+              <a href="/categories/iOS/">iOS</a>
             
-              <!-- Comments -->
-              <div class="comments" id="comments">
-                
-                
-  <div id="vcomments"></div>
-  <script defer src="https://cdn.staticfile.org/valine/1.4.4/Valine.min.js" ></script>
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Tool/">Tool</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
 
-  <script type="text/javascript">
-    var oldLoadVa = window.onload;
-    window.onload = function () {
-      oldLoadVa && oldLoadVa();
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/05/14/iOS%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85-Jenkins/" target="_self">
+          <img src="/img/articleCover/jenkins_cover.jpg" srcset="/img/loading.gif" alt="Jenkins自动打包--从零开始">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/2020/05/14/iOS%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85-Jenkins/">Jenkins自动打包--从零开始</a>
 
-      new Valine({
-        el: "#vcomments",
-        app_id: "yXom8ixvXSnnf5ow9iuwTppi-gzGzoHsz",
-        app_key: "Tb7YxoXCUDQsdcJI8M95cAWU",
-        placeholder: "说点什么",
-        path: window.location.pathname,
-        avatar: "retro",
-        meta: ["昵称"],
-        pageSize: "20",
-        lang: "zh-CN",
-        highlight: false,
-        recordIP: false,
-        serverURLs: "",
-      });
-    };
+      <a href="/2020/05/14/iOS%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85-Jenkins/" class="index-excerpt">
+        
+        
+          
+        
+        <div>一、前言Jenkins是基于Java开发的一种持续集成工具，支持自动化、部署、构建。
+简而言之，对于开发者可以避免做重复并且耗时的事情，专注于代码的开发(测试的小姐姐就不用每次跟我要安装包)
+篇幅较长，请耐心看完，本人亲测有效。
+写文不容易，翻阅了多篇博客，构建失败将近50次，总结的文章，除了文字描述，也附上图片说明，方便阅读。
+如果喜欢本文的，请打赏一分支持
+二、Jenkins安装2.0 jav</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-05-14
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/iOS/">iOS</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Tool/">Tool</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/04/28/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" target="_self">
+          <img src="/img/articleCover/hexo_git_cover.jpg" srcset="/img/loading.gif" alt="Hexo + Github 搭建博客完整版">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/2020/04/28/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">Hexo + Github 搭建博客完整版</a>
+
+      <a href="/2020/04/28/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" class="index-excerpt">
+        
+        
+          
+        
+        <div>一、Hexo搭建1.0 环境准备(具体的参考百度文章)a&gt; npm安装
+b&gt; Git 安装
+c&gt; node.js 安装（建议安装10.0以上版本）
+2.0 Hexo安装$ npm install -g hexo-cli
+
+可以输入hexo -v ，检查hexo是否安装成功
+3.0 搭建网站3.1 创建一个文件夹存放网站文件，比如在桌面中添加一个 Blog 文件夹3.2 初始化Bl</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-04-28
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E5%85%B6%E4%BB%96/">其他</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Tool/">Tool</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
   </script>
-  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments
-      powered by Valine.</a></noscript>
+
 
 
               </div>
-            
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
-</div>
-
-      </div>
-    
-  </div>
-</div>
-
-<!-- Custom -->
-
-
     
   </main>
 
@@ -395,34 +428,6 @@
 
 
 
-  
-  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
-  <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '.post-content',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 6,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
 
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
@@ -468,7 +473,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "MVVM探讨&nbsp;",
+        "行动创造价值 ACTION CREATE VALUE&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 100,
@@ -511,20 +516,6 @@
   </script>
 
 
-
-  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
 
 
 
